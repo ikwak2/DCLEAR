@@ -2,10 +2,10 @@
 # Generator token: 10BE3573-1514-4C36-9D1C-5A225CD40393
 
 dist_w_ham <- function(X, InfoW) {
-    .Call('_DECLEAR_dist_w_ham', PACKAGE = 'DECLEAR', X, InfoW)
+    .Call('_DCLEAR_dist_w_ham', PACKAGE = 'DCLEAR', X, InfoW)
 }
 
 dist_w_ham2 <- function(X, InfoW) {
-    .Call('_DECLEAR_dist_w_ham2', PACKAGE = 'DECLEAR', X, InfoW)
+    .Call('_DCLEAR_dist_w_ham2', PACKAGE = 'DCLEAR', X, InfoW)
 }
 
