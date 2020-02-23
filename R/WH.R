@@ -15,6 +15,7 @@
 #'
 #' @examples
 #'
+#' set.seed(1)
 #' mu_d1 = c( 30, 20, 10, 5, 5, 1, 0.01, 0.001)
 #' mu_d1 = mu_d1/sum(mu_d1)
 #' simn = 100 # number of cell samples
