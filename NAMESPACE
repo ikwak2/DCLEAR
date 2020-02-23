@@ -5,6 +5,10 @@ importFrom(stringr, str_pad)
 importFrom(purrr, map)
 importFrom("stats", "dist")
 importFrom(Rcpp, evalCpp)
+import(ape)
+import(tidyverse)
+import(phangorn)
+import(phylosim)
 
 useDynLib(DCLEAR)
 
