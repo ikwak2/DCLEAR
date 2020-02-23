@@ -6,7 +6,11 @@ Description: R codes for distance based cell lineage reconstruction.
 Author: Wuming Gong and Il-Youp Kwak
 Maintainer: Il-Youp Kwak <ilyoup.kwak@gmail.com>
 Depends:
-    R (>= 3.6.2)
+    R (>= 3.6.2),
+    ape,
+    phangorn,
+    tidyverse,
+    phylosim
 Imports: Rcpp,
     ape,
     phangorn,
