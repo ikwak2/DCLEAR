@@ -42,6 +42,7 @@ mu_d1 = mu_d1/sum(mu_d1)
 simn = 100 # number of cell samples
 m = 200  ## number of targets
 sD = sim_seqdata(sim_n = simn, m = m, mu_d = 0.03, d = 12, n_s = length(mu_d1), outcome_prob = mu_d1, p_d = 0.005 )
+x = sD$seqs; y = sD$tree
 ## RF score with hamming distance
 sD$seqs \%>\% dist.hamming()  \%>\% NJ() \%>\% RF.dist(y, normalize = TRUE)
 ## RF score with weighted hamming
