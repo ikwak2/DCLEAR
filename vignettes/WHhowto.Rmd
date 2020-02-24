@@ -17,9 +17,9 @@ opts_chunk$set(fig.width = 12)
 
 ## What is Cell Lineage Reconstruction?
 
-The research question is that "Can we recover the phylogenetic tree structure of cell lineage?". Given the hundreds or thousands of cells in our body, can we recover the cell lineage? [McKenna et al Science (2016)](https://science.sciencemag.org/content/353/6298/aaf7907) proposed to enject barcode of CRISPR/Cas9 target sites, and reconstruct the cell lineange based on the information from barcodes of each cell.
+The research question is that "Can we reconstruct the lineage of how cells differentiate?". [McKenna et al Science (2016)](https://science.sciencemag.org/content/353/6298/aaf7907) shows the possibility that lineage can be reconstructed through the edited barcode of CRISPR/Cas9 target sites. Scientists can reconstruct the cell lineange based on the information from barcodes of each cell.
 
-The next question is how accurately can we recover cell lineage? The [Allen Institute Cell Lineage Reconstruction DREAM Challenge](https://www.synapse.org/#!Synapse:syn20692755/wiki/595096) is hosted to answer this question and to search for useful approaches on this question.
+The next question is how accurately can we recover the cell lineage? The [Allen Institute Cell Lineage Reconstruction DREAM Challenge](https://www.synapse.org/#!Synapse:syn20692755/wiki/595096) is hosted to answer the question and search for useful approaches.
 
 ## Who We are?
 

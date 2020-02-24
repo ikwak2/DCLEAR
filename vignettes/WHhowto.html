@@ -101,8 +101,8 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <div id="what-is-cell-lineage-reconstruction" class="section level2">
 <h2>What is Cell Lineage Reconstruction?</h2>
-<p>The research question is that “Can we recover the phylogenetic tree structure of cell lineage?”. Given the hundreds or thousands of cells in our body, can we recover the cell lineage? <a href="https://science.sciencemag.org/content/353/6298/aaf7907">McKenna et al Science (2016)</a> proposed to enject barcode of CRISPR/Cas9 target sites, and reconstruct the cell lineange based on the information from barcodes of each cell.</p>
-<p>The next question is how accurately can we recover cell lineage? The <a href="https://www.synapse.org/#!Synapse:syn20692755/wiki/595096">Allen Institute Cell Lineage Reconstruction DREAM Challenge</a> is hosted to answer this question and to search for useful approaches on this question.</p>
+<p>The research question is that “Can we reconstruct the lineage of how cells differentiate?”. <a href="https://science.sciencemag.org/content/353/6298/aaf7907">McKenna et al Science (2016)</a> shows the possibility that lineage can be reconstructed through the edited barcode of CRISPR/Cas9 target sites. Scientists can reconstruct the cell lineange based on the information from barcodes of each cell.</p>
+<p>The next question is how accurately can we recover the cell lineage? The <a href="https://www.synapse.org/#!Synapse:syn20692755/wiki/595096">Allen Institute Cell Lineage Reconstruction DREAM Challenge</a> is hosted to answer the question and search for useful approaches.</p>
 </div>
 <div id="who-we-are" class="section level2">
 <h2>Who We are?</h2>
@@ -162,22 +162,22 @@ k =<span class="st"> </span><span class="dv">2</span>
 ## [1] &quot;000000000000000000000000000000&quot;
 ## 
 ## [[2]]
-## [1] &quot;0000000000000D00E00000000000D0&quot;
+## [1] &quot;000000000000E0BEC000000000E000&quot;
 ## 
 ## [[3]]
-## [1] &quot;000000000000000000000000000000&quot;
+## [1] &quot;CD0E0000000000000000000B0000DA&quot;
 ## 
 ## [[4]]
-## [1] &quot;E000E00000A00D0EE00000000000D0&quot;
+## [1] &quot;000000000000EEBEC000B000A0E000&quot;
 ## 
 ## [[5]]
-## [1] &quot;00A0000------------000000000D0&quot;
+## [1] &quot;000000000000E0BEC00C000000E000&quot;
 ## 
 ## [[6]]
-## [1] &quot;0000000B000000000CC00000000000&quot;
+## [1] &quot;CD0E00000B0000000B00000B0000DA&quot;
 ## 
 ## [[7]]
-## [1] &quot;00000000000000CD0000A000000000&quot;</code></pre>
+## [1] &quot;CDCE000000000D000000000B0000DA&quot;</code></pre>
 <p>By extending the code, we made our code <code>sim_seqdata</code> for simulating data.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">set.seed</span>(<span class="dv">1</span>)
 mu_d1 =<span class="st"> </span><span class="kw">c</span>( <span class="dv">30</span>, <span class="dv">20</span>, <span class="dv">10</span>, <span class="dv">5</span>, <span class="dv">5</span>, <span class="dv">1</span>, <span class="fl">0.01</span>, <span class="fl">0.001</span>)
