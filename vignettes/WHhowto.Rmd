@@ -23,7 +23,7 @@ The next question is how accurately can we recover cell lineage? The [Allen Inst
 
 ## Who We are?
 
-We, Il-Youp Kwak and Wuming Going participated this competition as a team, Kwak_Gong, and would like to share our methods with the research community. Hope our findings helpful to others as well. :)
+We are Il-Youp Kwak and Wuming Going who participated this competition as a team (Kwak_Gong). We would like to share our methods and experience. Hope our findings helpful to everyone! :)
 
 ```{r loading, include=FALSE}
 library(DCLEAR)
@@ -106,18 +106,13 @@ simn = 100 # number of cell samples
 m = 200  ## number of targets
 mu_d = 0.03 # mutation rate
 d = 12 # number of cell division
-p_d = 0.03 # dropout probability
+p_d = 0.005 # dropout probability
 ```
 
 To generate `r simn` number of cells with 'r m' number of targets, 'r mu_d' mutation rate, 'r d' number of cell divisions, 'r p_d' dropout probability, and 'r length(mu_d1)' number of outcome states with outcome probability of 'r mu_d1', we can run the code below.
 
 ```{r simulatedata}
-set.seed(1)
-mu_d1 = c( 30, 20, 10, 5, 5, 1, 0.01, 0.001)
-mu_d1 = mu_d1/sum(mu_d1)
-simn = 100 # number of cell samples
-m = 200  ## number of targets
-sD = sim_seqdata(sim_n = simn, m = m, mu_d = mu_d, d = d, n_s = length(mu_d1), outcome_prob = mu_d1, p_d = 0.005 )
+sD = sim_seqdata(sim_n = simn, m = m, mu_d = mu_d, d = d, n_s = length(mu_d1), outcome_prob = mu_d1, p_d = p_d )
 ```
 
 The result of sim_seqdata function, sD, is a list of two object, 'seqs' and 'tree'. 
@@ -129,7 +124,7 @@ sD$seqs
 
 and 'tree' is ground truth tree structure of 'phylo' object.
 ```{r simulatedata_tree}
-plot(sD$tree)
+class(sD$tree)
 ```
 
 ## Distance estimation using hamming 
