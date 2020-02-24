@@ -15,7 +15,118 @@ opts_chunk$set(fig.width = 12)
 ```
 
 
-## What is it?
+## What is Cell Lineage Reconstruction?
+
+The research question is that "Can we recover the phylogenetic tree structure of cell lineage?". Given the hundreds or thousands of cells in our body, can we recover the cell lineage? [McKenna et al Science (2016)](https://science.sciencemag.org/content/353/6298/aaf7907) proposed to enject barcode of CRISPR/Cas9 target sites, and reconstruct the cell lineange based on the information from barcodes of each cell.
+
+The next question is how accurately can we recover cell lineage? The [Allen Institute Cell Lineage Reconstruction DREAM Challenge](https://www.synapse.org/#!Synapse:syn20692755/wiki/595096) is hosted to answer this question and to search for useful approaches on this question.
+
+## Who We are?
+
+We, Il-Youp Kwak and Wuming Going participated this competition as a team, Kwak_Gong, and would like to share our methods with the research community. Hope our findings helpful to others as well. :)
+
+```{r loading, include=FALSE}
+library(DCLEAR)
+```
+
+## The Simulation data
+
+We tried to generate the sequence data, the way [Salvador-Martinez and Grillo et al. (2019)](https://elifesciences.org/articles/40292) described in 'General description of the simulation' from Result section. Basically, it simulate binary structure of cell lineage. For a simple example, given the tree structure of 7 cells below,
+
+```
+    1
+  2   3
+ 4 5 6 7
+```
+The barcode of cells generated as
+
+```
+1: '0000000000'
+2: 'E00A000000'
+3: '0000C00000'
+4: 'EA0A000E00'
+5: 'E00A000000'
+6: 'E0A0CD0000'
+7: '0000C---00'
+```
+Here, '0' stands for the initial state, '-' stands for interval dropout, and character letter stands for mutational outcomes.
+
+
+Here is a code to generate simulation data.
+
+
+```{r simulate1}
+m = 30  # number of targets
+acell = as.integer(rep(1,m)) ## mother cell with an unmutated state
+mu_d = 0.1  ## mutation rate (ex 0.01 to 0.3)
+d = 3  ## number of cell division
+n_s = 5 ##  the number of possible mutational outcomes (1:n_s)
+p_d = 0.05 ## dropout probability
+
+nmstrings = c( '0', '-', LETTERS[1:n_s] ) 
+sim_tree = list()
+sim_tree[[1]] = acell
+
+k = 2
+while(k < 2^d) {
+    ## codes for point mutation
+    mother_cell = sim_tree[[k%/%2]]
+    mu_loc = runif(m) < mu_d
+    mutation_cites = (mother_cell == 1) &  mu_loc
+    n_mut = sum(mutation_cites)
+    if (n_mut > 0) {
+        mother_cell[mutation_cites] = as.integer(sample(n_s, n_mut, replace = T)+2)
+    }
+    
+    ## codes for dropout
+    dropout_cites = runif(m) < p_d
+    if (sum(dropout_cites) > 2 ) {
+        dropout_between = sample(which(dropout_cites), 2 )
+        mother_cell[dropout_between[1]:dropout_between[2]] = as.integer(2)
+    }
+    
+    sim_tree[[k]] = mother_cell
+    k = k+1
+}
+```
+
+Simulated cells are shown below:
+```{r simulate2}
+1:7 %>% map(~paste(nmstrings[sim_tree[[.]]], collapse=""))
+```
+
+
+By extending the code, we made our code `sim_seqdata` for simulating data. 
+
+```{r parameters}
+set.seed(1)
+mu_d1 = c( 30, 20, 10, 5, 5, 1, 0.01, 0.001)
+mu_d1 = mu_d1/sum(mu_d1)
+simn = 100 # number of cell samples
+m = 200  ## number of targets
+mu_d = 0.03 # mutation rate
+d = 12 # number of cell division
+p_d = 0.03 # dropout probability
+```
+
+To generate `r simn` number of cells with 'r m' number of targets, 'r mu_d' mutation rate, 'r d' number of cell divisions, 'r p_d' dropout probability, and 'r length(mu_d1)' number of outcome states with outcome probability of 'r mu_d1', we can run the code below.
+
+```{r simulatedata}
+set.seed(1)
+mu_d1 = c( 30, 20, 10, 5, 5, 1, 0.01, 0.001)
+mu_d1 = mu_d1/sum(mu_d1)
+simn = 100 # number of cell samples
+m = 200  ## number of targets
+sD = sim_seqdata(sim_n = simn, m = m, mu_d = mu_d, d = d, n_s = length(mu_d1), outcome_prob = mu_d1, p_d = 0.005 )
+```
+
+The result of sim_seqdata function, sD, is a list of two object, 'seqs' and 'tree'. 
+
+'seqs' is a sequence data of 'phyDat' object 
+```{r simulatedata}
+sD$seqs
+```
+
 
 
 ## How to use it?
@@ -24,17 +135,19 @@ opts_chunk$set(fig.width = 12)
 ### Simulation data generation
 
 
-```{r loading, include=FALSE}
-library(DCLEAR)
-```
-
-```{r loading2}
+```{r simulate data}
 #' set.seed(1)
 #' mu_d1 = c( 30, 20, 10, 5, 5, 1, 0.01, 0.001)
 #' mu_d1 = mu_d1/sum(mu_d1)
 #' simn = 100 # number of cell samples
 #' m = 200  ## number of targets
 #' sD = sim_seqdata(sim_n = simn, m = m, mu_d = 0.03, d = 12, n_s = length(mu_d1), outcome_prob = mu_d1, p_d = 0.005 )
+```
+
+
+
+
+```{r loading2}
 #' x = sD$seqs; y = sD$tree
 #' ## RF score with hamming distance
 #' sD$seqs %>% dist.hamming()  %>% NJ() %>% RF.dist(y, normalize = TRUE)
