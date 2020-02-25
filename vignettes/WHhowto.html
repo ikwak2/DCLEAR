@@ -10,7 +10,7 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-<meta name="author" content="Il-Youp Kwak" />
+<meta name="author" content="Il-Youp Kwak and Wuming Gong" />
 
 <meta name="date" content="2020-02-25" />
 
@@ -94,7 +94,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 
 <h1 class="title toc-ignore">DCLEAR : Distance based Cell LinEAge Reconstruction</h1>
-<h4 class="author">Il-Youp Kwak</h4>
+<h4 class="author">Il-Youp Kwak and Wuming Gong</h4>
 <h4 class="date">2020-02-25</h4>
 
 
@@ -162,22 +162,22 @@ k =<span class="st"> </span><span class="dv">2</span>
 ## [1] &quot;000000000000000000000000000000&quot;
 ## 
 ## [[2]]
-## [1] &quot;00000000000C0000000B0000000000&quot;
+## [1] &quot;0000000C000000B000D00000000D00&quot;
 ## 
 ## [[3]]
-## [1] &quot;00000B0000C0000000000C00000000&quot;
+## [1] &quot;0000B0C00E00000000000000000000&quot;
 ## 
 ## [[4]]
-## [1] &quot;0000000000EC00000------000000B&quot;
+## [1] &quot;0000000C000000B000D00000000D00&quot;
 ## 
 ## [[5]]
-## [1] &quot;00D00000000CB000000B0000E00000&quot;
+## [1] &quot;C000000C00000CB000D00000000D00&quot;
 ## 
 ## [[6]]
-## [1] &quot;00000--------------0DC00000000&quot;
+## [1] &quot;00A0B0C00E00000000000B00000E0E&quot;
 ## 
 ## [[7]]
-## [1] &quot;A00B0B000DC0000000000C00000000&quot;</code></pre>
+## [1] &quot;0000B0CE0E0BD000000C0E0000B0C0&quot;</code></pre>
 <p>By extending the code, we made our code <code>sim_seqdata</code> for simulating data.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">set.seed</span>(<span class="dv">1</span>)
 mu_d1 =<span class="st"> </span><span class="kw">c</span>( <span class="dv">30</span>, <span class="dv">20</span>, <span class="dv">10</span>, <span class="dv">5</span>, <span class="dv">5</span>, <span class="dv">1</span>, <span class="fl">0.01</span>, <span class="fl">0.001</span>)

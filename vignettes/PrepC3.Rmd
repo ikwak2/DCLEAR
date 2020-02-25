@@ -1,7 +1,7 @@
 ---
 title: "How we generated our prediction for subchallenge 3"
 date: "`r Sys.Date()`"
-author: "Il-Youp Kwak"
+author: "Il-Youp Kwak and Wuming Gong"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{prediction for subchallenge 3}
@@ -50,7 +50,7 @@ InfoW[3] = .4
 InfoW[4:26] = 3
 ```
 
-## Generating finanl file for the submission on subchallenge 3
+## Generating final submission file for subchallenge 3
 
 ```
 aTree2 <- x %>% WH(InfoW) %>% fastme.ols()

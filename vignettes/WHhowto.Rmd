@@ -1,7 +1,7 @@
 ---
 title: "DCLEAR : Distance based Cell LinEAge Reconstruction"
 date: "`r Sys.Date()`"
-author: "Il-Youp Kwak"
+author: "Il-Youp Kwak and Wuming Gong"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{DCLEAR : Distance based Cell LinEAge Reconstruction}
