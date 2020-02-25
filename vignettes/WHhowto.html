@@ -14,7 +14,7 @@
 
 <meta name="date" content="2020-02-25" />
 
-<title>DCLEAR : Distance based Cell LinEAge Reconstruction</title>
+<title>How to use weighted hamming on sequence data for cell lineage reconstruction?</title>
 
 
 
@@ -93,7 +93,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 
 
-<h1 class="title toc-ignore">DCLEAR : Distance based Cell LinEAge Reconstruction</h1>
+<h1 class="title toc-ignore">How to use weighted hamming on sequence data for cell lineage reconstruction?</h1>
 <h4 class="author">Il-Youp Kwak and Wuming Gong</h4>
 <h4 class="date">2020-02-25</h4>
 
@@ -162,22 +162,22 @@ k =<span class="st"> </span><span class="dv">2</span>
 ## [1] &quot;000000000000000000000000000000&quot;
 ## 
 ## [[2]]
-## [1] &quot;000000000A00A000C000000000000B&quot;
+## [1] &quot;C000C0000000000000000000000C00&quot;
 ## 
 ## [[3]]
-## [1] &quot;0000000E0000000D0000000000E000&quot;
+## [1] &quot;0A00000D00C000000000000000000E&quot;
 ## 
 ## [[4]]
-## [1] &quot;000000000A00A000C0B0000000000B&quot;
+## [1] &quot;C000C00A00E00A0000000000D00C00&quot;
 ## 
 ## [[5]]
-## [1] &quot;000000000A00A000C0000E0000000B&quot;
+## [1] &quot;CA00CC000A0A000E00000000000C00&quot;
 ## 
 ## [[6]]
-## [1] &quot;0000000E0B00000D00AD000000E000&quot;
+## [1] &quot;0A00000D00C00000B00000000000DE&quot;
 ## 
 ## [[7]]
-## [1] &quot;0000000E00D0000D00000E0000EB00&quot;</code></pre>
+## [1] &quot;EA0E0E0D00C00000000000000A000E&quot;</code></pre>
 <p>By extending the code, we made our code <code>sim_seqdata</code> for simulating data.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">set.seed</span>(<span class="dv">1</span>)
 mu_d1 =<span class="st"> </span><span class="kw">c</span>( <span class="dv">30</span>, <span class="dv">20</span>, <span class="dv">10</span>, <span class="dv">5</span>, <span class="dv">5</span>, <span class="dv">1</span>, <span class="fl">0.01</span>, <span class="fl">0.001</span>)

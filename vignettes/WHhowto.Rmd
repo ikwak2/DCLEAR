@@ -1,10 +1,10 @@
 ---
-title: "DCLEAR : Distance based Cell LinEAge Reconstruction"
+title: "How to use weighted hamming on sequence data for cell lineage reconstruction?"
 date: "`r Sys.Date()`"
 author: "Il-Youp Kwak and Wuming Gong"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{DCLEAR : Distance based Cell LinEAge Reconstruction}
+  %\VignetteIndexEntry{DCLEAR : Distance based Cell LinEAge Reconstruction-weighted hamming}
   %\VignetteEngine{knitr::rmarkdown}
   \usepackage[utf8]{inputenc}
 ---
