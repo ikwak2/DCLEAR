@@ -12,7 +12,7 @@
 
 <meta name="author" content="Il-Youp Kwak" />
 
-<meta name="date" content="2020-02-24" />
+<meta name="date" content="2020-02-25" />
 
 <title>DCLEAR : Distance based Cell LinEAge Reconstruction</title>
 
@@ -95,7 +95,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <h1 class="title toc-ignore">DCLEAR : Distance based Cell LinEAge Reconstruction</h1>
 <h4 class="author">Il-Youp Kwak</h4>
-<h4 class="date">2020-02-24</h4>
+<h4 class="date">2020-02-25</h4>
 
 
 
@@ -162,22 +162,22 @@ k =<span class="st"> </span><span class="dv">2</span>
 ## [1] &quot;000000000000000000000000000000&quot;
 ## 
 ## [[2]]
-## [1] &quot;000000000000E0BEC000000000E000&quot;
+## [1] &quot;00000000000C0000000B0000000000&quot;
 ## 
 ## [[3]]
-## [1] &quot;CD0E0000000000000000000B0000DA&quot;
+## [1] &quot;00000B0000C0000000000C00000000&quot;
 ## 
 ## [[4]]
-## [1] &quot;000000000000EEBEC000B000A0E000&quot;
+## [1] &quot;0000000000EC00000------000000B&quot;
 ## 
 ## [[5]]
-## [1] &quot;000000000000E0BEC00C000000E000&quot;
+## [1] &quot;00D00000000CB000000B0000E00000&quot;
 ## 
 ## [[6]]
-## [1] &quot;CD0E00000B0000000B00000B0000DA&quot;
+## [1] &quot;00000--------------0DC00000000&quot;
 ## 
 ## [[7]]
-## [1] &quot;CDCE000000000D000000000B0000DA&quot;</code></pre>
+## [1] &quot;A00B0B000DC0000000000C00000000&quot;</code></pre>
 <p>By extending the code, we made our code <code>sim_seqdata</code> for simulating data.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">set.seed</span>(<span class="dv">1</span>)
 mu_d1 =<span class="st"> </span><span class="kw">c</span>( <span class="dv">30</span>, <span class="dv">20</span>, <span class="dv">10</span>, <span class="dv">5</span>, <span class="dv">5</span>, <span class="dv">1</span>, <span class="fl">0.01</span>, <span class="fl">0.001</span>)
@@ -187,7 +187,7 @@ m =<span class="st"> </span><span class="dv">200</span>  ## number of targets
 mu_d =<span class="st"> </span><span class="fl">0.03</span> <span class="co"># mutation rate</span>
 d =<span class="st"> </span><span class="dv">12</span> <span class="co"># number of cell division</span>
 p_d =<span class="st"> </span><span class="fl">0.005</span> <span class="co"># dropout probability</span></code></pre></div>
-<p>To generate 100 number of cells with ‘r m’ number of targets, ‘r mu_d’ mutation rate, ‘r d’ number of cell divisions, ‘r p_d’ dropout probability, and ‘r length(mu_d1)’ number of outcome states with outcome probability of ‘r mu_d1’, we can run the code below.</p>
+<p>To generate 100 number of cells with 200 number of targets, 0.03 mutation rate, 12 number of cell divisions, 0.005 dropout probability, and 8 number of outcome states with outcome probability of 0.4224698, 0.2816465, 0.1408233, 0.0704116, 0.0704116, 0.0140823, 1.408232510^{-4}, 1.408232510^{-5}, we can run the code below.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sD =<span class="st"> </span><span class="kw">sim_seqdata</span>(<span class="dt">sim_n =</span> simn, <span class="dt">m =</span> m, <span class="dt">mu_d =</span> mu_d, <span class="dt">d =</span> d, <span class="dt">n_s =</span> <span class="kw">length</span>(mu_d1), <span class="dt">outcome_prob =</span> mu_d1, <span class="dt">p_d =</span> p_d )</code></pre></div>
 <p>The result of sim_seqdata function, sD, is a list of two object, ‘seqs’ and ‘tree’.</p>
 <p>‘seqs’ is a sequence data of ‘phyDat’ object,</p>
@@ -218,13 +218,13 @@ TreeFM =<span class="st"> </span><span class="kw">fastme.ols</span>(distH)</code
 <p>Hamming distance simply count the number of different characters given two sequences. Say we have two sequences ‘00AB0’ and ‘0-CB0’. Hamming distance is simply 2.</p>
 <p>The second position, we have ‘0’ and ‘-’, and the third position, we have ‘A’ and ‘C’. Would it be reasonable to put equal weights for these two differences? If not, what difference would be farther?</p>
 <p>To account for this consideration, we proposed weights for ‘0’ (initial state), ‘-’ (interval dropout), ‘’(point dropout) and each outcome state (A-Z). Say <span class="math inline">\(w_1\)</span> is weight for ’0’, <span class="math inline">\(w_2\)</span> is for ‘-’, <span class="math inline">\(w_3\)</span> is for ’’, and <span class="math inline">\(w_a, \cdots, w_z\)</span> are for outcome states A to Z.</p>
-<p>So, for the given example, ‘00AB0’ and ‘0-CB0’, weighted hamming distance is w_1 w_2 + w_a w_c .</p>
+<p>So, for the given example, ‘00AB0’ and ‘0-CB0’, weighted hamming distance is <span class="math inline">\(w_1 w_2 + w_a w_c\)</span> .</p>
 </div>
 <div id="initcial-choice-of-weights." class="section level3">
 <h3>Initcial choice of weights.</h3>
 <div id="information-entropy-weights-for-w_a-cdots-w_z" class="section level4">
 <h4>Information entropy weights for <span class="math inline">\(w_a, \cdots, w_z\)</span></h4>
-<p>We can estimate mutation probability for each outcome state from the data by their frequencies. Less frequent outcomes are less likely to observe. Less likely outcomes would corresponds with farther distances. Thus one idea for outcome states is with their information entropy. $w_a = -<span class="math inline">\(P(base is A\)</span>)$, , w_z = -<span class="math inline">\(P(base is Z).\)</span></p>
+<p>We can estimate mutation probability for each outcome state from the data by their frequencies. Less frequent outcomes are less likely to observe. Less likely outcomes would corresponds with farther distances. Thus one idea for outcome states is with their information entropy. <span class="math inline">\(w_a = -log P(\text{base is A}\)</span>, , w_z = -log P($.</p>
 </div>
 <div id="constant-weights-for-w_a-cdots-w_z" class="section level4">
 <h4>Constant weights for <span class="math inline">\(w_a, \cdots, w_z\)</span></h4>
@@ -237,7 +237,7 @@ TreeFM =<span class="st"> </span><span class="kw">fastme.ols</span>(distH)</code
 </div>
 <div id="weighted-hamming-distance-ii-that-considering-interval-dropout" class="section level3">
 <h3>Weighted Hamming Distance II that considering interval dropout</h3>
-<p>The proposed weighted hamming didn’t account for interval dropout. It maybe better to consider interval dropout event in distance calculation. Previously, we assigned weights to each target site. Our extended idea is to assign weight on dropout interval. Say we have two sequences ‘00AB0’ and ‘00—’. The Hamming distance score would be 3, and the weighted hamming score would be <span class="math inline">\(w_a*w_2 + w_b*w_2 + w_1*w_2\)</span>. However, this interval dropout maybe one event of interval missing. So, with the new algorithm, weighted hamming distance II is just <span class="math inline">\(w_2^*\)</span>.</p>
+<p>The proposed weighted hamming didn’t account for interval dropout. It maybe better to consider interval dropout event in distance calculation. Previously, we assigned weights to each target site. Our extended idea is to assign weight on dropout interval. Say we have two sequences ‘00AB0’ and ‘00- - -’. The Hamming distance score would be 3, and the weighted hamming score would be <span class="math inline">\(w_a w_2 + w_b w_2 + w_1 w_2\)</span>. However, this interval dropout maybe one event of interval missing. So, with the new algorithm, weighted hamming distance II is just <span class="math inline">\(w_2^*\)</span>.</p>
 </div>
 <div id="example-code-for-weighted-hamming-i" class="section level3">
 <h3>Example code for Weighted Hamming I</h3>

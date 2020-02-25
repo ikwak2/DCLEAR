@@ -109,7 +109,7 @@ d = 12 # number of cell division
 p_d = 0.005 # dropout probability
 ```
 
-To generate `r simn` number of cells with 'r m' number of targets, 'r mu_d' mutation rate, 'r d' number of cell divisions, 'r p_d' dropout probability, and 'r length(mu_d1)' number of outcome states with outcome probability of 'r mu_d1', we can run the code below.
+To generate `r simn` number of cells with `r m` number of targets, `r mu_d` mutation rate, `r d` number of cell divisions, `r p_d` dropout probability, and `r length(mu_d1)` number of outcome states with outcome probability of `r mu_d1`, we can run the code below.
 
 ```{r simulatedata}
 sD = sim_seqdata(sim_n = simn, m = m, mu_d = mu_d, d = d, n_s = length(mu_d1), outcome_prob = mu_d1, p_d = p_d )
@@ -158,14 +158,13 @@ If not, what difference would be farther?
 
 To account for this consideration, we proposed weights for '0' (initial state), '-' (interval dropout), ''(point dropout) and each outcome state (A-Z). Say $w_1$ is weight for '0', $w_2$ is for '-', $w_3$ is for '', and $w_a, \cdots, w_z$ are for outcome states A to Z.
 
-So, for the given example, '00AB0' and '0-CB0', weighted hamming distance is w_1 w_2 + w_a w_c .
+So, for the given example, '00AB0' and '0-CB0', weighted hamming distance is $w_1 w_2 + w_a w_c$ .
 
 ### Initcial choice of weights.
 
 #### Information entropy weights for $w_a, \cdots, w_z$
 
-We can estimate mutation probability for each outcome state from the data by their frequencies. Less frequent outcomes are less likely to observe. Less likely outcomes would corresponds with farther distances. Thus one idea for outcome states is with their information entropy. $w_a = -\log $P(base is A$)$, \cdots, w_z = -\log $P(base is Z).$
-
+We can estimate mutation probability for each outcome state from the data by their frequencies. Less frequent outcomes are less likely to observe. Less likely outcomes would corresponds with farther distances. Thus one idea for outcome states is with their information entropy. $w_a = -log P(\text{base is A}$, \cdots, w_z = -log P(\text{base is Z)}$.
 
 
 #### Constant weights for $w_a, \cdots, w_z$
@@ -179,7 +178,7 @@ We can search for weights $w_2$ and $w_3$ that minimize averaged RF score on tra
 
 
 ### Weighted Hamming Distance II that considering interval dropout
-The proposed weighted hamming didn't account for interval dropout. It maybe better to consider interval dropout event in distance calculation. Previously, we assigned weights to each target site. Our extended idea is to assign weight on dropout interval. Say we have two sequences '00AB0' and '00---'. The Hamming distance score would be 3, and the weighted hamming score would be $w_a*w_2 + w_b*w_2 + w_1*w_2$. However, this interval dropout maybe one event of interval missing. So, with the new algorithm, weighted hamming distance II is just $w_2^*$.  
+The proposed weighted hamming didn't account for interval dropout. It maybe better to consider interval dropout event in distance calculation. Previously, we assigned weights to each target site. Our extended idea is to assign weight on dropout interval. Say we have two sequences '00AB0' and '00- - -'. The Hamming distance score would be 3, and the weighted hamming score would be $w_a w_2 + w_b w_2 + w_1 w_2$. However, this interval dropout maybe one event of interval missing. So, with the new algorithm, weighted hamming distance II is just $w_2^*$.  
 
 
 ### Example code for Weighted Hamming I
