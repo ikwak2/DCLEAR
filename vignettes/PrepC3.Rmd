@@ -1,0 +1,61 @@
+---
+title: "How we generated our prediction for subchallenge 3"
+date: "`r Sys.Date()`"
+author: "Il-Youp Kwak"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{prediction for subchallenge 3}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+---
+
+```{r knitr_options, echo=FALSE, results=FALSE}
+library(knitr)
+opts_chunk$set(fig.width = 12)
+```
+
+```{r loading, include=FALSE}
+library(DCLEAR)
+```
+
+This vignettes illustrate how our team prepared a submission for subchallenge 3. 
+
+## Data processing
+
+```
+states <- c('0', '-', '*', LETTERS)
+csv_file <- 'Data/subC3/SubC3_10K_0001_mutation_table.csv'
+
+x <- read.table(csv_file, header = T, sep = ',', colClasses = "character")
+tip_names <- x[, 1]
+x <- x[,-1]
+rownames(x) <- tip_names
+x[ x == '' ] = '*'  ## specified * as point dropout (point missing) 
+x = as.matrix(x)
+x <- x %>% phyDat(type = 'USER', levels = states)
+
+states2num = 1:length(states)
+names(states2num) = states
+```
+
+## Weight parameters for the prediction
+
+We tried weighted hamming I and II with large number of parameter combinations, and found weighted hamming I with weight below worked fairly well. 
+
+```
+InfoW = 1:5
+InfoW[1] = 1  ## Score 
+InfoW[2] = .9
+InfoW[3] = .4
+InfoW[4:26] = 3
+```
+
+## Generating finanl file for the submission on subchallenge 3
+
+```
+aTree2 <- x %>% WH(InfoW) %>% fastme.ols()
+write.tree(aTree2, "Kwak_Gongsub3_submission.nw")
+
+```
+
+
