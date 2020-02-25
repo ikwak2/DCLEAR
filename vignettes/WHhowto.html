@@ -162,22 +162,22 @@ k =<span class="st"> </span><span class="dv">2</span>
 ## [1] &quot;000000000000000000000000000000&quot;
 ## 
 ## [[2]]
-## [1] &quot;0000000C000000B000D00000000D00&quot;
+## [1] &quot;000000000A00A000C000000000000B&quot;
 ## 
 ## [[3]]
-## [1] &quot;0000B0C00E00000000000000000000&quot;
+## [1] &quot;0000000E0000000D0000000000E000&quot;
 ## 
 ## [[4]]
-## [1] &quot;0000000C000000B000D00000000D00&quot;
+## [1] &quot;000000000A00A000C0B0000000000B&quot;
 ## 
 ## [[5]]
-## [1] &quot;C000000C00000CB000D00000000D00&quot;
+## [1] &quot;000000000A00A000C0000E0000000B&quot;
 ## 
 ## [[6]]
-## [1] &quot;00A0B0C00E00000000000B00000E0E&quot;
+## [1] &quot;0000000E0B00000D00AD000000E000&quot;
 ## 
 ## [[7]]
-## [1] &quot;0000B0CE0E0BD000000C0E0000B0C0&quot;</code></pre>
+## [1] &quot;0000000E00D0000D00000E0000EB00&quot;</code></pre>
 <p>By extending the code, we made our code <code>sim_seqdata</code> for simulating data.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">set.seed</span>(<span class="dv">1</span>)
 mu_d1 =<span class="st"> </span><span class="kw">c</span>( <span class="dv">30</span>, <span class="dv">20</span>, <span class="dv">10</span>, <span class="dv">5</span>, <span class="dv">5</span>, <span class="dv">1</span>, <span class="fl">0.01</span>, <span class="fl">0.001</span>)
@@ -224,7 +224,7 @@ TreeFM =<span class="st"> </span><span class="kw">fastme.ols</span>(distH)</code
 <h3>Initcial choice of weights.</h3>
 <div id="information-entropy-weights-for-w_a-cdots-w_z" class="section level4">
 <h4>Information entropy weights for <span class="math inline">\(w_a, \cdots, w_z\)</span></h4>
-<p>We can estimate mutation probability for each outcome state from the data by their frequencies. Less frequent outcomes are less likely to observe. Less likely outcomes would corresponds with farther distances. Thus one idea for outcome states is with their information entropy. <span class="math inline">\(w_a = -log P(\text{base is A}\)</span>, , w_z = -log P($.</p>
+<p>We can estimate mutation probability for each outcome state from the data by their frequencies. Less frequent outcomes are less likely to observe. Less likely outcomes would corresponds with farther distances. Thus one idea for outcome states is with their information entropy. <span class="math inline">\(w_a = -log P(\text{base is A}), \cdots, w_z = -log P(\text{base is Z})\)</span>.</p>
 </div>
 <div id="constant-weights-for-w_a-cdots-w_z" class="section level4">
 <h4>Constant weights for <span class="math inline">\(w_a, \cdots, w_z\)</span></h4>

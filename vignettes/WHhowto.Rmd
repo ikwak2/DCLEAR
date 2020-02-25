@@ -164,7 +164,7 @@ So, for the given example, '00AB0' and '0-CB0', weighted hamming distance is $w_
 
 #### Information entropy weights for $w_a, \cdots, w_z$
 
-We can estimate mutation probability for each outcome state from the data by their frequencies. Less frequent outcomes are less likely to observe. Less likely outcomes would corresponds with farther distances. Thus one idea for outcome states is with their information entropy. $w_a = -log P(\text{base is A}$, \cdots, w_z = -log P(\text{base is Z)}$.
+We can estimate mutation probability for each outcome state from the data by their frequencies. Less frequent outcomes are less likely to observe. Less likely outcomes would corresponds with farther distances. Thus one idea for outcome states is with their information entropy. $w_a = -log P(\text{base is A}), \cdots, w_z = -log P(\text{base is Z})$.
 
 
 #### Constant weights for $w_a, \cdots, w_z$

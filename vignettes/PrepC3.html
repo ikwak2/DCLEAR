@@ -42,11 +42,13 @@
 <p>This vignettes illustrate how our team prepared a submission for subchallenge 3.</p>
 <div id="data-processing" class="section level2">
 <h2>Data processing</h2>
-<pre><code>states &lt;- c('0', '-', '*', LETTERS)
-csv_file &lt;- 'Data/subC3/SubC3_10K_0001_mutation_table.csv'
-
-x &lt;- read.table(csv_file, header = T, sep = ',', colClasses = &quot;character&quot;)
-tip_names &lt;- x[, 1]
+<p>The ‘csv_file’ is a file path of evaluation for subchallenge 3 given from the competition. Change the like with the one you would like to predict.</p>
+<pre><code>csv_file &lt;- 'Data/subC3/SubC3_10K_0001_mutation_table.csv'
+x &lt;- read.table(csv_file, header = T, sep = ',', colClasses = &quot;character&quot;)</code></pre>
+<p>Initical state is ‘0’, interval dropout is ‘-’, point dropout is ‘<em>’ (point dropout was ’’ from the file, but we will replace it with ’</em>’), and mutational outcome states are ‘A’ to ‘Z’.</p>
+<pre><code>states &lt;- c('0', '-', '*', LETTERS)</code></pre>
+<p>Read file and save it as ‘phyDat’ object.</p>
+<pre><code>tip_names &lt;- x[, 1]
 x &lt;- x[,-1]
 rownames(x) &lt;- tip_names
 x[ x == '' ] = '*'  ## specified * as point dropout (point missing) 
@@ -70,6 +72,7 @@ InfoW[4:26] = 3</code></pre>
 <pre><code>aTree2 &lt;- x %&gt;% WH(InfoW) %&gt;% fastme.ols()
 write.tree(aTree2, &quot;Kwak_Gongsub3_submission.nw&quot;)
 </code></pre>
+<p>Thanks!</p>
 </div>
 
 
