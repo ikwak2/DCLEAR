@@ -16,7 +16,7 @@ setMethod(
 		n_cells_per_batch = 200L,
 		k = 2,
 		division = 20L,
-    dropout = TRUE
+    deletion = TRUE
 	){
 
 		DEFAULT <- '0'
@@ -36,7 +36,7 @@ setMethod(
 		if (any(names(freq) %in% DROPOUT))
 			freq[DROPOUT] <- 0
 
-		mutation_probs <- 1 - (freq[DEFAULT] / sum(freq))^(1 / division)
+		mutation_prob <- 1 - (freq[DEFAULT] / sum(freq))^(1 / division)
 		freq[DEFAULT] <- 0
 		outcome_prob <- freq / sum(freq)
 		alphabets <- names(outcome_prob)
@@ -49,9 +49,9 @@ setMethod(
 			alphabets = alphabets,
 			outcome_prob = as.numeric(outcome_prob),
 			sequence_length = sequence_length,
-			mutation_probs = mutation_probs,
+			mutation_prob = mutation_prob,
 			division = division,
-      dropout = dropout
+      deletion = deletion 
 		)
 	}
 ) # compute_replacement_matrix
@@ -74,16 +74,12 @@ compute_replacement_matrix_core <- function(
 	alphabets = NULL,
 	outcome_prob = NULL,
 	sequence_length = 200L,
-	mutation_probs = seq(0.01, 0.3, by = 0.01),
 	division = 20L,
 	n_leaves = 200L,
-  dropout = TRUE
+  deletion = TRUE
 ){
 
 	res <- bplapply(1:n_batch, function(i){
-
-		# sampling a mutation proability
-		mp <- sample(mutation_probs, 1)	
 
 		flog.info(sprintf('simulating | sample=%4.d/%4.d | k=%2.d | mutation prob=%.3f', i, n_batch, k, mp))
 
@@ -94,7 +90,7 @@ compute_replacement_matrix_core <- function(
  		  division = division, 				# number of cell divisons
 		  alphabets = alphabets, # possible mutational outcomes
 			outcome_prob = outcome_prob,	# outcome probability of each letter
-			dropout = dropout 					# whether or not considering inter-mutatoin deletion
+			deletion = deletion # whether or not considering inter-mutatoin deletion
 		)
 	
 		# randomly sample nodes, including either leaves or internal nodes

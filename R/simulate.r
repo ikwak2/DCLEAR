@@ -2,6 +2,8 @@
 #'
 #' Adoped from https://github.com/elifesciences-publications/CRISPR_recorders_sims/blob/master/MATLAB_sims/GESTALT_30hr_1x_simulation.m
 #'
+#' @export
+#'
 simulate <- function(
 	n_samples = 200, # number of samples to simulate 
 	n_targets = 200,  	# number of targets 
@@ -9,7 +11,7 @@ simulate <- function(
 	division = 16L, # number of cell divisons
 	alphabets = NULL,
 	outcome_prob = NULL, # outcome probability vector
-	dropout = TRUE
+	deletion = TRUE
 ){
 
 	num_states <- length(alphabets)
@@ -39,7 +41,7 @@ simulate <- function(
 
 			if (n_mut > 0){
 				xc[i, mutation_site] <- sample(alphabets, n_mut, replace = TRUE, prob = outcome_prob)
-				if (n_mut > 1 && dropout){
+				if (n_mut > 1 && deletion){
 					# find all pairs of mutation sites within 20 bp
 					p <- expand.grid(from = which(mutation_site), to = which(mutation_site)) %>%
 						filter(to - from <= 20 & to - from >= 2)
@@ -79,10 +81,11 @@ simulate <- function(
 		division = division,
 		n_samples = n_samples,
 		n_targets = n_targets,
-		dropout = dropout
+		deletion = deletion 
 	)
 
 } # simulate
+
 
 #' random_tree
 #'

@@ -35,6 +35,6 @@ setClass(
 		division = 'numeric',
 		n_samples = 'numeric',
 		n_targets = 'numeric',
-		dropout = 'logical'
+		deletion = 'logical'
 	)
 )

@@ -30,7 +30,7 @@ txt_file <- 'Data/subC2/SubC2_TEST_data.txt'
 x <- read.table(txt_file, header = FALSE, sep = ' ')
 ```
 
-Initical state is '0', interval dropout is '-', and mutational outcome states are 'A' to 'Z'. 
+Initical state is '0', interval deletion is '-', and mutational outcome states are 'A' to 'Z'. 
 ```{r}
 states <- c('0', '-', LETTERS)
 ```
