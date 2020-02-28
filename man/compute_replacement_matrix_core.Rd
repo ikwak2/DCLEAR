@@ -11,10 +11,9 @@ compute_replacement_matrix_core(
   alphabets = NULL,
   outcome_prob = NULL,
   sequence_length = 200L,
-  mutation_probs = seq(0.01, 0.3, by = 0.01),
   division = 20L,
   n_leaves = 200L,
-  dropout = TRUE
+  deletion = TRUE
 )
 }
 \arguments{

@@ -11,7 +11,7 @@ simulate(
   division = 16L,
   alphabets = NULL,
   outcome_prob = NULL,
-  dropout = TRUE
+  deletion = TRUE
 )
 }
 \description{

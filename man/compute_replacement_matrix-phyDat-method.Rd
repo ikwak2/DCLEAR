@@ -10,7 +10,7 @@
   n_cells_per_batch = 200L,
   k = 2,
   division = 20L,
-  dropout = TRUE
+  deletion = TRUE
 )
 }
 \description{
