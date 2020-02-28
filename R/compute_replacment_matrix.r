@@ -74,6 +74,7 @@ compute_replacement_matrix_core <- function(
 	alphabets = NULL,
 	outcome_prob = NULL,
 	sequence_length = 200L,
+  mutation_prob = 0.1,
 	division = 20L,
 	n_leaves = 200L,
   deletion = TRUE
@@ -81,12 +82,12 @@ compute_replacement_matrix_core <- function(
 
 	res <- bplapply(1:n_batch, function(i){
 
-		flog.info(sprintf('simulating | sample=%4.d/%4.d | k=%2.d | mutation prob=%.3f', i, n_batch, k, mp))
+		flog.info(sprintf('simulating | sample=%4.d/%4.d | k=%2.d | mutation prob=%.3f', i, n_batch, k, mutation_prob))
 
 		sim <- simulate(
 			n_samples = n_leaves, 		# number of samples to simulate
 			n_targets  = sequence_length,  # number of targets
-			mutation_prob = mp,		# mutation proability
+			mutation_prob = mutation_prob,		# mutation proability
  		  division = division, 				# number of cell divisons
 		  alphabets = alphabets, # possible mutational outcomes
 			outcome_prob = outcome_prob,	# outcome probability of each letter

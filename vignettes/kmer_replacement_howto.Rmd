@@ -6,9 +6,7 @@ author: 'Wuming Gong'
 ---
 
 ```{r, message = FALSE}
-devtools::document('.')
-devtools::load_all('.')
-options(width = as.integer(system('tput cols', intern = TRUE)))
+library(DCLEAR)
 ```
 
 ## Load the Challenge 2 lineage data
@@ -20,11 +18,10 @@ y <- lineages[[1]]$tree
 
 ## Distance estimation by 2-mer replacment frequency from the simulated data
 ```{r}
-devtools::load_all('.')
 S <- compute_replacement_matrix(x = x, n_batch = 10, n_cells_per_batch = 200, k = 2, mc.cores = 8)
 x %>% 
 	dist_replacement(S) %>% 
-	fastme.bal() %>% 
-	RF.dist(y, normalize = TRUE)
+	ape::fastme.bal() %>% 
+	phangorn::RF.dist(y, normalize = TRUE)
 ```
 

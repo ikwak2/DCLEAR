@@ -2,6 +2,7 @@
 
 export(simulate)
 exportMethods(compute_replacement_matrix)
+exportMethods(dist_replacement)
 import(Matrix)
 import(dplyr)
 import(futile.logger)

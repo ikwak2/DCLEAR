@@ -3,6 +3,8 @@ setGeneric('dist_replacement', function(x, replacement_matrix, ...) standardGene
 #' dist_replacement
 #'
 #' compute the kmer replacement distance matrix
+#'
+#' @export
 #
 setMethod(
 	'dist_replacement',

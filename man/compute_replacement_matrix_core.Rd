@@ -11,6 +11,7 @@ compute_replacement_matrix_core(
   alphabets = NULL,
   outcome_prob = NULL,
   sequence_length = 200L,
+  mutation_prob = 0.1,
   division = 20L,
   n_leaves = 200L,
   deletion = TRUE
