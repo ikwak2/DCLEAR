@@ -1,0 +1,65 @@
+---
+title: 'How to generate prediction for subchallenge 2'
+output: rmarkdown::github_document
+date: "`r Sys.Date()`"
+author: "Il-Youp Kwak and Wuming Gong"
+---
+
+```{r knitr_options, echo=FALSE, results=FALSE}
+library(knitr)
+opts_chunk$set(fig.width = 12)
+```
+
+
+```{r, message = FALSE}
+devtools::load_all('.')
+library(phangorn)
+library(phylosim)
+library(parallel)
+options(width = as.integer(system('tput cols', intern = TRUE)))
+```
+
+This vignettes illustrate how our team prepared a submission for subchallenge 2. 
+
+## Data processing
+
+The 'txt_file' is a file path of evaluation for subchallenge 2 given from the competition.
+Change the like with the one you would like to predict.
+```{r}
+txt_file <- 'Data/subC2/SubC2_TEST_data.txt'
+x <- read.table(txt_file, header = FALSE, sep = ' ')
+```
+
+Initical state is '0', interval dropout is '-', and mutational outcome states are 'A' to 'Z'. 
+```{r}
+states <- c('0', '-', LETTERS)
+```
+
+Read file and save it as 'phyDat' object.
+```{r}
+tip_names <- x[, 1]
+x <- do.call('rbind', strsplit(as.character(x[, 2]), ''))
+rownames(x) <- tip_names
+x <- rbind(x, rep('0', ncol(x)))
+rownames(x)[nrow(x)] <- 'root'
+states <- states[states %in% names(table(c(x)))]
+x <- x %>% phyDat(type = 'USER', levels = states)
+sequence_length <- x %>% as.character() %>% ncol()
+```
+
+## Compute the replacement matrix for 2-mers
+```{r}
+n_batch <- 1000L 
+k <- 2L
+set.seed(1)
+S <- compute_replacement_matrix(x = x, n_batch = n_batch, k = k, mc.cores = 8)
+```
+
+## Generating final submission file for subchallenge 2
+```{r}
+d <- dist_replacement(x, S)
+tree <- d %>% fastme.bal()
+write.tree(tree, 'SubC2_transition.nw')
+```
+
+

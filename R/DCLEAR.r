@@ -1,10 +1,6 @@
 #' DCLEAR
 #'
-#' @import tensorflow
-#' @import keras
-#' @import tfprobability
 #' @import Matrix
-#' @import SummarizedExperiment
 #' @importFrom matrixStats rowSds rowVars rowMedians rowMins rowMaxs
 #' @import futile.logger
 #' @importFrom phangorn NJ treedist RF.dist
@@ -14,6 +10,25 @@
 #' @importFrom abind abind
 #' @importFrom Biostrings BStringSet oligonucleotideFrequency
 #' @importFrom dplyr filter sample_n mutate select collect
-#' @importFrom fields rdist
 #'
 NULL
+
+#' register S3 classes
+setOldClass('phyDat')
+setOldClass('phylo')
+setOldClass('igraph')
+
+#' register new S4 classes
+setClass(
+	'lineage_tree',
+	representation(
+		x = 'phyDat',
+		graph = 'igraph',
+		outcome_prob = 'numeric',
+		alphabets = 'character',
+		division = 'numeric',
+		n_samples = 'numeric',
+		n_targets = 'numeric',
+		dropout = 'logical'
+	)
+)
