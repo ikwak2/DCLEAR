@@ -1,5 +1,9 @@
-#' DCLEAR
+#' DCLEAR: A package for DCLEAR: Distance based Cell LinEAge Reconstruction
 #'
+#' Distance based methods for inferring lineage treess from single cell data
+#' 
+#' @import tidyverse
+#' @import dplyr 
 #' @import Matrix
 #' @importFrom matrixStats rowSds rowVars rowMedians rowMins rowMaxs
 #' @import futile.logger
@@ -9,16 +13,18 @@
 #' @importFrom stringr str_pad
 #' @importFrom abind abind
 #' @importFrom Biostrings BStringSet oligonucleotideFrequency
-#' @importFrom dplyr filter sample_n mutate select collect
+#' @importFrom BiocParallel bplapply
+#' @importFrom phangorn phyDat
+#' @docType package
+#' @name DCLEAR
 #'
 NULL
+# > NULL
 
-#' register S3 classes
 setOldClass('phyDat')
 setOldClass('phylo')
 setOldClass('igraph')
 
-#' register new S4 classes
 setClass(
 	'lineage_tree',
 	representation(
