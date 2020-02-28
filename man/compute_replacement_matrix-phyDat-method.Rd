@@ -6,11 +6,10 @@
 \usage{
 \S4method{compute_replacement_matrix}{phyDat}(
   x,
-  n_batch = 2L,
+  n_batch = 10L,
   n_cells_per_batch = 200L,
   k = 2,
-  mc.cores = 2,
-  division = 16L,
+  division = 20L,
   dropout = TRUE
 )
 }

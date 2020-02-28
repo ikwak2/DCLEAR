@@ -5,17 +5,16 @@
 \title{compute_replacement_matrix_core}
 \usage{
 compute_replacement_matrix_core(
-  n_batch = 2L,
+  n_batch = 10L,
   n_cells_per_batch = 200L,
   k = 2,
   alphabets = NULL,
   outcome_prob = NULL,
   sequence_length = 200L,
   mutation_probs = seq(0.01, 0.3, by = 0.01),
-  division = 16L,
+  division = 20L,
   n_leaves = 200L,
-  dropout = TRUE,
-  mc.cores = 2
+  dropout = TRUE
 )
 }
 \arguments{
