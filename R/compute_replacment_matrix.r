@@ -76,7 +76,6 @@ compute_replacement_matrix_core <- function(
 	sequence_length = 200L,
   mutation_prob = 0.1,
 	division = 20L,
-	n_leaves = 200L,
   deletion = TRUE
 ){
 
@@ -85,7 +84,7 @@ compute_replacement_matrix_core <- function(
 		flog.info(sprintf('simulating | sample=%4.d/%4.d | k=%2.d | mutation prob=%.3f', i, n_batch, k, mutation_prob))
 
 		sim <- simulate(
-			n_samples = n_leaves, 		# number of samples to simulate
+			n_samples = n_cells_per_batch, 		# number of samples to simulate
 			n_targets  = sequence_length,  # number of targets
 			mutation_prob = mutation_prob,		# mutation proability
  		  division = division, 				# number of cell divisons
@@ -95,7 +94,9 @@ compute_replacement_matrix_core <- function(
 		)
 	
 		# randomly sample nodes, including either leaves or internal nodes
+
 		s <- sample(1:length(sim@x), n_cells_per_batch)	
+
 		X <- sim@x[s] %>% as.character()
 		p <- expand.grid(
 			from = seq_len(n_cells_per_batch),
