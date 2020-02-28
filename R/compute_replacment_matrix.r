@@ -3,6 +3,7 @@ setGeneric('compute_replacement_matrix', function(x, ...) standardGeneric('compu
 #' compute_replacement_matrix
 #'
 #' Simulate replacement matrix with input sequence data
+#' @export
 #'
 setMethod(
 	'compute_replacement_matrix',
@@ -14,7 +15,6 @@ setMethod(
 		n_batch = 10L,
 		n_cells_per_batch = 200L,
 		k = 2,
-		mc.cores = 2,
 		division = 20L,
     dropout = TRUE
 	){
@@ -49,7 +49,6 @@ setMethod(
 			alphabets = alphabets,
 			outcome_prob = as.numeric(outcome_prob),
 			sequence_length = sequence_length,
-			mc.cores = mc.cores,
 			mutation_probs = mutation_probs,
 			division = division,
       dropout = dropout
@@ -78,11 +77,10 @@ compute_replacement_matrix_core <- function(
 	mutation_probs = seq(0.01, 0.3, by = 0.01),
 	division = 20L,
 	n_leaves = 200L,
-  dropout = TRUE,
-	mc.cores = 2
+  dropout = TRUE
 ){
 
-	res <- mclapply(1:n_batch, function(i){
+	res <- bplapply(1:n_batch, function(i){
 
 		# sampling a mutation proability
 		mp <- sample(mutation_probs, 1)	
@@ -123,7 +121,7 @@ compute_replacement_matrix_core <- function(
 
 		d_mean
 
-	}, mc.cores = mc.cores)
+	})
 
 	# compute the mean distance between any pairs of k-mers over all simulated samples
 	r <- do.call('rbind', lapply(1:n_batch, function(i) res[[i]]))
