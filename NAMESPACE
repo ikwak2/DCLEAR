@@ -38,3 +38,11 @@ importFrom(phangorn,phyDat)
 importFrom(phangorn,treedist)
 importFrom(purrr,map)
 importFrom(stringr,str_pad)
+
+
+export(sim_seqdata)
+export(WH)
+importFrom("stats", "dist")
+importFrom(Rcpp, evalCpp)
+
+useDynLib(DCLEAR)
