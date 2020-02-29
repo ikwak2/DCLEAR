@@ -33,7 +33,7 @@ sD$seqs \%>\% dist.hamming()  \%>\% NJ() \%>\% RF.dist(sD$tree, normalize = TRUE
 InfoW = -log(mu_d1)
 InfoW[1:2] = 1
 InfoW[3:7] = 4.5
-sD$seqs \%>\% `dist_weighted_hamming(InfoW) \%>\% NJ() \%>\% RF.dist(sD$tree, normalize = TRUE)
+sD$seqs \%>\% dist_weighted_hamming(InfoW) \%>\% NJ() \%>\% RF.dist(sD$tree, normalize = TRUE)
 ## RF score with weighted hamming, cosidering dropout situation
 nfoW = -log(mu_d1)
 InfoW[1] = 1
