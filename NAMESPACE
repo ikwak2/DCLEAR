@@ -41,6 +41,7 @@ importFrom(stringr,str_pad)
 
 
 
+exportMethods(dist_weighted_hamming)
 export(sim_seqdata)
 export(WH)
 importFrom("stats", "dist")
