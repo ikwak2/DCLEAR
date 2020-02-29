@@ -34,6 +34,7 @@ simulate <- function(
 		xc <- x[parents, , drop = FALSE]	# the states of the children cells
 		rownames(xc) <- children
 
+
 		for (i in 1:nrow(pairs)){ # for each child
 
 			mutation_site <- runif(n_targets) < mutation_prob & xc[i, ] == DEFAULT	# sampling mutation site
@@ -61,6 +62,7 @@ simulate <- function(
 
 	num_nodes <- 2^division - 1
 	node_names <- (1:num_nodes) %>% get_node_names()
+
 	A <- sparseMatrix(
 		i = tree[, 'from'], 
 		j = tree[, 'to'], 
@@ -133,6 +135,6 @@ sample_outcome_prob <- function(alphabets){
 
 #' get_node_names
 #'
-get_node_names <- function(x) sprintf('node_%s', str_pad(x, nchar(2^21), pad = '0'))
+get_node_names <- function(x) sprintf('node_%s', sprintf('%d', x) %>% str_pad(15, pad = '0'))
 
 
