@@ -25,18 +25,18 @@ This vignettes illustrate how our team prepared a submission for subchallenge 2.
 
 The 'txt_file' is a file path of evaluation for subchallenge 2 given from the competition.
 Change the like with the one you would like to predict.
-```{r}
+```
 txt_file <- 'Data/subC2/SubC2_TEST_data.txt'
 x <- read.table(txt_file, header = FALSE, sep = ' ')
 ```
 
 Initical state is '0', interval deletion is '-', and mutational outcome states are 'A' to 'Z'. 
-```{r}
+```
 states <- c('0', '-', LETTERS)
 ```
 
 Read file and save it as 'phyDat' object.
-```{r}
+```
 tip_names <- x[, 1]
 x <- do.call('rbind', strsplit(as.character(x[, 2]), ''))
 rownames(x) <- tip_names
@@ -48,7 +48,7 @@ sequence_length <- x %>% as.character() %>% ncol()
 ```
 
 ## Compute the replacement matrix for 2-mers
-```{r}
+```
 n_batch <- 1000L 
 k <- 2L
 set.seed(1)
@@ -56,7 +56,7 @@ S <- compute_replacement_matrix(x = x, n_batch = n_batch, k = k, mc.cores = 8)
 ```
 
 ## Generating final submission file for subchallenge 2
-```{r}
+```
 d <- dist_replacement(x, S)
 tree <- d %>% fastme.bal()
 write.tree(tree, 'SubC2_transition.nw')

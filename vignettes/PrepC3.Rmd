@@ -16,6 +16,10 @@ opts_chunk$set(fig.width = 12)
 
 ```{r loading, include=FALSE}
 library(DCLEAR)
+library(phangorn)
+library(phylosim)
+library(parallel)
+
 ```
 
 This vignettes illustrate how our team prepared a submission for subchallenge 3. 
@@ -65,7 +69,7 @@ InfoW[4:26] = 3
 ## Generating final submission file for subchallenge 3
 
 ```
-aTree2 <- x %>% WH(InfoW) %>% fastme.ols()
+aTree2 <- x %>% dist_weighted_hamming(InfoW) %>% fastme.ols()
 write.tree(aTree2, "Kwak_Gongsub3_submission.nw")
 
 ```
