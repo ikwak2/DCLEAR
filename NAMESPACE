@@ -47,5 +47,6 @@ export(WH)
 importFrom("stats", "dist")
 importFrom(Rcpp, evalCpp)
 importFrom(ape, write.tree)
+importFrom(ape, read.tree)
 
 useDynLib(DCLEAR)

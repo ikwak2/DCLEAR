@@ -7,7 +7,9 @@ Author: Il-Youp Kwak and Wuming Gong
 Maintainer: 
   Il-Youp Kwak <ilyoup.kwak@gmail.com>
   Wuming Gong <gongx030@umn.edu>
-Depends: R (>= 3.6.0)
+Depends: R (>= 3.6.0),
+	 ape,
+	 phangorn
 License: GPL-3
 VignetteBuilder: knitr
 LinkingTo: Rcpp, RcppArmadillo

@@ -28,18 +28,26 @@ simn = 100 # number of cell samples
 m = 200  ## number of targets
 sD = sim_seqdata(sim_n = simn, m = m, mu_d = 0.03, d = 12, n_s = length(mu_d1), outcome_prob = mu_d1, p_d = 0.005 )
 ## RF score with hamming distance
-sD$seqs \%>\% dist.hamming()  \%>\% NJ() \%>\% RF.dist(sD$tree, normalize = TRUE)
+D_hm = dist.hamming(sD$seqs)
+tree_hm = NJ(D_hm)
+RF.dist(tree_hm, sD$tree, normalize = TRUE)
+
 ## RF score with weighted hamming
 InfoW = -log(mu_d1)
 InfoW[1:2] = 1
 InfoW[3:7] = 4.5
-sD$seqs \%>\% dist_weighted_hamming(InfoW) \%>\% NJ() \%>\% RF.dist(sD$tree, normalize = TRUE)
+D_wh = dist_weighted_hamming(sD$seqs, InfoW)
+tree_wh = NJ(D_wh)
+RF.dist(tree_wh, sD$tree, normalize = TRUE)
+
 ## RF score with weighted hamming, cosidering dropout situation
 nfoW = -log(mu_d1)
 InfoW[1] = 1
 InfoW[2] = 12
 InfoW[3:7] = 3
-sD$seqs \%>\% dist_weighted_hamming(InfoW, dropout=TRUE) \%>\% NJ() \%>\% RF.dist(sD$tree, normalize = TRUE)
+D_wh2 = dist_weighted_hamming(sD$seqs, InfoW, dropout = TRUE)
+tree_wh2= NJ(D_wh2)
+RF.dist(tree_wh2, sD$tree, normalize = TRUE)
 
 
 }
