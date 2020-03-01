@@ -12,7 +12,7 @@
 #' @return Calculated distance matrix of input sequences. The result is a 'dist' class object.  
 #'
 #' @author Il-Youp Kwak
-#'
+#' 
 #' @examples
 #'
 #' set.seed(1)
@@ -44,6 +44,9 @@
 #' RF.dist(tree_wh2, sD$tree, normalize = TRUE)
 #'
 #' 
+#' @export
+
+
 
 setGeneric('dist_weighted_hamming', function(x, wVec, dropout, ...) standardGeneric('dist_weighted_hamming'))
 

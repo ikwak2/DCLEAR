@@ -51,7 +51,7 @@
 #' tree_wh2= NJ(D_wh2)
 #' RF.dist(tree_wh2, sD$tree, normalize = TRUE)
 #'
-#' 
+#' @export
 
 sim_seqdata <- function(sim_n = 200, # number of samples to simulate 
                      m = 200,  # number of targets 

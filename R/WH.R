@@ -35,7 +35,7 @@
 #' InfoW[3:7] = 3
 #' #sD$seqs %>% WH(InfoW, dropout=TRUE) %>% NJ() %>% RF.dist(sD$tree, normalize = TRUE)
 #'
-#' 
+#' @export
 
 WH <- function(x, InfoW, dropout = FALSE) {
     states <- c('0', '-', LETTERS)

@@ -65,7 +65,6 @@ D_wh2 = dist_weighted_hamming(sD$seqs, InfoW, dropout = TRUE)
 tree_wh2= NJ(D_wh2)
 RF.dist(tree_wh2, sD$tree, normalize = TRUE)
 
-
 }
 \author{
 Il-Youp Kwak

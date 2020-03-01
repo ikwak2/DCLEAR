@@ -41,7 +41,6 @@ InfoW[2] = 12
 InfoW[3:7] = 3
 #sD$seqs \%>\% WH(InfoW, dropout=TRUE) \%>\% NJ() \%>\% RF.dist(sD$tree, normalize = TRUE)
 
-
 }
 \author{
 Il-Youp Kwak
