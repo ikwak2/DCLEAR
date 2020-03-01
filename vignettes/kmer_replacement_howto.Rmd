@@ -7,6 +7,8 @@ author: 'Wuming Gong'
 
 ```{r, message = FALSE}
 library(DCLEAR)
+library(BiocParallel)
+register(MulticoreParam(3)) # Use 3 cores
 ```
 
 ## Load the Challenge 2 lineage data
@@ -18,7 +20,7 @@ y <- lineages[[1]]$tree
 
 ## Distance estimation by 2-mer replacment frequency from the simulated data
 ```{r}
-S <- compute_replacement_matrix(x = x, n_batch = 10, n_cells_per_batch = 200, k = 2, mc.cores = 8)
+S <- compute_replacement_matrix(x = x, n_batch = 10, n_cells_per_batch = 200, k = 2)
 x %>% 
 	dist_replacement(S) %>% 
 	ape::fastme.bal() %>% 
