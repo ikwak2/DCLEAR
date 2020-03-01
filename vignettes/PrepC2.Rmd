@@ -5,17 +5,12 @@ date: "`r Sys.Date()`"
 author: "Il-Youp Kwak and Wuming Gong"
 ---
 
-```{r knitr_options, echo=FALSE, results=FALSE}
-library(knitr)
-opts_chunk$set(fig.width = 12)
-```
-
-
 ```{r, message = FALSE}
 devtools::load_all('.')
 library(phangorn)
 library(phylosim)
-library(parallel)
+library(BiocParallel)
+register(MulticoreParam(8)) # Use 8 cores
 options(width = as.integer(system('tput cols', intern = TRUE)))
 ```
 
@@ -52,7 +47,7 @@ sequence_length <- x %>% as.character() %>% ncol()
 n_batch <- 1000L 
 k <- 2L
 set.seed(1)
-S <- compute_replacement_matrix(x = x, n_batch = n_batch, k = k, mc.cores = 8)
+S <- compute_replacement_matrix(x = x, n_batch = n_batch, k = k)
 ```
 
 ## Generating final submission file for subchallenge 2
