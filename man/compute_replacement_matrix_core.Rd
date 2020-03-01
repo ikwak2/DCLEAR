@@ -28,7 +28,19 @@ compute_replacement_matrix_core(
 \item{outcome_prob}{outcome probability of each letter}
 
 \item{sequence_length}{sequence length (e.g. number of targets)}
+
+\item{mutation_prob}{mutation probability}
+
+\item{division}{number of cell division}
+
+\item{deletion}{whether or not include the deletion events}
+}
+\value{
+a data frame
 }
 \description{
 compute_replacement_matrix_core
+}
+\author{
+Wuming Gong (gongx030@umn.edu)
 }

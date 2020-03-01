@@ -4,8 +4,21 @@
 \alias{sample_outcome_prob}
 \title{sample_outcome_prob}
 \usage{
-sample_outcome_prob(alphabets)
+sample_outcome_prob(alphabets, shape = 0.1, scale = 2)
+}
+\arguments{
+\item{alphabets}{alphabets used in the tree}
+
+\item{shape}{shape parameter in gamma distribution}
+
+\item{scale}{scale parameter in gamma distribution}
+}
+\value{
+a probability vector for each alphabet
 }
 \description{
-sample_outcome_prob
+Sampling outcome probability based on a gamma distribution
+}
+\author{
+Wuming Gong (gongx030@umn.edu)
 }

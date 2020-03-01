@@ -14,6 +14,28 @@ simulate(
   deletion = TRUE
 )
 }
+\arguments{
+\item{n_samples}{number of samples to simulate}
+
+\item{n_targets}{number of targets (e.g. sequence length)}
+
+\item{mutation_prob}{mutation probability}
+
+\item{division}{number of cell division}
+
+\item{alphabets}{alphabets used in the tree}
+
+\item{outcome_prob}{outcome probability of each letter}
+
+\item{deletion}{whether or not include the deletion events}
+}
+\value{
+a lineage_tree object
+}
 \description{
+Simulate a cell lineage tree
 Adoped from https://github.com/elifesciences-publications/CRISPR_recorders_sims/blob/master/MATLAB_sims/GESTALT_30hr_1x_simulation.m
+}
+\author{
+Wuming Gong (gongx030@umn.edu)
 }

@@ -3,6 +3,18 @@ setGeneric('compute_replacement_matrix', function(x, ...) standardGeneric('compu
 #' compute_replacement_matrix
 #'
 #' Simulate replacement matrix with input sequence data
+#'
+#' @param x a phyDat object
+#' @param n_batch number of simulated trees
+#' @param n_cells_per_batch number of sampled tip or internval nodes in the simulated tree
+#' @param k k-mer
+#' @param division number of cell division
+#' @param deletion whether or not include the deletion events
+#'
+#' @return a data frame
+#'
+#' @author Wuming Gong (gongx030@umn.edu)
+#'
 #' @export
 #'
 setMethod(
@@ -66,6 +78,13 @@ setMethod(
 #' @param alphabets alphabets used in the tree
 #' @param outcome_prob outcome probability of each letter
 #' @param sequence_length sequence length (e.g. number of targets)
+#' @param mutation_prob mutation probability
+#' @param division number of cell division
+#' @param deletion whether or not include the deletion events
+#'
+#' @return a data frame
+#'
+#' @author Wuming Gong (gongx030@umn.edu)
 #'
 compute_replacement_matrix_core <- function(
 	n_batch = 10L,

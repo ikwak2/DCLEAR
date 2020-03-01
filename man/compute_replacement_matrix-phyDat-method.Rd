@@ -13,6 +13,25 @@
   deletion = TRUE
 )
 }
+\arguments{
+\item{x}{a phyDat object}
+
+\item{n_batch}{number of simulated trees}
+
+\item{n_cells_per_batch}{number of sampled tip or internval nodes in the simulated tree}
+
+\item{k}{k-mer}
+
+\item{division}{number of cell division}
+
+\item{deletion}{whether or not include the deletion events}
+}
+\value{
+a data frame
+}
 \description{
 Simulate replacement matrix with input sequence data
+}
+\author{
+Wuming Gong (gongx030@umn.edu)
 }

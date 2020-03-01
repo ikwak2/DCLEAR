@@ -6,6 +6,15 @@
 \usage{
 get_node_names(x)
 }
+\arguments{
+\item{x}{node id}
+}
+\value{
+node names
+}
 \description{
-get_node_names
+Convenient function for get node names
+}
+\author{
+Wuming Gong (gongx030@umn.edu)
 }

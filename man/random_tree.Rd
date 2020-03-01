@@ -6,6 +6,17 @@
 \usage{
 random_tree(n_samples, division = 16L)
 }
+\arguments{
+\item{n_samples}{number of samples to simulate}
+
+\item{division}{number of cell division}
+}
+\value{
+a data frame
+}
 \description{
-random_tree
+Simulate a random lineage tree
+}
+\author{
+Wuming Gong (gongx030@umn.edu)
 }

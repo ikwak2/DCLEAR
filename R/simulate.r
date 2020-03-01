@@ -1,6 +1,19 @@
 #' simulate
 #'
+#' Simulate a cell lineage tree
 #' Adoped from https://github.com/elifesciences-publications/CRISPR_recorders_sims/blob/master/MATLAB_sims/GESTALT_30hr_1x_simulation.m
+#'
+#' @param n_samples number of samples to simulate
+#' @param n_targets number of targets (e.g. sequence length)
+#' @param mutation_prob mutation probability
+#' @param division number of cell division
+#' @param alphabets alphabets used in the tree
+#' @param outcome_prob outcome probability of each letter
+#' @param deletion whether or not include the deletion events
+#'
+#' @return a lineage_tree object
+#'
+#' @author Wuming Gong (gongx030@umn.edu)
 #'
 #' @export
 #'
@@ -91,6 +104,15 @@ simulate <- function(
 
 #' random_tree
 #'
+#' Simulate a random lineage tree
+#'
+#' @param n_samples number of samples to simulate
+#' @param division number of cell division
+#'
+#' @return a data frame
+#'
+#' @author Wuming Gong (gongx030@umn.edu)
+#'
 random_tree <- function(n_samples, division = 16L){
 
 	ancestor <- 1	# ancestor index
@@ -118,11 +140,21 @@ random_tree <- function(n_samples, division = 16L){
 
 
 #' sample_outcome_prob
+#' 
+#' Sampling outcome probability based on a gamma distribution
 #'
-sample_outcome_prob <- function(alphabets){
+#' @param alphabets alphabets used in the tree
+#' @param shape shape parameter in gamma distribution
+#' @param scale scale parameter in gamma distribution
+#' 
+#' @return a probability vector for each alphabet
+#'
+#' @author Wuming Gong (gongx030@umn.edu)
+#'
+sample_outcome_prob <- function(alphabets, shape = 0.1, scale = 2){
 
 	num_states <- length(alphabets)
-	rvs <- rgamma(num_states - 2, shape = 0.1, scale = 2)
+	rvs <- rgamma(num_states - 2, shape = shape, scale = scale)
 	rvs <- rvs / sum(rvs)
 	rvs <- sort(rvs, decreasing = TRUE)
 
@@ -134,6 +166,13 @@ sample_outcome_prob <- function(alphabets){
 } # sample_outcome_prob
 
 #' get_node_names
+#'
+#' Convenient function for get node names
+#'
+#' @param x node id
+#'
+#' @return node names
+#' @author Wuming Gong (gongx030@umn.edu)
 #'
 get_node_names <- function(x) sprintf('node_%s', sprintf('%d', x) %>% str_pad(15, pad = '0'))
 
