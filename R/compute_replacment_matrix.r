@@ -115,6 +115,7 @@ compute_replacement_matrix_core <- function(
 
 		# compute the mean distances between any pairs of k-mers
 		d <- D[cbind(p[, 'from'], p[, 'to'])]
+
 		d_mean <- aggregate(d, list(from = str_from, to = str_to), mean)
 
 		d_mean
