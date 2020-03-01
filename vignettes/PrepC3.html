@@ -12,7 +12,7 @@
 
 <meta name="author" content="Il-Youp Kwak and Wuming Gong" />
 
-<meta name="date" content="2020-02-25" />
+<meta name="date" content="2020-03-01" />
 
 <title>How we generated our prediction for subchallenge 3</title>
 
@@ -35,7 +35,7 @@
 
 <h1 class="title toc-ignore">How we generated our prediction for subchallenge 3</h1>
 <h4 class="author">Il-Youp Kwak and Wuming Gong</h4>
-<h4 class="date">2020-02-25</h4>
+<h4 class="date">2020-03-01</h4>
 
 
 
@@ -69,7 +69,7 @@ InfoW[4:26] = 3</code></pre>
 </div>
 <div id="generating-final-submission-file-for-subchallenge-3" class="section level2">
 <h2>Generating final submission file for subchallenge 3</h2>
-<pre><code>aTree2 &lt;- x %&gt;% WH(InfoW) %&gt;% fastme.ols()
+<pre><code>aTree2 &lt;- x %&gt;% dist_weighted_hamming(InfoW) %&gt;% fastme.ols()
 write.tree(aTree2, &quot;Kwak_Gongsub3_submission.nw&quot;)
 </code></pre>
 <p>Thanks!</p>
