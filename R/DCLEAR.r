@@ -15,6 +15,10 @@
 #' @importFrom Biostrings BStringSet oligonucleotideFrequency
 #' @importFrom BiocParallel bplapply
 #' @importFrom phangorn phyDat
+#' @importFrom stats dist
+#' @importFrom Rcpp evalCpp
+#' @importFrom ape write.tree read.tree
+#' @useDynLib DCLEAR
 #' @docType package
 #' @name DCLEAR
 #'
