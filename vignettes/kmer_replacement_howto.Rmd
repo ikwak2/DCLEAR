@@ -3,6 +3,10 @@ title: 'Computing the k-mer replacement matrix by simulation'
 output: rmarkdown::html_vignette
 date: '2/27/2020'
 author: 'Wuming Gong'
+vignette: >
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteIndexEntry{Computing the k-mer replacement matrix by simulation}
+  %\VignetteEncoding{UTF-8}
 ---
 
 ```{r, message = FALSE}
