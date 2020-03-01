@@ -1,8 +1,8 @@
 ## Distance based Cell LinEAge Reconstruction (DCLEAR)
 
-Il-Youp Kwak (<ikwak2@cau.ac.kr>), and Wuming Gong (<gongx030@umn.edu>)
+Il-Youp Kwak (<ikwak2@cau.ac.kr>) and Wuming Gong (<gongx030@umn.edu>)
 
-R/DCLEAR package is an R package for Distance based Cell LinEAge Reconstruction(DCLEAR). These are basically some useful codes created during the participation of Cell Lineage Reconstruction DREAM challenge.
+R/DCLEAR is an R package for Distance based Cell LinEAge Reconstruction(DCLEAR). These are basically some useful codes created during the participation of Cell Lineage Reconstruction DREAM challenge.
 
 ### installation
 
