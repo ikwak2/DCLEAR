@@ -7,5 +7,5 @@
 dist_replacement_core(x, replacement_matrix)
 }
 \description{
-dist_replacement_core
+Compute the replacement distance matrix using a replacement matrix derived by sampling
 }

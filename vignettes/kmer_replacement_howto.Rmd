@@ -13,6 +13,8 @@ vignette: >
 library(DCLEAR)
 library(BiocParallel)
 register(MulticoreParam(3)) # Use 3 cores
+options(width = as.integer(system('tput cols', intern = TRUE)))
+
 ```
 
 ## Load the Challenge 2 lineage data
