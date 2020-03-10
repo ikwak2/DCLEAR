@@ -4,7 +4,7 @@
 \alias{dist_replacement_core}
 \title{dist_replacement_core}
 \usage{
-dist_replacement_core(x, replacement_matrix)
+dist_replacement_core(x, kmer_summary, ...)
 }
 \description{
 Compute the replacement distance matrix using a replacement matrix derived by sampling
