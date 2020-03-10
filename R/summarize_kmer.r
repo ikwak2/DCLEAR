@@ -82,6 +82,15 @@ setMethod(
 #'
 #' Summarize kmer distributions (core function)
 #'
+#' @param k k-mer
+#' @param alphabets alphabets used in the tree
+#' @param mutation_prob mutation probability
+#' @param division number of cell division
+#' @param reps number of simulated trees
+#' @param sequence_length sequence length (e.g. number of targets)
+#' @param outcome_prob outcome probability of each letter
+#' @param n_nodes number of sampled tip or internval nodes in the simulated tree (default: 100L)
+#'
 summarize_kmer_core <- function(
   k,
   alphabets,
@@ -93,8 +102,14 @@ summarize_kmer_core <- function(
   n_nodes = 100L
 ){
 
-  dimers <- do.call('paste0', do.call('expand.grid', lapply(1:2, function(j) alphabets)))
   max_distance <- (division - 1) * 2
+
+  if (k == 1)
+    kmers <- alphabets
+  else if (k == 2)
+    kmers <- do.call('paste0', do.call('expand.grid', lapply(1:2, function(j) alphabets)))
+  else
+    stop('k>2 is not supported')
 
   flog.info(sprintf('simulating | alphabets=%d | mutation=%.3f | division=%d | sample=%d | sequence_length=%d', length(alphabets), mutation_prob, division, reps, sequence_length))
 
@@ -140,16 +155,16 @@ summarize_kmer_core <- function(
     }
   )) %>%
     group_by(from, to, distance) %>%
-    summarize(n = sum(n)) %>%
-    mutate(k = nchar(from))
+    summarize(n = sum(n))
 
   flog.info('finished')
+
 
   new(
     'kmer_summary',
     df = df,
     alphabets = alphabets,
-    dimers = dimers,
+    kmers = kmers,
     outcome_prob = as.numeric(outcome_prob),
     sequence_length = sequence_length,
     division = division,

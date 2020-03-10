@@ -49,7 +49,7 @@ setClass(
 	representation(
 		df = 'data.frame',
     alphabets = 'character',
-    dimers = 'character',
+    kmers = 'character',
     outcome_prob = 'numeric',
     sequence_length = 'numeric',
     division = 'numeric',
