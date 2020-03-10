@@ -1,5 +1,12 @@
 setGeneric('dist_replacement', function(x, kmer_summary, ...) standardGeneric('dist_replacement'))
 
+#' dist_replacement
+#' 
+#' Compute the sequence distance by kmer replacement
+#' @param ix nput data in phyDat format
+#' @param kmer_summary a kmer_summary object
+#' @return a dist object
+#'
 setMethod(
 	'dist_replacement',
 	signature(
@@ -16,7 +23,8 @@ setMethod(
 
 #' dist_kmer_replacement_matrix
 #' 
-#' Compute the sequence distance matrix using a known kmer replacement matrix 
+#' Compute the sequence distance matrix using kmer replacement matrix 
+#' @return a dist object
 #'
 dist_kmer_replacement_matrix <- function(x, kmer_summary){
 
@@ -68,12 +76,16 @@ dist_kmer_replacement_matrix <- function(x, kmer_summary){
   D <- t(D) + D
   D %>% as.dist()
 
-} # dist_replacement_core
+} # dist_kmer_replacement_matrix
 
  
 #' dist_kmer_replacement_inference
 #' 
 #' Compute the sequence distance matrix using a inferred kmer replacement matrix 
+#' @param x input data in phyDat format
+#' @param kmer_summary a kmer_summary object
+#' @param k k-mers (default k=2)
+#' @return a dist object
 #'
 dist_kmer_replacement_inference <- function(x, kmer_summary, k = 2){
 
@@ -161,7 +173,7 @@ dist_kmer_replacement_inference <- function(x, kmer_summary, k = 2){
   D <- t(D) + D
   D %>% as.dist()
 
-} # dist_replacement_core
+} # dist_kmer_replacement_inference
 
  
 #' get_distance_prior 

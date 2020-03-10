@@ -58,5 +58,3 @@ get_distance_probability <- function(x){
 
 } # get_distance_probability
 
-
-
