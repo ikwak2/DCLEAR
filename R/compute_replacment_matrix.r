@@ -141,6 +141,7 @@ compute_replacement_matrix_core <- function(
 
 	})
 
+
 	# compute the mean distance between any pairs of k-mers over all simulated samples
 	r <- do.call('rbind', lapply(1:n_batch, function(i) res[[i]]))
 	r <- aggregate(r$x, list(from = r$from, to = r$to), mean)
