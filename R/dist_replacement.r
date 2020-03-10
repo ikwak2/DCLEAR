@@ -6,6 +6,7 @@ setGeneric('dist_replacement', function(x, kmer_summary, ...) standardGeneric('d
 #' @param ix nput data in phyDat format
 #' @param kmer_summary a kmer_summary object
 #' @return a dist object
+#' @export
 #'
 setMethod(
 	'dist_replacement',
@@ -23,11 +24,13 @@ setMethod(
 
 #' dist_kmer_replacement_inference
 #' 
-#' Compute the sequence distance matrix using a inferred kmer replacement matrix 
+#' Compute the sequence distance matrix using inferred kmer replacement matrix 
+#'
 #' @param x input data in phyDat format
 #' @param kmer_summary a kmer_summary object
 #' @param k k-mers (default k=2)
 #' @return a dist object
+#' @author Wuming Gong (gongx030@umn.edu)
 #'
 dist_kmer_replacement_inference <- function(x, kmer_summary, k = 2){
 
