@@ -21,64 +21,6 @@ setMethod(
 )
 
 
-#' dist_kmer_replacement_matrix
-#' 
-#' Compute the sequence distance matrix using kmer replacement matrix 
-#' @return a dist object
-#'
-dist_kmer_replacement_matrix <- function(x, kmer_summary){
-
-  kmers <- kmer_summary@kmers
-  k <- kmer_summary@k
-  sequence_length <- ncol(x %>% as.character())
-
-  dm <- kmer_replacement(kmer_summary)
-
-	p <- expand.grid(
-		from = 1:length(x),
-		to = 1:length(x)
-	) %>% 
-		filter(from < to)
-
-  # input sequence in BStringSet object
-  y <- do.call('paste0', as.data.frame(x %>% as.character())) %>%
-    BStringSet()
-
-  D <- Matrix(0, nrow = length(x), ncol = length(x), dimnames = list(names(x), names(x)))
-
-  for (start in 1:(sequence_length - k + 1)){ # for each position in the target sequence
-
-    if (start %% 50 == 0)
-      flog.info(sprintf('posterior probability | position=%5.d/%5.d', start, sequence_length))
-
- 		yi <- substr(y, start, start + k - 1)
-
-    str_from <- yi[p[, 'from']] %>% 
-      factor(kmers) %>% 
-      as.numeric()
-
-    str_to <- yi[p[, 'to']] %>% 
-      factor(kmers) %>% 
-      as.numeric()
-
-    Di <- sparseMatrix(
-      i = p[, 'from'], 
-      j = p[, 'to'], 
-      x = dm[cbind(str_from, str_to)],
-      dims = c(length(x), length(x)), 
-      dimnames = list(names(x), names(x))
-    )
-
-    D <- D + Di
-
-  }
-
-  D <- t(D) + D
-  D %>% as.dist()
-
-} # dist_kmer_replacement_matrix
-
- 
 #' dist_kmer_replacement_inference
 #' 
 #' Compute the sequence distance matrix using a inferred kmer replacement matrix 
