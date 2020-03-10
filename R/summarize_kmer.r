@@ -12,7 +12,7 @@ setMethod(
   function(
     x,
     division = 16L,
-    k = 1,
+    k = 2,
     reps = 20L,
     mutation_prob
   ){
@@ -62,7 +62,7 @@ setMethod(
   function(
     x,
     division = 16L,
-    k = 1,
+    k = 2,
     reps = 20L,
     mutation_prob = 0.1,
     alphabets,
@@ -82,7 +82,7 @@ setMethod(
 #'
 #' Summarize kmer distributions (core function)
 #'
-#' @param k k-mer
+#' @param k k-mer (default = 2)
 #' @param alphabets alphabets used in the tree
 #' @param mutation_prob mutation probability
 #' @param division number of cell division
@@ -92,7 +92,7 @@ setMethod(
 #' @param n_nodes number of sampled tip or internval nodes in the simulated tree (default: 100L)
 #'
 summarize_kmer_core <- function(
-  k,
+  k = 2,
   alphabets,
   mutation_prob,
   division,
@@ -111,7 +111,7 @@ summarize_kmer_core <- function(
   else
     stop('k>2 is not supported')
 
-  flog.info(sprintf('simulating | alphabets=%d | mutation=%.3f | division=%d | sample=%d | sequence_length=%d', length(alphabets), mutation_prob, division, reps, sequence_length))
+  flog.info(sprintf('simulating | k=%d | alphabets=%d | mutation=%.3f | division=%d | sample=%d | sequence_length=%d', k, length(alphabets), mutation_prob, division, reps, sequence_length))
 
   p <- expand.grid(
     from = 1:n_nodes,

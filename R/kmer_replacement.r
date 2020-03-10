@@ -5,15 +5,14 @@ setMethod(
   signature(
     x = 'kmer_summary'
   ),
-  function(x, method, ...){
+  function(x, ...){
 
-    p_D_AB <- get_distance_probability(x)
+    d <- get_distance_probability(x)
 
     max_distance <- x@max_distance
     kmers <- x@kmers
-    k <- x@k
 
-    D <- matrix(c(p_D_AB), nrow = length(kmers) * length(kmers), ncol = max_distance)
+    D <- matrix(c(d), nrow = length(kmers) * length(kmers), ncol = max_distance)
 
     D <- matrix(
       rowSums(D %*% Diagonal(x = 1:max_distance)),
@@ -58,5 +57,6 @@ get_distance_probability <- function(x){
   )
 
 } # get_distance_probability
+
 
 

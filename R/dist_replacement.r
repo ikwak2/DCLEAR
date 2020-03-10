@@ -6,34 +6,29 @@ setMethod(
 		x = 'phyDat',
     kmer_summary = 'kmer_summary'
 	),
-	function(x, kmer_summary, method, ...){
+	function(x, kmer_summary, k = 2, ...){
 
-    if (method == 'sampling'){
-  		dist_replacement_core(x, kmer_summary, ...)
-    }else if (method == 'bayesian'){
-      dist_replacement_bayesian_core(x, kmer_summary, ...)
-    }
+    dist_kmer_replacement_inference(x, kmer_summary, k)
+
   }
 )
 
 
-#' dist_replacement_core
+#' dist_kmer_replacement_matrix
 #' 
-#' Compute the replacement distance matrix using a replacement matrix derived by sampling
+#' Compute the sequence distance matrix using a known kmer replacement matrix 
 #'
-dist_replacement_core <- function(x, kmer_summary, ...){
+dist_kmer_replacement_matrix <- function(x, kmer_summary){
 
-  p_D_AB <- get_distance_probability(kmer_summary)
-
-  max_distance <- kmer_summary@max_distance
   kmers <- kmer_summary@kmers
-
+  k <- kmer_summary@k
   sequence_length <- ncol(x %>% as.character())
+
+  dm <- kmer_replacement(kmer_summary)
 
 	p <- expand.grid(
 		from = 1:length(x),
-		to = 1:length(x),
-    distance = 1:max_distance
+		to = 1:length(x)
 	) %>% 
 		filter(from < to)
 
@@ -41,14 +36,14 @@ dist_replacement_core <- function(x, kmer_summary, ...){
   y <- do.call('paste0', as.data.frame(x %>% as.character())) %>%
     BStringSet()
 
-  log_prob <- rep(0, length(x) * (length(x) - 1) / 2 * max_distance)
+  D <- Matrix(0, nrow = length(x), ncol = length(x), dimnames = list(names(x), names(x)))
 
-  for (start in 1:sequence_length){ # for each position in the target sequence
+  for (start in 1:(sequence_length - k + 1)){ # for each position in the target sequence
 
-    if (start %% 10 == 0)
+    if (start %% 50 == 0)
       flog.info(sprintf('posterior probability | position=%5.d/%5.d', start, sequence_length))
 
- 		yi <- substr(y, start, start)
+ 		yi <- substr(y, start, start + k - 1)
 
     str_from <- yi[p[, 'from']] %>% 
       factor(kmers) %>% 
@@ -58,45 +53,40 @@ dist_replacement_core <- function(x, kmer_summary, ...){
       factor(kmers) %>% 
       as.numeric()
 
-    log_prob_i <- log(p_D_AB[cbind(str_from, str_to, p$distance)] + 1e-1)
-    log_prob <- log_prob + log_prob_i
+    Di <- sparseMatrix(
+      i = p[, 'from'], 
+      j = p[, 'to'], 
+      x = dm[cbind(str_from, str_to)],
+      dims = c(length(x), length(x)), 
+      dimnames = list(names(x), names(x))
+    )
+
+    D <- D + Di
+
   }
 
-  P <- matrix(log_prob, nrow = length(x) * (length(x) - 1) / 2, ncol = max_distance)
-  post <- exp(P - apply(P, 1, logSumExp))
-
-  p1 <- p %>% filter(distance == 1)
-  D <- sparseMatrix(
-    i = p1[, 'from'], 
-    j = p1[, 'to'], 
-    x = rowSums(post %*% Diagonal(x = 1:max_distance)),
-    dims = c(length(x), length(x)), 
-    dimnames = list(names(x), names(x))
-  )
   D <- t(D) + D
   D %>% as.dist()
 
 } # dist_replacement_core
 
  
-#' dist_replacement_bayesian_core
+#' dist_kmer_replacement_inference
+#' 
+#' Compute the sequence distance matrix using a inferred kmer replacement matrix 
 #'
-dist_replacement_bayesian_core <- function(x, kmer_summary){
+dist_kmer_replacement_inference <- function(x, kmer_summary, k = 2){
 
-  # prior distribution of nodal distance
-  p_D <- kmer_summary  %>% get_distance_prior()
+  p_D <- get_distance_prior(kmer_summary)
+  p_AB_D <- get_replacement_probability(kmer_summary)
 
-  p_B_AD <- kmer_summary %>% get_conditional_replacement_probability()
-
-  max_distance <- length(p_D)
-  alphabets <- dimnames(p_B_AD)[[1]]
-
-  sequence_length <- ncol(x %>% as.character())
+  if (k > 1)
+    p_B_AD <- get_transition_probability(kmer_summary)
 
 	p <- expand.grid(
 		from = 1:length(x),
 		to = 1:length(x),
-    distance = 1:max_distance
+    distance = 1:kmer_summary@max_distance
 	) %>% 
 		filter(from < to)
 
@@ -104,49 +94,84 @@ dist_replacement_bayesian_core <- function(x, kmer_summary){
   y <- do.call('paste0', as.data.frame(x %>% as.character())) %>%
     BStringSet()
 
-  log_prob <- rep(0, length(x) * (length(x) - 1) / 2 * max_distance)
+  sequence_length <- ncol(x %>% as.character())
 
-  for (start in 1:sequence_length){ # for each position in the target sequence
+  n_kmers <- sequence_length - k + 1
+  n_atoms <- sequence_length - kmer_summary@k + 1
+  n_atoms_per_kmer <- k - kmer_summary@k + 1
+
+  p1 <- p %>% filter(distance == 1)
+
+  D <- Matrix(0, nrow = length(x), ncol = length(x), dimnames = list(names(x), names(x)))
+
+  for (start in seq_len(n_kmers)){
 
     if (start %% 10 == 0)
       flog.info(sprintf('posterior probability | position=%5.d/%5.d', start, sequence_length))
 
- 		yi <- substr(y, start, start)
+    yi <- substr(y, start, start)
 
     str_from <- yi[p[, 'from']] %>% 
-      factor(alphabets) %>% 
+      factor(kmer_summary@alphabets) %>% 
       as.numeric()
 
     str_to <- yi[p[, 'to']] %>% 
-      factor(alphabets) %>% 
+      factor(kmer_summary@alphabets) %>% 
       as.numeric()
 
-    log_prob_i <- log(p_B_AD[cbind(str_from, str_to, p$distance)] + 1e-10)
-    log_prob <- log_prob + log_prob_i
+    log_prob <- log(p_AB_D[cbind(str_from, str_to, p$distance)] + 1e-10)
+
+    if (k > 1){
+
+      for (i in seq(k - 1)){
+
+        start_i <- start + i - 1
+
+        t1 <- substr(y, start_i, start_i)
+        t2 <- substr(y, start_i + 1, start_i + 1)
+
+        str_from <- paste0(t1[p[, 'from']], t1[p[, 'to']]) %>%
+          factor(kmer_summary@kmers) %>% 
+          as.numeric()
+
+        str_to <- paste0(t2[p[, 'from']], t2[p[, 'to']]) %>%
+          factor(kmer_summary@kmers) %>% 
+          as.numeric()
+
+        log_prob <- log_prob + log(p_B_AD[cbind(str_from, str_to, p$distance)] + 1e-10)
+
+      }
+    }
+
+    log_prob  <- log_prob +  log(p_D[p$distance])
+
+    P <- matrix(log_prob, nrow = length(x) * (length(x) - 1) / 2, ncol = kmer_summary@max_distance)
+    post <- exp(P - apply(P, 1, logSumExp))
+
+    Di <- sparseMatrix(
+      i = p1[, 'from'], 
+      j = p1[, 'to'], 
+      x = rowSums(post %*% Diagonal(x = 1:kmer_summary@max_distance)),
+      dims = c(length(x), length(x)),
+      dimnames = list(names(x), names(x))
+    )
+    D <- D + Di
   }
 
-  log_prob <- log_prob + log(p_D[p$distance])
-
-  P <- matrix(log_prob, nrow = length(x) * (length(x) - 1) / 2, ncol = max_distance)
-  post <- exp(P - apply(P, 1, logSumExp))
-
-  p1 <- p %>% filter(distance == 1)
-  D <- sparseMatrix(
-    i = p1[, 'from'], 
-    j = p1[, 'to'], 
-    x = rowSums(post %*% Diagonal(x = 1:max_distance)),
-    dims = c(length(x), length(x)), 
-    dimnames = list(names(x), names(x))
-  )
   D <- t(D) + D
   D %>% as.dist()
 
-} # dist_replacement_bayesian_core
+} # dist_replacement_core
 
-
+ 
 #' get_distance_prior 
 #'
 #' prior distribution of distance
+#'
+#' @param x a kmer_summary object
+#' @return a probabilistic vector of the distribution of nodal distances
+#'
+#' @author Wuming Gong (gongx030@umn.edu)
 #'
 get_distance_prior <- function(x){
 
@@ -164,133 +189,19 @@ get_distance_prior <- function(x){
 } # get_distance_prior
 
 
-get_conditional_transition_probability <- function(x){
+#' get_transition_probability
+#'
+get_transition_probability <- function(x){
 
   # conditional transition probability
   d <- x@df %>%
     ungroup() %>%
-    filter(k == 2) %>%
     mutate(
       from2 = paste0(substr(from, 1, 1), substr(to, 1, 1)),
       to2 = paste0(substr(from, 2, 2), substr(to, 2, 2))
     ) %>%
     mutate(from = from2, to = to2) %>%
     select(from, to, distance, n) %>%
-    right_join(
-      expand.grid(
-        from = x@dimers, 
-        to = x@dimers, 
-        distance = 1:x@max_distance, 
-        stringsAsFactors = FALSE
-      ),
-      by = c('from', 'to', 'distance')
-    ) %>%
-    replace_na(list(n = 10))  %>%
-    group_by(distance, from) %>%
-    mutate(prob = n / sum(n)) %>%
-    select(from, to, distance, prob)
-
-  array(
-    d$prob, 
-    dim = c(length(x@dimers), length(x@dimers), x@max_distance),
-    dimnames = list(x@dimers, x@dimers, NULL)
-  )
-
-} # get_conditional_transition_probability
-
-
-#' get_conditional_replacement_probability
-#'
-get_conditional_replacement_probability <- function(x){
-
-  # conditional probability of single nucleotide replacement
-  d <- x@df %>%
-    ungroup() %>%
-    select(from, to, distance, n) %>%
-    right_join(
-      expand.grid(
-        from = x@alphabets, 
-        to = x@alphabets, 
-        distance = 1:x@max_distance, 
-        stringsAsFactors = FALSE
-      ),
-      by = c('from', 'to', 'distance')
-    ) %>%
-    replace_na(list(n = 0))  %>%
-    mutate(n = ifelse(from == to, n + 1, n)) %>%
-    group_by(from, distance) %>%
-    mutate(prob = n / sum(n)) %>%
-    select(from, to, distance, prob)
-
-  array(
-    d$prob, 
-    dim = c(length(x@alphabets), length(x@alphabets), x@max_distance),
-    dimnames = list(x@alphabets, x@alphabets, NULL)
-  )
-
-} # get_conditional_replacement_probability
-
-get_letter_prior <- function(x){
-
-  d <- x@df %>%
-    ungroup() %>%
-    filter(k == 1) %>%
-    select(from, n) %>%
-    right_join(
-      data.frame(
-        from = x@alphabets
-      ),
-      by = 'from'
-    ) %>%
-    group_by(from) %>%
-    summarize(n = sum(n)) %>%
-    mutate(prob = n / sum(n))
-  d$prob
-
-} # get_letter_prior
-
-
-#' get_replacement_probability
-#'
-get_replacement_probability <- function(x){
-
-  d <- x@df %>%
-    ungroup() %>%
-    filter(k == 1) %>%
-    select(from, to, n) %>%
-    right_join(
-      expand.grid(
-        from = x@alphabets, 
-        to = x@alphabets, 
-        stringsAsFactors = FALSE
-      ),
-      by = c('from', 'to')
-    ) %>%
-    replace_na(list(n = 0))  %>%
-    group_by(from, to) %>%
-    summarize(n = sum(n)) %>%
-    mutate(prob  = n / sum(n))
-
-  matrix(
-    d$prob, 
-    nrow = length(x@alphabets), 
-    ncol = length(x@alphabets),
-    dimnames = list(x@alphabets, x@alphabets)
-  )
-
-} # get_replacement_probability
-
-
-#' get_distance_probability
-#'
-#' Compute the conditional distribution of distance according to k-mer replacement
-#'
-get_distance_probability <- function(x){
-
-  d <- x@df %>%
-    ungroup() %>%
-    select(from, to, distance, n) %>%
-    mutate(n = ifelse(from == to, n + 1, n)) %>%
     right_join(
       expand.grid(
         from = x@kmers, 
@@ -301,8 +212,10 @@ get_distance_probability <- function(x){
       by = c('from', 'to', 'distance')
     ) %>%
     replace_na(list(n = 0))  %>%
-    group_by(from, to) %>%
-    mutate(prob  = n / sum(n))
+    mutate(n = ifelse(from == to, n + 1, n)) %>%
+    group_by(distance, from) %>%
+    mutate(prob = n / sum(n)) %>%
+    select(from, to, distance, prob)
 
   array(
     d$prob, 
@@ -310,6 +223,53 @@ get_distance_probability <- function(x){
     dimnames = list(x@kmers, x@kmers, NULL)
   )
 
-} # get_distance_probability
+} # get_transition_probability
+
+
+
+#' get_replacement_probability
+#'
+#' Compute p(A,B|d), the conditional probability of seeing a replacement of from kmer A to B or vice versa
+#'
+#' @param x a kmer_summary object
+#' @return an 3D probabilistic array (kmers by kmers by distances)
+#'
+#' @author Wuming Gong (gongx030@umn.edu)
+#'
+get_replacement_probability <- function(x){
+
+  d <- do.call('rbind', lapply(seq_len(x@k), function(i){
+    x@df %>% 
+      ungroup() %>%
+      mutate(
+        from = substr(from, i, i), 
+        to = substr(to, i, i)
+      )
+  })) %>%
+    group_by(from, to, distance) %>%
+    summarize(n = sum(n)) %>%
+    select(from, to, distance, n) %>%
+    right_join(
+      expand.grid(
+        from = x@alphabets,
+        to = x@alphabets, 
+        distance = 1:x@max_distance, 
+        stringsAsFactors = FALSE
+      ),
+      by = c('from', 'to', 'distance')
+    ) %>%
+    replace_na(list(n = 0))  %>%
+    mutate(n = ifelse(from == to, n + 1, n)) %>%
+    group_by(distance) %>%
+    mutate(prob = n / sum(n)) %>%
+    select(from, to, distance, prob)
+
+  array(
+    d$prob, 
+    dim = c(length(x@alphabets), length(x@alphabets), x@max_distance),
+    dimnames = list(x@alphabets, x@alphabets, NULL)
+  )
+
+} # get_replacement_probability
 
 
