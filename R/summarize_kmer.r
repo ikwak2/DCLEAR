@@ -3,6 +3,11 @@ setGeneric('summarize_kmer', function(x, ...) standardGeneric('summarize_kmer'))
 #' summarize_kmer
 #'
 #' Summarize kmer distributions with input sequences
+#' @param x input data as a phyDat object
+#'
+#' @return a kmer_summary object
+#'
+#' @author Wuming Gong (gongx030@umn.edu)
 #'
 setMethod(
   'summarize_kmer',
@@ -54,6 +59,10 @@ setMethod(
 #'
 #' Summarize kmer distributions without input sequences
 #'
+#' @return a kmer_summary object
+#'
+#' @author Wuming Gong (gongx030@umn.edu)
+#'
 setMethod(
   'summarize_kmer',
   signature(
@@ -91,6 +100,10 @@ setMethod(
 #' @param outcome_prob outcome probability of each letter
 #' @param n_nodes number of sampled tip or internval nodes in the simulated tree (default: 100L)
 #'
+#' @return a kmer_summary object
+#'
+#' @author Wuming Gong (gongx030@umn.edu)
+#'
 summarize_kmer_core <- function(
   k = 2,
   alphabets,
@@ -102,14 +115,9 @@ summarize_kmer_core <- function(
   n_nodes = 100L
 ){
 
-  max_distance <- (division - 1) * 2
+  kmers <- do.call('paste0', do.call('expand.grid', lapply(1:2, function(j) alphabets)))
 
-  if (k == 1)
-    kmers <- alphabets
-  else if (k == 2)
-    kmers <- do.call('paste0', do.call('expand.grid', lapply(1:2, function(j) alphabets)))
-  else
-    stop('k>2 is not supported')
+  max_distance <- (division - 1) * 2
 
   flog.info(sprintf('simulating | k=%d | alphabets=%d | mutation=%.3f | division=%d | sample=%d | sequence_length=%d', k, length(alphabets), mutation_prob, division, reps, sequence_length))
 

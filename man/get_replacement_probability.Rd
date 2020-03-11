@@ -6,6 +6,15 @@
 \usage{
 get_replacement_probability(x)
 }
+\arguments{
+\item{x}{a kmer_summary object}
+}
+\value{
+an 3D probabilistic array (kmers by kmers by distances)
+}
 \description{
-get_replacement_probability
+Compute p(A,B|d), the conditional probability of seeing a replacement of from kmer A to B or vice versa
+}
+\author{
+Wuming Gong (gongx030@umn.edu)
 }

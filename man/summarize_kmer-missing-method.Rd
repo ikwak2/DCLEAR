@@ -7,13 +7,19 @@
 \S4method{summarize_kmer}{missing}(
   x,
   division = 16L,
-  k = 1,
+  k = 2,
   reps = 20L,
   mutation_prob = 0.1,
   alphabets,
   sequence_length = 200L
 )
 }
+\value{
+a kmer_summary object
+}
 \description{
 Summarize kmer distributions without input sequences
+}
+\author{
+Wuming Gong (gongx030@umn.edu)
 }

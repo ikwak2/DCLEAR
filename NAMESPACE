@@ -2,8 +2,11 @@
 
 export(WH)
 export(dist_weighted_hamming)
+export(get_replacement_probability)
+export(get_transition_probability)
 export(sim_seqdata)
 export(simulate)
+exportMethods(dist_replacement)
 import(Matrix)
 import(dplyr)
 import(futile.logger)

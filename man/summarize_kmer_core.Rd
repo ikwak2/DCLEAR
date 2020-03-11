@@ -5,7 +5,7 @@
 \title{summarize_kmer_core}
 \usage{
 summarize_kmer_core(
-  k,
+  k = 2,
   alphabets,
   mutation_prob,
   division,
@@ -16,7 +16,7 @@ summarize_kmer_core(
 )
 }
 \arguments{
-\item{k}{k-mer}
+\item{k}{k-mer (default = 2)}
 
 \item{alphabets}{alphabets used in the tree}
 
@@ -32,6 +32,12 @@ summarize_kmer_core(
 
 \item{n_nodes}{number of sampled tip or internval nodes in the simulated tree (default: 100L)}
 }
+\value{
+a kmer_summary object
+}
 \description{
 Summarize kmer distributions (core function)
+}
+\author{
+Wuming Gong (gongx030@umn.edu)
 }

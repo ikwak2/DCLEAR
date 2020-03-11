@@ -6,6 +6,15 @@
 \usage{
 get_distance_prior(x)
 }
+\arguments{
+\item{x}{a kmer_summary object}
+}
+\value{
+a probabilistic vector of the distribution of nodal distances
+}
 \description{
 prior distribution of distance
+}
+\author{
+Wuming Gong (gongx030@umn.edu)
 }

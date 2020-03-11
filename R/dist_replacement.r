@@ -7,6 +7,7 @@ setGeneric('dist_replacement', function(x, kmer_summary, ...) standardGeneric('d
 #' @param kmer_summary a kmer_summary object
 #' @return a dist object
 #' @export
+#' @author Wuming Gong (gongx030@umn.edu)
 #'
 setMethod(
 	'dist_replacement',
@@ -15,6 +16,9 @@ setMethod(
     kmer_summary = 'kmer_summary'
 	),
 	function(x, kmer_summary, k = 2, ...){
+
+    if (kmer_summary@k != 2)
+      stop('k must be 2 in kmer_summary')
 
     dist_kmer_replacement_inference(x, kmer_summary, k)
 
@@ -53,15 +57,11 @@ dist_kmer_replacement_inference <- function(x, kmer_summary, k = 2){
 
   sequence_length <- ncol(x %>% as.character())
 
-  n_kmers <- sequence_length - k + 1
-  n_atoms <- sequence_length - kmer_summary@k + 1
-  n_atoms_per_kmer <- k - kmer_summary@k + 1
-
   p1 <- p %>% filter(distance == 1)
 
   D <- Matrix(0, nrow = length(x), ncol = length(x), dimnames = list(names(x), names(x)))
 
-  for (start in seq_len(n_kmers)){
+  for (start in seq_len(sequence_length - k + 1)){  # for each k-mer segment
 
     if (start %% 10 == 0)
       flog.info(sprintf('posterior probability | position=%5.d/%5.d', start, sequence_length))
@@ -148,6 +148,15 @@ get_distance_prior <- function(x){
 
 #' get_transition_probability
 #'
+#' Compute p(A,X|B,Y,d), the conditional probability of seeing a replacement from A to B
+#' given the previous replacement B from Y at nodal distance d
+#'
+#' @param x a kmer_summary object
+#' @return an 3D probabilistic array (kmers by kmers by distances)
+#' @export
+#'
+#' @author Wuming Gong (gongx030@umn.edu)
+#'
 get_transition_probability <- function(x){
 
   # conditional transition probability
@@ -190,6 +199,7 @@ get_transition_probability <- function(x){
 #'
 #' @param x a kmer_summary object
 #' @return an 3D probabilistic array (kmers by kmers by distances)
+#' @export
 #'
 #' @author Wuming Gong (gongx030@umn.edu)
 #'
