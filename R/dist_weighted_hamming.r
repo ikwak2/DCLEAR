@@ -30,7 +30,7 @@
 #' InfoW = -log(mu_d1)
 #' InfoW[1:2] = 1
 #' InfoW[3:7] = 4.5
-#' D_wh = dist_weighted_hamming(sD$seqs, InfoW)
+#' D_wh = dist_weighted_hamming(sD$seqs, InfoW, dropout = FALSE)
 #' tree_wh = NJ(D_wh)
 #' RF.dist(tree_wh, sD$tree, normalize = TRUE)
 #'
