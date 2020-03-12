@@ -58,7 +58,7 @@ setMethod(
             wVec = 'numeric',
             dropout = 'logical'
 	),
-	function(x, y, wVec, dropout=FALSE, ...){
+	function(x, wVec, dropout=FALSE, ...){
 
             ## compute pairwise weighted hamming distance
 
