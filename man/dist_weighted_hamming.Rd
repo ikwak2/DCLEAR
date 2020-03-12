@@ -4,7 +4,7 @@
 \alias{dist_weighted_hamming}
 \title{dist_weighted_hamming}
 \usage{
-dist_weighted_hamming(x, wVec, dropout, ...)
+dist_weighted_hamming(x, wVec, dropout = FALSE, ...)
 }
 \arguments{
 \item{x}{Sequence object of 'phyDat' type.}
@@ -36,7 +36,7 @@ RF.dist(tree_hm, sD$tree, normalize = TRUE)
 InfoW = -log(mu_d1)
 InfoW[1:2] = 1
 InfoW[3:7] = 4.5
-D_wh = dist_weighted_hamming(sD$seqs, InfoW)
+D_wh = dist_weighted_hamming(sD$seqs, InfoW, dropout = FALSE)
 tree_wh = NJ(D_wh)
 RF.dist(tree_wh, sD$tree, normalize = TRUE)
 

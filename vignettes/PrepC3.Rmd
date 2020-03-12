@@ -69,7 +69,7 @@ InfoW[4:26] = 3
 ## Generating final submission file for subchallenge 3
 
 ```
-aTree2 <- x %>% dist_weighted_hamming(InfoW) %>% fastme.ols()
+aTree2 <- x %>% dist_weighted_hamming(InfoW, FALSE) %>% fastme.ols()
 write.tree(aTree2, "Kwak_Gongsub3_submission.nw")
 
 ```
