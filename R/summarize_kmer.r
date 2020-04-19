@@ -115,7 +115,7 @@ summarize_kmer_core <- function(
   n_nodes = 100L
 ){
 
-  kmers <- do.call('paste0', do.call('expand.grid', lapply(1:2, function(j) alphabets)))
+  kmers <- do.call('paste0', do.call('expand.grid', lapply(1:k, function(j) alphabets)))
 
   max_distance <- (division - 1) * 2
 
@@ -182,3 +182,5 @@ summarize_kmer_core <- function(
     k = k
   )
 } # summarize_kmer_core
+
+

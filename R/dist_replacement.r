@@ -39,7 +39,10 @@ setMethod(
 dist_kmer_replacement_inference <- function(x, kmer_summary, k = 2){
 
   p_D <- get_distance_prior(kmer_summary)
-  p_AB_D <- get_replacement_probability(kmer_summary)
+
+  p_AB_D <- kmer_summary %>%
+    substr_kmer(k = 1) %>%
+    get_replacement_probability()
 
   if (k > 1)
     p_B_AD <- get_transition_probability(kmer_summary)
@@ -205,21 +208,11 @@ get_transition_probability <- function(x){
 #'
 get_replacement_probability <- function(x){
 
-  d <- do.call('rbind', lapply(seq_len(x@k), function(i){
-    x@df %>% 
-      ungroup() %>%
-      mutate(
-        from = substr(from, i, i), 
-        to = substr(to, i, i)
-      )
-  })) %>%
-    group_by(from, to, distance) %>%
-    summarize(n = sum(n)) %>%
-    select(from, to, distance, n) %>%
+  d <- x@df %>% 
     right_join(
       expand.grid(
-        from = x@alphabets,
-        to = x@alphabets, 
+        from = x@kmers,
+        to = x@kmers, 
         distance = 1:x@max_distance, 
         stringsAsFactors = FALSE
       ),
@@ -233,8 +226,8 @@ get_replacement_probability <- function(x){
 
   array(
     d$prob, 
-    dim = c(length(x@alphabets), length(x@alphabets), x@max_distance),
-    dimnames = list(x@alphabets, x@alphabets, NULL)
+    dim = c(length(x@kmers), length(x@kmers), x@max_distance),
+    dimnames = list(x@kmers, x@kmers, NULL)
   )
 
 } # get_replacement_probability
