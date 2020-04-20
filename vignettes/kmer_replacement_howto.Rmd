@@ -1,7 +1,7 @@
 ---
 title: 'Computing the k-mer replacement matrix by simulation'
 output: rmarkdown::html_vignette
-date: '2/27/2020'
+date: '4/20/2020'
 author: 'Wuming Gong'
 vignette: >
   %\VignetteEngine{knitr::rmarkdown}
@@ -12,6 +12,8 @@ vignette: >
 ```{r, message = FALSE}
 library(DCLEAR)
 library(BiocParallel)
+library(ape)
+library(phangorn)
 register(MulticoreParam(3)) # Use 3 cores
 options(width = as.integer(system('tput cols', intern = TRUE)))
 
@@ -26,10 +28,12 @@ y <- lineages[[1]]$tree
 
 ## Distance estimation by 2-mer replacment frequency from the simulated data
 ```{r}
-S <- compute_replacement_matrix(x = x, n_batch = 10, n_cells_per_batch = 200, k = 2)
+ks <- x %>% summarize_kmer(reps = 100L, division = 16L)
+
 x %>% 
-	dist_replacement(S) %>% 
-	ape::fastme.bal() %>% 
-	phangorn::RF.dist(y, normalize = TRUE)
+	dist_replacement(kmer_summary = ks, k = 2) %>%
+	fastme.bal() %>% 
+	RF.dist(y, normalize = TRUE)
+
 ```
 
