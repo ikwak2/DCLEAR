@@ -11,7 +11,8 @@ simulate(
   division = 16L,
   alphabets = NULL,
   outcome_prob = NULL,
-  deletion = TRUE
+  deletion = TRUE,
+  dropout_prob = 0
 )
 }
 \arguments{
@@ -28,6 +29,8 @@ simulate(
 \item{outcome_prob}{outcome probability of each letter}
 
 \item{deletion}{whether or not include the deletion events}
+
+\item{dropout_prob}{dropout probability (default: 0)}
 }
 \value{
 a lineage_tree object

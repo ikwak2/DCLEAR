@@ -5,7 +5,7 @@
 #' @import tidyverse
 #' @import dplyr 
 #' @import Matrix
-#' @importFrom matrixStats rowSds rowVars rowMedians rowMins rowMaxs
+#' @importFrom matrixStats rowSds rowVars rowMedians rowMins rowMaxs rowProds logSumExp
 #' @import futile.logger
 #' @importFrom phangorn NJ treedist RF.dist
 #' @importFrom igraph as.igraph distances graph.adjacency ends incident_edges adjacent_vertices degree permute.vertices vcount V contract simplify set_vertex_attr graph.empty add_edges add_vertices
@@ -18,6 +18,7 @@
 #' @importFrom stats dist
 #' @importFrom Rcpp evalCpp
 #' @importFrom ape write.tree read.tree
+#' @importFrom tidyr replace_na
 #' @useDynLib DCLEAR
 #' @docType package
 #' @name DCLEAR
@@ -39,6 +40,24 @@ setClass(
 		division = 'numeric',
 		n_samples = 'numeric',
 		n_targets = 'numeric',
-		deletion = 'logical'
+		deletion = 'logical',
+		dropout_prob = 'numeric'
+	)
+)
+
+setClass(
+	'kmer_summary',
+	representation(
+		df = 'data.frame',
+    alphabets = 'character',
+    kmers = 'character',
+    outcome_prob = 'numeric',
+    sequence_length = 'numeric',
+    division = 'numeric',
+    reps = 'numeric',
+    max_distance = 'numeric',
+    mutation_prob = 'numeric',
+    k = 'numeric',
+		dropout_prob = 'numeric'
 	)
 )

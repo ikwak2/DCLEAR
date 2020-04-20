@@ -10,6 +10,7 @@
 #' @param alphabets alphabets used in the tree
 #' @param outcome_prob outcome probability of each letter
 #' @param deletion whether or not include the deletion events
+#' @param dropout_prob dropout probability (default: 0)
 #'
 #' @return a lineage_tree object
 #'
@@ -24,12 +25,14 @@ simulate <- function(
 	division = 16L, # number of cell divisons
 	alphabets = NULL,
 	outcome_prob = NULL, # outcome probability vector
-	deletion = TRUE
+	deletion = TRUE,
+	dropout_prob = 0
 ){
 
 	num_states <- length(alphabets)
 	DEFAULT <- '0'
-	DROPOUT <- '-'
+	DELETION <- '-'
+	DROPOUT <- '*'
     
 	if (is.null(outcome_prob))
 		stop('outcome_prob must be specified')
@@ -63,7 +66,7 @@ simulate <- function(
 						j <- sample(1:nrow(p), 1)
 						from <- p[j, 'from'] + 1
 						to <- p[j, 'to'] - 1
-						xc[i, from:to] <- DROPOUT
+						xc[i, from:to] <- DELETION 
 					}
 				}
 			}
@@ -71,6 +74,12 @@ simulate <- function(
 
 		x <- rbind(x, xc)
 		h <- h + 1
+	}
+
+	if (dropout_prob > 0){
+		# randomly add dropout events
+		dropout_position <- sample(prod(dim(x)), round(prod(dim(x)) * dropout_prob), replace = FALSE)
+		x[dropout_position] <- DROPOUT
 	}
 
 	num_nodes <- 2^division - 1
@@ -96,7 +105,8 @@ simulate <- function(
 		division = division,
 		n_samples = n_samples,
 		n_targets = n_targets,
-		deletion = deletion 
+		deletion = deletion,
+		dropout_prob = dropout_prob
 	)
 
 } # simulate
