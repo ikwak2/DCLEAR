@@ -40,7 +40,8 @@ setClass(
 		division = 'numeric',
 		n_samples = 'numeric',
 		n_targets = 'numeric',
-		deletion = 'logical'
+		deletion = 'logical',
+		dropout_prob = 'numeric'
 	)
 )
 
@@ -56,6 +57,7 @@ setClass(
     reps = 'numeric',
     max_distance = 'numeric',
     mutation_prob = 'numeric',
-    k = 'numeric'
+    k = 'numeric',
+		dropout_prob = 'numeric'
 	)
 )

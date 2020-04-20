@@ -12,7 +12,8 @@ summarize_kmer_core(
   reps,
   sequence_length,
   outcome_prob,
-  n_nodes = 100L
+  n_nodes = 100L,
+  dropout_prob = 0
 )
 }
 \arguments{
@@ -31,6 +32,8 @@ summarize_kmer_core(
 \item{outcome_prob}{outcome probability of each letter}
 
 \item{n_nodes}{number of sampled tip or internval nodes in the simulated tree (default: 100L)}
+
+\item{dropout_prob}{dropout probability (default: 0)}
 }
 \value{
 a kmer_summary object

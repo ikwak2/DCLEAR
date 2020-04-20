@@ -31,6 +31,9 @@ setMethod(
       as.character() %>%
       factor(alphabets) %>%
       table()
+
+		dropout_prob <- freq[DROPOUT] / sum(freq)	# dropout probability
+
     freq <- freq[freq > 0]
 
     if (any(names(freq) %in% DELETION))
@@ -49,7 +52,7 @@ setMethod(
 
     sequence_length <- ncol(x %>% as.character())
 
-    summarize_kmer_core(k, alphabets, mutation_prob, division, reps, sequence_length, outcome_prob)
+    summarize_kmer_core(k, alphabets, mutation_prob, division, reps, sequence_length, outcome_prob, dropout_prob = dropout_prob)
 
   }
 )
@@ -99,6 +102,7 @@ setMethod(
 #' @param sequence_length sequence length (e.g. number of targets)
 #' @param outcome_prob outcome probability of each letter
 #' @param n_nodes number of sampled tip or internval nodes in the simulated tree (default: 100L)
+#' @param dropout_prob dropout probability (default: 0)
 #'
 #' @return a kmer_summary object
 #'
@@ -112,14 +116,15 @@ summarize_kmer_core <- function(
   reps,
   sequence_length,
   outcome_prob,
-  n_nodes = 100L
+  n_nodes = 100L,
+	dropout_prob = 0
 ){
 
   kmers <- do.call('paste0', do.call('expand.grid', lapply(1:k, function(j) alphabets)))
 
   max_distance <- (division - 1) * 2
 
-  flog.info(sprintf('simulating | k=%d | alphabets=%d | mutation=%.3f | division=%d | sample=%d | sequence_length=%d', k, length(alphabets), mutation_prob, division, reps, sequence_length))
+  flog.info(sprintf('simulating | k=%d | alphabets=%d | mutation=%.3f | division=%d | sample=%d | sequence_length=%d | dropout_prob=%.3f', k, length(alphabets), mutation_prob, division, reps, sequence_length, dropout_prob))
 
   p <- expand.grid(
     from = 1:n_nodes,
@@ -139,7 +144,8 @@ summarize_kmer_core <- function(
         division = division,        # number of cell divisons
         alphabets = alphabets, # possible mutational outcomes
         outcome_prob = as.numeric(outcome_prob),  # outcome probability of each letter
-        deletion = TRUE # whether or not considering inter-mutatoin deletion
+        deletion = TRUE, # whether or not considering inter-mutatoin deletion
+				dropout_prob = dropout_prob
       ) 
 
       s <- sample(length(sim@x), n_nodes)
@@ -167,7 +173,6 @@ summarize_kmer_core <- function(
 
   flog.info('finished')
 
-
   new(
     'kmer_summary',
     df = df,
@@ -179,7 +184,8 @@ summarize_kmer_core <- function(
     mutation_prob = as.numeric(mutation_prob),
     reps = reps,
     max_distance = 2 * (division - 1),
-    k = k
+    k = k,
+		dropout_prob = dropout_prob
   )
 } # summarize_kmer_core
 
