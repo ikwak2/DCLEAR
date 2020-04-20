@@ -1,6 +1,6 @@
 Package: DCLEAR
-Version: 0.8
-Date: 2020-3-12
+Version: 0.9
+Date: 2020-04-20
 Title: Distance based Cell LinEAge Reconstruction (DCLEAR)
 Description: R codes for distance based cell lineage reconstruction. 
 Author: Il-Youp Kwak and Wuming Gong
