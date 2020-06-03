@@ -9,7 +9,8 @@ Maintainer:
   Wuming Gong <gongx030@umn.edu>
 Depends: R (>= 3.6.0),
 	 ape,
-	 phangorn
+	 phangorn,
+   futile.logger
 License: GPL-3
 VignetteBuilder: knitr
 LinkingTo: Rcpp, RcppArmadillo
@@ -17,4 +18,4 @@ RoxygenNote: 7.1.0
 Imports: 
     dplyr,
     Matrix,
-    matrixStats
+    matrixStats,
