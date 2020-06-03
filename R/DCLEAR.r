@@ -18,7 +18,7 @@
 #' @importFrom Rcpp evalCpp
 #' @importFrom ape write.tree read.tree
 #' @importFrom tidyr replace_na
-#' @useDynLib DCLEAR
+###' @useDynLib DCLEAR
 #' @docType package
 #' @name DCLEAR
 #'
