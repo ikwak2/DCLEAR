@@ -8,6 +8,8 @@ setGeneric('summarize_kmer', function(x, ...) standardGeneric('summarize_kmer'))
 #' @return a kmer_summary object
 #'
 #' @author Wuming Gong (gongx030@umn.edu)
+#' 
+#' @export
 #'
 setMethod(
   'summarize_kmer',
@@ -65,6 +67,8 @@ setMethod(
 #' @return a kmer_summary object
 #'
 #' @author Wuming Gong (gongx030@umn.edu)
+#'
+#' @export
 #'
 setMethod(
   'summarize_kmer',
