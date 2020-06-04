@@ -34,7 +34,11 @@ setMethod(
       factor(alphabets) %>%
       table()
 
-		dropout_prob <- freq[DROPOUT] / sum(freq)	# dropout probability
+    if (any(DROPOUT %in% alphabets))
+		  dropout_prob <- freq[DROPOUT] / sum(freq)	# dropout probability
+    else
+      dropout_prob <- 0
+
 
     freq <- freq[freq > 0]
 
