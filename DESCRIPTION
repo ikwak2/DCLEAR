@@ -15,8 +15,8 @@ License: GPL-3
 VignetteBuilder: knitr
 LinkingTo: Rcpp, RcppArmadillo
 RoxygenNote: 7.1.0
+biocViews:
 Imports: 
     dplyr,
     Matrix,
-    matrixStats,
-    BiocParallel
+    matrixStats
