@@ -161,6 +161,8 @@ random_tree <- function(n_samples, division = 16L){
 #'
 #' @author Wuming Gong (gongx030@umn.edu)
 #'
+#' @export
+#'
 sample_outcome_prob <- function(alphabets, shape = 0.1, scale = 2){
 
 	num_states <- length(alphabets)
