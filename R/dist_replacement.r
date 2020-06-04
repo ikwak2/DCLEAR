@@ -64,8 +64,12 @@ dist_kmer_replacement_inference <- function(x, kmer_summary, k = 2){
 
   sequence_length <- ncol(x %>% as.character())
 
-  d <- p %>% filter(distance == 1)
-	d$distance <- 0
+#  d <- p %>% filter(distance == 1)
+#	d$distance <- 0
+	p1 <- p %>% filter(distance == 1)
+
+	  D <- Matrix(0, nrow = length(x), ncol = length(x), dimnames = list(names(x), names(x)))
+
 
   for (start in seq_len(sequence_length - k + 1)){  # for each k-mer segment
 
@@ -110,19 +114,27 @@ dist_kmer_replacement_inference <- function(x, kmer_summary, k = 2){
     P <- matrix(log_prob, nrow = length(x) * (length(x) - 1) / 2, ncol = kmer_summary@max_distance)
     post <- exp(P - apply(P, 1, logSumExp))
 
-		di <- rowSums(post %*% Diagonal(x = 1:kmer_summary@max_distance))
-		d$distance <- d$distance + di
+#		di <- rowSums(post %*% Diagonal(x = 1:kmer_summary@max_distance))
+#		d$distance <- d$distance + di
+		Di <- sparseMatrix(
+											       i = p1[, 'from'], 
+														       j = p1[, 'to'], 
+																	       x = rowSums(post %*% Diagonal(x = 1:kmer_summary@max_distance)),
+																				       dims = c(length(x), length(x)),
+																							       dimnames = list(names(x), names(x))
+														     )
+		    D <- D + Di
 
   }
 
-	D <- sparseMatrix(
-  	i = d$from,
-		j = d$to,
-		x = d$distance,
-		dims = c(length(x), length(x)),
-		dimnames = list(names(x), names(x))
-	) %>%
-		as.matrix()
+#	D <- sparseMatrix(
+#  	i = d$from,
+#		j = d$to,
+#		x = d$distance,
+#		dims = c(length(x), length(x)),
+#		dimnames = list(names(x), names(x))
+#	) %>%
+#		as.matrix()
 
   D <- t(D) + D
   D %>% as.dist()
