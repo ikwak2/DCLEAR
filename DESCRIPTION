@@ -10,8 +10,7 @@ Maintainer:
 Depends: R (>= 3.6.0),
 	 ape,
 	 phangorn,
-   futile.logger,
-   BiocParallel
+   futile.logger
 License: GPL-3
 VignetteBuilder: knitr
 LinkingTo: Rcpp, RcppArmadillo
@@ -20,3 +19,4 @@ Imports:
     dplyr,
     Matrix,
     matrixStats,
+    BiocParallel
