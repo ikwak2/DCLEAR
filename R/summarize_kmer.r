@@ -179,8 +179,6 @@ summarize_kmer_core <- function(
     group_by(from, to, distance) %>%
     summarize(n = sum(n))
 
-  flog.info('finished')
-
   new(
     'kmer_summary',
     df = df,

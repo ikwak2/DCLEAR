@@ -38,14 +38,18 @@ setMethod(
 #'
 dist_kmer_replacement_inference <- function(x, kmer_summary, k = 2){
 
-  p_D <- get_distance_prior(kmer_summary)
+  log_p_D <- log(get_distance_prior(kmer_summary))
 
-  p_AB_D <- kmer_summary %>%
+  log_p_AB_D <- kmer_summary %>%
     substr_kmer(k = 1) %>%
     get_replacement_probability()
+	log_p_AB_D <- log(log_p_AB_D + 1e-10)
 
-  if (k > 1)
-    p_B_AD <- get_transition_probability(kmer_summary)
+  if (k > 1){
+    log_p_B_AD <- get_transition_probability(kmer_summary)
+		log_p_B_AD <- log(log_p_B_AD + 1e-10)
+
+	}
 
 	p <- expand.grid(
 		from = 1:length(x),
@@ -60,14 +64,12 @@ dist_kmer_replacement_inference <- function(x, kmer_summary, k = 2){
 
   sequence_length <- ncol(x %>% as.character())
 
-  p1 <- p %>% filter(distance == 1)
-
-  D <- Matrix(0, nrow = length(x), ncol = length(x), dimnames = list(names(x), names(x)))
+  d <- p %>% filter(distance == 1)
+	d$distance <- 0
 
   for (start in seq_len(sequence_length - k + 1)){  # for each k-mer segment
 
-    if (start %% 10 == 0)
-      flog.info(sprintf('posterior probability | position=%5.d/%5.d', start, sequence_length))
+    flog.info(sprintf('posterior probability | position=%5.d/%5.d', start, sequence_length))
 
     yi <- substr(y, start, start)
 
@@ -79,7 +81,7 @@ dist_kmer_replacement_inference <- function(x, kmer_summary, k = 2){
       factor(kmer_summary@alphabets) %>% 
       as.numeric()
 
-    log_prob <- log(p_AB_D[cbind(str_from, str_to, p$distance)] + 1e-10)
+    log_prob <- log_p_AB_D[cbind(str_from, str_to, p$distance)]
 
     if (k > 1){
 
@@ -98,25 +100,29 @@ dist_kmer_replacement_inference <- function(x, kmer_summary, k = 2){
           factor(kmer_summary@kmers) %>% 
           as.numeric()
 
-        log_prob <- log_prob + log(p_B_AD[cbind(str_from, str_to, p$distance)] + 1e-10)
+        log_prob <- log_prob + log_p_B_AD[cbind(str_from, str_to, p$distance)]
 
       }
     }
 
-    log_prob  <- log_prob +  log(p_D[p$distance])
+    log_prob  <- log_prob +  log_p_D[p$distance]
 
     P <- matrix(log_prob, nrow = length(x) * (length(x) - 1) / 2, ncol = kmer_summary@max_distance)
     post <- exp(P - apply(P, 1, logSumExp))
 
-    Di <- sparseMatrix(
-      i = p1[, 'from'], 
-      j = p1[, 'to'], 
-      x = rowSums(post %*% Diagonal(x = 1:kmer_summary@max_distance)),
-      dims = c(length(x), length(x)),
-      dimnames = list(names(x), names(x))
-    )
-    D <- D + Di
+		di <- rowSums(post %*% Diagonal(x = 1:kmer_summary@max_distance))
+		d$distance <- d$distance + di
+
   }
+
+	D <- sparseMatrix(
+  	i = d$from,
+		j = d$to,
+		x = d$distance,
+		dims = c(length(x), length(x)),
+		dimnames = list(names(x), names(x))
+	) %>%
+		as.matrix()
 
   D <- t(D) + D
   D %>% as.dist()
