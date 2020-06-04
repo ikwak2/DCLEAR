@@ -1,5 +1,7 @@
 #' as_phylo
 #'
+#' @export
+#'
 as_phylo <- function(x){
 
 	y <- list()	# a phylo object
