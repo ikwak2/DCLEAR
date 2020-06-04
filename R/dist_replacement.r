@@ -73,7 +73,9 @@ dist_kmer_replacement_inference <- function(x, kmer_summary, k = 2){
 
   for (start in seq_len(sequence_length - k + 1)){  # for each k-mer segment
 
-    flog.info(sprintf('posterior probability | position=%5.d/%5.d', start, sequence_length))
+		if (start %% 10 == 0){
+			flog.info(sprintf('posterior probability | position=%5.d/%5.d', start, sequence_length))
+		}
 
     yi <- substr(y, start, start)
 
