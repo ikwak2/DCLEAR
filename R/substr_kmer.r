@@ -1,3 +1,12 @@
+#' Subseting a kmer_summary object
+#'
+#' Summarize the short k-mer summary from the long k-mer summary
+#' @param x a kmer_summary object
+#' @param k k-mer length(default: 2)
+#' @return a new kmer_summary object
+#' @export
+#' @author Wuming Gong (gongx030@umn.edu)
+#'
 setMethod(
   'substr_kmer',
   signature(
@@ -9,7 +18,7 @@ setMethod(
   ){
 
     if (k > x@k)
-      stop(sprintf('k=%d must be smaller than the input k=%d', k, x@k))
+      stop(sprintf('k(%d) must be smaller than the input x@k(%d)', k, x@k))
     else if (k == x@k){
       return(x)
     }else{

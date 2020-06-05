@@ -15,8 +15,7 @@ setMethod(
 	),
 	function(x, kmer_summary, k = 2, ...){
 
-    if (kmer_summary@k != 2)
-      stop('k must be 2 in kmer_summary')
+		kmer_summary <- substr_kmer(kmer_summary, k)
 
     dist_kmer_replacement_inference(x, kmer_summary, k)
 
