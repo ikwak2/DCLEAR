@@ -4,7 +4,14 @@
 \alias{summarize_kmer,phyDat-method}
 \title{summarize_kmer}
 \usage{
-\S4method{summarize_kmer}{phyDat}(x, division = 16L, k = 2, reps = 20L, mutation_prob)
+\S4method{summarize_kmer}{phyDat}(
+  x,
+  division = 16L,
+  k = 2,
+  reps = 20L,
+  sequence_length = 200L,
+  mutation_prob
+)
 }
 \arguments{
 \item{x}{input data as a phyDat object}

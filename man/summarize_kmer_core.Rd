@@ -10,7 +10,7 @@ summarize_kmer_core(
   mutation_prob,
   division,
   reps,
-  sequence_length,
+  sequence_length = 200L,
   outcome_prob,
   n_nodes = 100L,
   dropout_prob = 0
@@ -27,7 +27,7 @@ summarize_kmer_core(
 
 \item{reps}{number of simulated trees}
 
-\item{sequence_length}{sequence length (e.g. number of targets)}
+\item{sequence_length}{sequence length (e.g. number of targets, default 200L)}
 
 \item{outcome_prob}{outcome probability of each letter}
 

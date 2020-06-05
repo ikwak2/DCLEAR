@@ -19,6 +19,7 @@ setMethod(
     division = 16L,
     k = 2,
     reps = 20L,
+		sequence_length = 200L,
     mutation_prob
   ){
 
@@ -37,7 +38,6 @@ setMethod(
     else
       dropout_prob <- 0
 
-
     freq <- freq[freq > 0]
 
     if (any(names(freq) %in% DELETION))
@@ -53,8 +53,6 @@ setMethod(
     outcome_prob <- freq / sum(freq)
 
     alphabets <- names(outcome_prob)
-
-    sequence_length <- ncol(x %>% as.character())
 
     summarize_kmer_core(k, alphabets, mutation_prob, division, reps, sequence_length, outcome_prob, dropout_prob = dropout_prob)
 
@@ -105,7 +103,7 @@ setMethod(
 #' @param mutation_prob mutation probability
 #' @param division number of cell division
 #' @param reps number of simulated trees
-#' @param sequence_length sequence length (e.g. number of targets)
+#' @param sequence_length sequence length (e.g. number of targets, default 200L)
 #' @param outcome_prob outcome probability of each letter
 #' @param n_nodes number of sampled tip or internval nodes in the simulated tree (default: 100L)
 #' @param dropout_prob dropout probability (default: 0)
@@ -120,7 +118,7 @@ summarize_kmer_core <- function(
   mutation_prob,
   division,
   reps,
-  sequence_length,
+  sequence_length = 200L,
   outcome_prob,
   n_nodes = 100L,
 	dropout_prob = 0

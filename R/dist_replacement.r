@@ -15,7 +15,7 @@ setMethod(
 	),
 	function(x, kmer_summary, k = 2, ...){
 
-		kmer_summary <- substr_kmer(kmer_summary, k)
+		kmer_summary <- substr_kmer(kmer_summary, 2L)
 
     dist_kmer_replacement_inference(x, kmer_summary, k)
 
@@ -35,6 +35,9 @@ setMethod(
 #'
 dist_kmer_replacement_inference <- function(x, kmer_summary, k = 2){
 
+	num_alphabets <- length(kmer_summary@alphabets)
+	num_kmers <- length(kmer_summary@kmers)
+
   log_p_D <- log(get_distance_prior(kmer_summary))
 
   log_p_AB_D <- kmer_summary %>%
@@ -42,16 +45,21 @@ dist_kmer_replacement_inference <- function(x, kmer_summary, k = 2){
     get_replacement_probability()
 	log_p_AB_D <- log(log_p_AB_D + 1e-10)
 
+	dim(log_p_AB_D) <- c(num_alphabets * num_alphabets, kmer_summary@max_distance)
+
+	# an array for mapping alphabet to 2-mer
+  km1 <- matrix(1:(num_alphabets * num_alphabets), num_alphabets, num_alphabets, dimnames = list(kmer_summary@alphabets, kmer_summary@alphabets))
+
   if (k > 1){
     log_p_B_AD <- get_transition_probability(kmer_summary)
 		log_p_B_AD <- log(log_p_B_AD + 1e-10)
-
+		dim(log_p_B_AD) <- c(length(kmer_summary@kmers) * length(kmer_summary@kmers), kmer_summary@max_distance)
+  	km2 <- matrix(1:(num_kmers * num_kmers), num_kmers, num_kmers, dimnames = list(kmer_summary@kmers, kmer_summary@kmers))
 	}
 
 	p <- expand.grid(
 		from = 1:length(x),
-		to = 1:length(x),
-    distance = 1:kmer_summary@max_distance
+		to = 1:length(x)
 	) %>% 
 		filter(from < to)
 
@@ -63,13 +71,7 @@ dist_kmer_replacement_inference <- function(x, kmer_summary, k = 2){
 		as.integer() %>%
 		matrix(length(x), sequence_length)
 
-	# an array for mapping individual character in kmer to kmer index
-  km <- do.call('paste0', do.call('expand.grid', lapply(seq_len(k), function(i) kmer_summary@alphabets))) %>%
-	  factor(kmer_summary@kmers) %>%
-		as.integer() %>%
-		array(dim = rep(length(kmer_summary@alphabets), k), dimnames = lapply(1:k, function(i) kmer_summary@alphabets))
-
-  d <- p %>% filter(distance == 1)
+  d <- p
 	d$distance <- 0
 
   for (start in seq_len(sequence_length - k + 1)){  # for each k-mer segment
@@ -82,7 +84,7 @@ dist_kmer_replacement_inference <- function(x, kmer_summary, k = 2){
     str_from <- yi[p[, 'from']] 
     str_to <- yi[p[, 'to']] 
 
-    log_prob <- log_p_AB_D[cbind(str_from, str_to, p$distance)]
+    log_prob <- log_p_AB_D[km1[cbind(str_from, str_to)], ]
 
     if (k > 1){
 
@@ -93,18 +95,17 @@ dist_kmer_replacement_inference <- function(x, kmer_summary, k = 2){
         t1 <- y[, start_i]
         t2 <- y[, start_i + 1]
 
-				str_from <- km[cbind(t1[p[, 'from']], t1[p[, 'to']])]
-				str_to <- km[cbind(t2[p[, 'from']], t2[p[, 'to']])]
+				str_from <- km1[cbind(t1[p[, 'from']], t1[p[, 'to']])]
+				str_to <- km1[cbind(t2[p[, 'from']], t2[p[, 'to']])]
 
-        log_prob <- log_prob + log_p_B_AD[cbind(str_from, str_to, p$distance)]
+        log_prob <- log_prob + log_p_B_AD[km2[cbind(str_from, str_to)], ]
 
       }
     }
 
-    log_prob  <- log_prob +  log_p_D[p$distance]
+		log_prob <- log_prob + matrix(log_p_D, nrow(log_prob), ncol(log_prob), byrow = TRUE)
 
-    P <- matrix(log_prob, nrow = length(x) * (length(x) - 1) / 2, ncol = kmer_summary@max_distance)
-    post <- exp(P - rowLogSumExps(P))
+    post <- exp(log_prob - rowLogSumExps(log_prob))
 
 		di <- rowSums(post %*% Diagonal(x = 1:kmer_summary@max_distance))
 		d$distance <- d$distance + di
