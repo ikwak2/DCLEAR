@@ -68,8 +68,7 @@ dist_kmer_replacement_inference <- function(x, kmer_summary, k = 2){
 #	d$distance <- 0
 	p1 <- p %>% filter(distance == 1)
 
-	  D <- Matrix(0, nrow = length(x), ncol = length(x), dimnames = list(names(x), names(x)))
-
+  D <- Matrix(0, nrow = length(x), ncol = length(x), dimnames = list(names(x), names(x)))
 
   for (start in seq_len(sequence_length - k + 1)){  # for each k-mer segment
 
@@ -204,7 +203,12 @@ get_transition_probability <- function(x){
     mutate(n = ifelse(from == to, n + 1, n)) %>%
     group_by(distance, from) %>%
     mutate(prob = n / sum(n)) %>%
-    select(from, to, distance, prob)
+    select(from, to, distance, prob) %>%
+		mutate(
+			from = factor(from, x@kmers),
+			to = factor(to, x@kmers)
+		) %>%
+		arrange(distance, to, from)
 
   array(
     d$prob, 
@@ -242,7 +246,12 @@ get_replacement_probability <- function(x){
     mutate(n = ifelse(from == to, n + 1, n)) %>%
     group_by(distance) %>%
     mutate(prob = n / sum(n)) %>%
-    select(from, to, distance, prob)
+    select(from, to, distance, prob) %>%
+		mutate(
+			from = factor(from, x@kmers),
+			to = factor(to, x@kmers)
+		) %>%
+		arrange(distance, to, from)
 
   array(
     d$prob, 
