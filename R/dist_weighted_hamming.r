@@ -47,9 +47,6 @@
 #' @export
 
 
-
-setGeneric('dist_weighted_hamming', function(x, wVec, dropout=FALSE, ...) standardGeneric('dist_weighted_hamming'))
-
 setMethod(
 	'dist_weighted_hamming',
 	signature(

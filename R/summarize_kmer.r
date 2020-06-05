@@ -1,5 +1,3 @@
-setGeneric('summarize_kmer', function(x, ...) standardGeneric('summarize_kmer'))
-
 #' summarize_kmer
 #'
 #' Summarize kmer distributions with input sequences

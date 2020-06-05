@@ -1,5 +1,3 @@
-setGeneric('substr_kmer', function(x, ...) standardGeneric('substr_kmer'))
-
 setMethod(
   'substr_kmer',
   signature(

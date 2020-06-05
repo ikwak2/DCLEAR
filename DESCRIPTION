@@ -16,7 +16,6 @@ Depends:
 biocViews:
 Imports: 
     BiocParallel,
-    Biostrings,
     dplyr,
     Matrix,
     matrixStats,

@@ -1,5 +1,3 @@
-setGeneric('dist_replacement', function(x, kmer_summary, ...) standardGeneric('dist_replacement'))
-
 #' dist_replacement
 #' 
 #' Compute the sequence distance by kmer replacement
@@ -58,17 +56,22 @@ dist_kmer_replacement_inference <- function(x, kmer_summary, k = 2){
 	) %>% 
 		filter(from < to)
 
-  # input sequence in BStringSet object
-  y <- do.call('paste0', as.data.frame(x %>% as.character())) %>%
-    BStringSet()
-
   sequence_length <- ncol(x %>% as.character())
 
-#  d <- p %>% filter(distance == 1)
-#	d$distance <- 0
-	p1 <- p %>% filter(distance == 1)
+  # input sequence 
+	y <- do.call('rbind', strsplit(as.character(x), '')) %>%
+		factor(kmer_summary@alphabets) %>% 
+		as.integer() %>%
+		matrix(length(x), sequence_length)
 
-  D <- Matrix(0, nrow = length(x), ncol = length(x), dimnames = list(names(x), names(x)))
+	# an array for mapping individual character in kmer to kmer index
+  km <- do.call('paste0', do.call('expand.grid', lapply(seq_len(k), function(i) kmer_summary@alphabets))) %>%
+	  factor(kmer_summary@kmers) %>%
+		as.integer() %>%
+		array(dim = rep(length(kmer_summary@alphabets), k), dimnames = lapply(1:k, function(i) kmer_summary@alphabets))
+
+  d <- p %>% filter(distance == 1)
+	d$distance <- 0
 
   for (start in seq_len(sequence_length - k + 1)){  # for each k-mer segment
 
@@ -76,15 +79,9 @@ dist_kmer_replacement_inference <- function(x, kmer_summary, k = 2){
 			flog.info(sprintf('posterior probability | position=%5.d/%5.d', start, sequence_length))
 		}
 
-    yi <- substr(y, start, start)
-
-    str_from <- yi[p[, 'from']] %>% 
-      factor(kmer_summary@alphabets) %>% 
-      as.numeric()
-
-    str_to <- yi[p[, 'to']] %>% 
-      factor(kmer_summary@alphabets) %>% 
-      as.numeric()
+    yi <- y[, start]
+    str_from <- yi[p[, 'from']] 
+    str_to <- yi[p[, 'to']] 
 
     log_prob <- log_p_AB_D[cbind(str_from, str_to, p$distance)]
 
@@ -94,16 +91,11 @@ dist_kmer_replacement_inference <- function(x, kmer_summary, k = 2){
 
         start_i <- start + i - 1
 
-        t1 <- substr(y, start_i, start_i)
-        t2 <- substr(y, start_i + 1, start_i + 1)
+        t1 <- y[, start_i]
+        t2 <- y[, start_i + 1]
 
-        str_from <- paste0(t1[p[, 'from']], t1[p[, 'to']]) %>%
-          factor(kmer_summary@kmers) %>% 
-          as.numeric()
-
-        str_to <- paste0(t2[p[, 'from']], t2[p[, 'to']]) %>%
-          factor(kmer_summary@kmers) %>% 
-          as.numeric()
+				str_from <- km[cbind(t1[p[, 'from']], t1[p[, 'to']])]
+				str_to <- km[cbind(t2[p[, 'from']], t2[p[, 'to']])]
 
         log_prob <- log_prob + log_p_B_AD[cbind(str_from, str_to, p$distance)]
 
@@ -113,29 +105,21 @@ dist_kmer_replacement_inference <- function(x, kmer_summary, k = 2){
     log_prob  <- log_prob +  log_p_D[p$distance]
 
     P <- matrix(log_prob, nrow = length(x) * (length(x) - 1) / 2, ncol = kmer_summary@max_distance)
-    post <- exp(P - apply(P, 1, logSumExp))
+    post <- exp(P - rowLogSumExps(P))
 
-#		di <- rowSums(post %*% Diagonal(x = 1:kmer_summary@max_distance))
-#		d$distance <- d$distance + di
-		Di <- sparseMatrix(
-											       i = p1[, 'from'], 
-														       j = p1[, 'to'], 
-																	       x = rowSums(post %*% Diagonal(x = 1:kmer_summary@max_distance)),
-																				       dims = c(length(x), length(x)),
-																							       dimnames = list(names(x), names(x))
-														     )
-		    D <- D + Di
+		di <- rowSums(post %*% Diagonal(x = 1:kmer_summary@max_distance))
+		d$distance <- d$distance + di
 
   }
 
-#	D <- sparseMatrix(
-#  	i = d$from,
-#		j = d$to,
-#		x = d$distance,
-#		dims = c(length(x), length(x)),
-#		dimnames = list(names(x), names(x))
-#	) %>%
-#		as.matrix()
+	D <- sparseMatrix(
+  	i = d$from,
+		j = d$to,
+		x = d$distance,
+		dims = c(length(x), length(x)),
+		dimnames = list(names(x), names(x))
+	) %>%
+		as.matrix()
 
   D <- t(D) + D
   D %>% as.dist()
@@ -226,6 +210,7 @@ get_transition_probability <- function(x){
 #'
 #' @param x a kmer_summary object
 #' @return an 3D probabilistic array (kmers by kmers by distances)
+#'
 #' @export
 #'
 #' @author Wuming Gong (gongx030@umn.edu)
