@@ -23,6 +23,34 @@ setMethod(
 )
 
 
+
+#' dist_replacement
+#' 
+#' Compute the sequence distance by kmer replacement
+#' @param ix nput data in phyDat format
+#' @param kmer_summary a kmer_summary object
+#' @return a dist object
+#' @export
+#' @author Wuming Gong (gongx030@umn.edu)
+#'
+setMethod(
+	'dist_replacement',
+	signature(
+		x = 'phyDat',
+    kmer_summary = 'missing'
+	),
+	function(x, kmer_summary, k = 2, reps = 20L, division = 16L, ...){
+
+		ks_summary <- x %>% summarize_kmer(reps = reps, division = division)
+
+    dist_kmer_replacement_inference(x, kmer_summary, k)
+
+  }
+)
+
+
+
+
 #' dist_kmer_replacement_inference
 #' 
 #' Compute the sequence distance matrix using inferred kmer replacement matrix 
