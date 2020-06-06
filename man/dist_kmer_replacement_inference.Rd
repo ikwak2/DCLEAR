@@ -2,7 +2,7 @@
 % Please edit documentation in R/dist_replacement.r
 \name{dist_kmer_replacement_inference}
 \alias{dist_kmer_replacement_inference}
-\title{dist_kmer_replacement_inference}
+\title{Core function of computing kmer replacement distance}
 \usage{
 dist_kmer_replacement_inference(x, kmer_summary, k = 2)
 }

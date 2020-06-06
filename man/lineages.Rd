@@ -4,9 +4,7 @@
 \name{lineages}
 \alias{lineages}
 \title{Lineage data}
-\format{
-An object of class \code{list} of length 100.
-}
+\format{An object of class \code{list} of length 100.}
 \usage{
 data(lineages)
 }
