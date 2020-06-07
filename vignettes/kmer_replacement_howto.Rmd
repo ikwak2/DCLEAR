@@ -1,7 +1,7 @@
 ---
 title: 'Computing the k-mer replacement matrix by simulation'
 output: rmarkdown::html_vignette
-date: '4/20/2020'
+date: '6/7/2020'
 author: 'Wuming Gong'
 vignette: >
   %\VignetteEngine{knitr::rmarkdown}
