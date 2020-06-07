@@ -28,10 +28,8 @@ y <- lineages[[1]]$tree
 
 ## Distance estimation by 2-mer replacment frequency from the simulated data
 ```{r}
-ks <- x %>% summarize_kmer(reps = 100L, division = 16L)
-
 x %>% 
-	dist_replacement(kmer_summary = ks, k = 2) %>%
+	dist_replacement() %>%
 	fastme.bal() %>% 
 	RF.dist(y, normalize = TRUE)
 
