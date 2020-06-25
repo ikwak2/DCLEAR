@@ -24,3 +24,8 @@ General Public License for more details.
 
 A copy of the GNU General Public License, version 3, is available at
 <https://www.r-project.org/Licenses/GPL-3>
+
+
+### Presentation
+
+Our talk on the special DREAM session in RECOMB 2020 meeting (https://www.recomb2020.org/) can be found [here](https://www.dropbox.com/s/a93q2lnqni6xf4q/RECOMB_2020_talk_final.pdf?dl=0).  
