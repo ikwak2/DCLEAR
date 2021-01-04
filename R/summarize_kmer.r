@@ -128,7 +128,8 @@ summarize_kmer_core <- function(
 
   max_distance <- (division - 1) * 2
 
-  flog.info(sprintf('simulating | k=%d | alphabets=%d | mutation=%.3f | division=%d | sample=%d | sequence_length=%d | dropout_prob=%.3f', k, length(alphabets), mutation_prob, division, reps, sequence_length, dropout_prob))
+  sprintf('simulating | k=%d | alphabets=%d | mutation=%.3f | division=%d | sample=%d | sequence_length=%d | dropout_prob=%.3f', k, length(alphabets), mutation_prob, division, reps, sequence_length, dropout_prob) %>%
+		message()
 
   p <- expand.grid(
     from = 1:n_nodes,

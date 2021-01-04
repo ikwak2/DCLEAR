@@ -1,6 +1,6 @@
 Package: DCLEAR
-Version: 0.9.3
-Date: 2020-06-05
+Version: 0.9.4
+Date: 2021-01-03
 Title: Distance based Cell LinEAge Reconstruction (DCLEAR)
 Description: R codes for distance based cell lineage reconstruction. 
 Author: Il-Youp Kwak and Wuming Gong
@@ -12,13 +12,14 @@ VignetteBuilder: knitr
 LinkingTo: Rcpp, RcppArmadillo
 RoxygenNote: 7.1.0
 Depends: 
-  R (>= 3.6.0)
+	R (>= 3.6.3),
+	tensorflow,
+	tfprobability
 biocViews:
 Imports: 
-    BiocParallel,
-    dplyr,
-    Matrix,
-    matrixStats,
-	  ape,
-  	phangorn,
-    futile.logger
+	BiocParallel,
+	dplyr,
+	Matrix,
+	matrixStats,
+	ape,
+	phangorn

@@ -104,7 +104,7 @@ dist_kmer_replacement_inference <- function(x, kmer_summary, k = 2){
   for (start in seq_len(sequence_length - k + 1)){  # for each k-mer segment
 
 		if (start == 1 || start %% 10 == 0){
-			flog.info(sprintf('posterior probability | position=%5.d/%5.d', start, sequence_length))
+			sprintf('posterior probability | position=%5.d/%5.d', start, sequence_length) %>% message()
 		}
 
     log_prob <- matrix(log_p_D, nrow(p), kmer_summary@max_distance, byrow = TRUE)
