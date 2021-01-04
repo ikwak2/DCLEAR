@@ -1,7 +1,9 @@
-
 setOldClass('phyDat')
 setOldClass('phylo')
 setOldClass('igraph')
+setOldClass('kerastools.model.RModel')
+setOldClass('tf_dataset')
+setOldClass('tensorflow.tensor')
 
 setClass(
 	'lineage_tree',
@@ -14,7 +16,10 @@ setClass(
 		n_samples = 'numeric',
 		n_targets = 'numeric',
 		deletion = 'logical',
-		dropout_prob = 'numeric'
+		dropout_prob = 'numeric',
+		dropout_character = 'character',
+		default_character = 'character',
+		deletion_character = 'character'
 	)
 )
 
@@ -34,3 +39,8 @@ setClass(
 		dropout_prob = 'numeric'
 	)
 )
+
+setClass('Model', slot = c(model = 'kerastools.model.RModel'))
+
+setClass('Tree2SeqModel', contains = 'Model')
+

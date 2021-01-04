@@ -29,7 +29,11 @@ simulate <- function(
 	dropout_prob = 0
 ){
 
+	if (is.null(alphabets))
+		stop('alphabets must be specified')
+
 	num_states <- length(alphabets)
+
 	DEFAULT <- '0'
 	DELETION <- '-'
 	DROPOUT <- '*'
@@ -49,7 +53,6 @@ simulate <- function(
 		children <- pairs[, 2] %>% get_node_names()
 		xc <- x[parents, , drop = FALSE]	# the states of the children cells
 		rownames(xc) <- children
-
 
 		for (i in 1:nrow(pairs)){ # for each child
 
@@ -80,6 +83,9 @@ simulate <- function(
 		# randomly add dropout events
 		dropout_position <- sample(prod(dim(x)), round(prod(dim(x)) * dropout_prob), replace = FALSE)
 		x[dropout_position] <- DROPOUT
+		alphabets <- c(DROPOUT, alphabets)
+		outcome_prob <- c(0, outcome_prob)
+		names(outcome_prob) <- alphabets
 	}
 
 	num_nodes <- 2^division - 1
@@ -106,7 +112,10 @@ simulate <- function(
 		n_samples = n_samples,
 		n_targets = n_targets,
 		deletion = deletion,
-		dropout_prob = dropout_prob
+		dropout_prob = dropout_prob,
+		dropout_character = DROPOUT,
+		default_character = DEFAULT,
+		deletion_character = DELETION
 	)
 
 } # simulate

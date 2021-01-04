@@ -5,3 +5,7 @@ setGeneric('dist_weighted_hamming', function(x, wVec, dropout=FALSE, ...) standa
 setGeneric('substr_kmer', function(x, ...) standardGeneric('substr_kmer'))
 
 setGeneric('summarize_kmer', function(x, ...) standardGeneric('summarize_kmer'))
+
+setGeneric('prepare_data', function(x, ...) standardGeneric('prepare_data'))
+
+setGeneric('fit', function(model, x, ...) standardGeneric('fit'))
