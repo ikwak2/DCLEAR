@@ -42,5 +42,6 @@ setClass(
 
 setClass('Model', slot = c(model = 'kerastools.model.RModel'))
 
-setClass('Tree2SeqModel', contains = 'Model')
+setClass('Seq2TreeModel', contains = 'Model')
+setClass('SimDistModel', contains = 'Model')
 
