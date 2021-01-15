@@ -6,8 +6,6 @@ setGeneric('substr_kmer', function(x, ...) standardGeneric('substr_kmer'))
 
 setGeneric('summarize_kmer', function(x, ...) standardGeneric('summarize_kmer'))
 
-setGeneric('prepare_data', function(x, ...) standardGeneric('prepare_data'))
-
 setGeneric('fit', function(model, x, ...) standardGeneric('fit'))
 
 setGeneric('dist_sim', function(x, model, ...) standardGeneric('dist_sim'))
