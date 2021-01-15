@@ -6,6 +6,7 @@ get_angles <- function(pos, i, d_model){
   pos %*% angle_rates
 }
 
+#'
 positional_encoding <- function(position, d_model){
 	angle_rads <- get_angles(
 		 matrix(0:(position - 1), position, 1),
