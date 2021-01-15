@@ -16,7 +16,7 @@ setMethod(
 	),
 	function(x, kmer_summary, k = 2, ...){
 
-		kmer_summary <- substr_kmer(kmer_summary, 2L)
+		kmer_summary <- substr_kmer(kmer_summary, 2L, ...)
 
     dist_kmer_replacement_inference(x, kmer_summary, k)
 
@@ -42,7 +42,7 @@ setMethod(
 	),
 	function(x, kmer_summary, k = 2, reps = 20L, division = 16L, ...){
 
-		kmer_summary <- x %>% summarize_kmer(reps = reps, division = division)
+		kmer_summary <- x %>% summarize_kmer(reps = reps, division = division, ...)
 
     dist_kmer_replacement_inference(x, kmer_summary, k)
 

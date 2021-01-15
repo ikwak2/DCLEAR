@@ -9,3 +9,5 @@ setGeneric('summarize_kmer', function(x, ...) standardGeneric('summarize_kmer'))
 setGeneric('fit', function(model, x, ...) standardGeneric('fit'))
 
 setGeneric('dist_sim', function(x, model, ...) standardGeneric('dist_sim'))
+
+setGeneric('simulate', function(config, ...) standardGeneric('simulate'))

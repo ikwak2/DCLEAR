@@ -9,12 +9,21 @@
   division = 16L,
   k = 2,
   reps = 20L,
-  sequence_length = 200L,
-  mutation_prob
+  n_samples = 200L,
+  n_nodes = 100L,
+  n_targets
 )
 }
 \arguments{
 \item{x}{input data as a phyDat object}
+
+\item{division}{number of cell division}
+
+\item{k}{k-mer (default = 2)}
+
+\item{reps}{number of simulated trees}
+
+\item{n_targets}{sequence length. If this argument is missing, the length of the input sequences will be used.}
 }
 \value{
 a kmer_summary object

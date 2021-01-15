@@ -206,48 +206,12 @@ setMethod(
 		x,
 		y = NULL,
 		division = 16L,
-		mutation_prob,
 		batch_size = 128L,
 		epochs = 10000L,
 		steps_per_epoch = 10L,
+		n_samples = 100L,
 		compile = FALSE
 	){
-
-		DEFAULT <- '0'
-		DELETION <- '-'
-		DROPOUT <- '*'
-
-		alphabets <- levels(x)
-		freq <- x %>%
-			as.character() %>%
-			factor(alphabets) %>%
-			table()
-
-		if (any(DROPOUT %in% alphabets))
-			dropout_prob <- freq[DROPOUT] / sum(freq) # dropout probability
-		else
-			dropout_prob <- 0
-
-		if (any(names(freq) %in% DELETION))
-			freq[DELETION] <- 0
-
-		if (any(names(freq) %in% DELETION))
-			deletion <- TRUE
-
-		if (any(names(freq) %in% DROPOUT))
-			freq[DROPOUT] <- 0
-
-		if (missing(mutation_prob))
-			mutation_prob <- 1 - (freq[DEFAULT] / sum(freq))^(1 / division)
-
-		freq[DEFAULT] <- 0
-		outcome_prob <- as.numeric(freq / sum(freq))
-		names(outcome_prob) <- names(freq)
-		alphabets <- names(freq)
-
-		n_targets <- x %>%
-			as.character() %>%
-			ncol()
 
 		learning_rate <- tf$keras$optimizers$schedules$PolynomialDecay(
 			initial_learning_rate = 1e-4,
@@ -274,19 +238,13 @@ setMethod(
 		if (compile){
 			train_step <- tf_function(train_step) # convert to graph mode
 		}
+
+		config <- process_sequence(x)
+		browser()
 		
 		for (epoch in 1:epochs){
 
-			sim <- simulate(
-				n_samples = 100L, 
-				n_targets = n_targets, 
-				mutation_prob = mutation_prob, 
-				division = division, 
-				outcome_prob = outcome_prob, 
-				alphabets = alphabets, 
-				deletion = deletion, 
-				dropout_prob = dropout_prob
-			)
+			sim <- simulate(config, n_samples = n_samples)
 
 			xb <- sim@x %>%
 			  as.character() %>%

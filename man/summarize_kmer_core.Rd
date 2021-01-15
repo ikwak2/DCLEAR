@@ -6,34 +6,18 @@
 \usage{
 summarize_kmer_core(
   k = 2,
-  alphabets,
-  mutation_prob,
-  division,
-  reps,
-  sequence_length = 200L,
-  outcome_prob,
+  reps = 20L,
+  n_samples = 200L,
   n_nodes = 100L,
-  dropout_prob = 0
+  config = NULL
 )
 }
 \arguments{
 \item{k}{k-mer (default = 2)}
 
-\item{alphabets}{alphabets used in the tree}
-
-\item{mutation_prob}{mutation probability}
-
-\item{division}{number of cell division}
-
 \item{reps}{number of simulated trees}
 
-\item{sequence_length}{sequence length (e.g. number of targets, default 200L)}
-
-\item{outcome_prob}{outcome probability of each letter}
-
-\item{n_nodes}{number of sampled tip or internval nodes in the simulated tree (default: 100L)}
-
-\item{dropout_prob}{dropout probability (default: 0)}
+\item{config}{lineage tree configuration (a lineage_tree_config object)}
 }
 \value{
 a kmer_summary object
