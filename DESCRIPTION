@@ -12,7 +12,9 @@ VignetteBuilder: knitr
 LinkingTo: Rcpp, RcppArmadillo
 RoxygenNote: 7.1.0
 Depends: 
-	R (>= 3.6.3)
+	R (>= 3.6.3),
+	tensorflow,
+	tfprobability
 biocViews:
 Imports: 
 	BiocParallel,
