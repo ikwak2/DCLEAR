@@ -240,18 +240,11 @@ setMethod(
 		}
 
 		config <- process_sequence(x)
-		browser()
 		
 		for (epoch in 1:epochs){
 
 			sim <- simulate(config, n_samples = n_samples)
-
-			xb <- sim@x %>%
-			  as.character() %>%
-			  factor(levels(sim@x)) %>%
-				as.numeric() %>%
-				matrix(nrow = length(sim@x), ncol = ncol(as.character(sim@x)), dimnames = list(names(sim@x), NULL))
-			xb  <- xb  - 1
+			xb <- as_matrix(sim@x)
 
 			for (s in seq_len(steps_per_epoch)){
 
@@ -292,12 +285,11 @@ setMethod(
 	),
 	function(x, model, batch_size = 512L, ...){
 
-		alphabets <- levels(x)
 		v <- names(x)
 
 		x <- x %>%
 		  as.character() %>%
-		  factor(alphabets) %>%
+		  factor(levels(x)) %>%
 			as.numeric() %>%
 			matrix(nrow = length(x), ncol = ncol(as.character(x)))
 		x <- x - 1
@@ -331,4 +323,14 @@ setMethod(
 		d
 	}
 )
+
+#'
+as_matrix <- function(x){
+	x <- x %>%
+		as.character() %>%
+		factor(levels(x)) %>%
+		as.numeric() %>%
+		matrix(nrow = length(x), ncol = ncol(as.character(x)), dimnames = list(names(x), NULL))
+	x <- x - 1
+}
 
