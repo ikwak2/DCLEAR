@@ -15,7 +15,6 @@ Depends:
 	R (>= 3.6.3),
 	tensorflow,
 	tfprobability,
-	tidyverse
 biocViews:
 Imports: 
 	BiocParallel,
