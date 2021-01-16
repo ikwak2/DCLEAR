@@ -4,6 +4,8 @@
 #'
 #' @param x input data in phyDat format
 #' @param kmer_summary a kmer_summary object
+#' @param k k-mer length
+#' @param ... other arguments passed to substr_kmer
 #' @return a dist object
 #' @export
 #' @author Wuming Gong (gongx030@umn.edu)
@@ -12,11 +14,12 @@ setMethod(
 	'dist_replacement',
 	signature(
 		x = 'phyDat',
-    kmer_summary = 'kmer_summary'
+    kmer_summary = 'kmer_summary',
+		k = 'integer'
 	),
 	function(x, kmer_summary, k = 2, ...){
 
-		kmer_summary <- substr_kmer(kmer_summary, 2L)
+		kmer_summary <- substr_kmer(kmer_summary, k = k, ...)
 
     dist_kmer_replacement_inference(x, kmer_summary, k)
 
@@ -30,6 +33,8 @@ setMethod(
 #'
 #' @param x input data in phyDat format
 #' @param kmer_summary a kmer_summary object
+#' @param k k-mer length
+#' @param ... other arguments passed to substr_kmer
 #' @return a dist object
 #' @export
 #' @author Wuming Gong (gongx030@umn.edu)
@@ -38,11 +43,12 @@ setMethod(
 	'dist_replacement',
 	signature(
 		x = 'phyDat',
-    kmer_summary = 'missing'
+    kmer_summary = 'missing',
+		k = 'integer'
 	),
-	function(x, kmer_summary, k = 2, reps = 20L, division = 16L, ...){
+	function(x, kmer_summary, k = 2, ...){
 
-		kmer_summary <- x %>% summarize_kmer(reps = reps, division = division)
+		kmer_summary <- x %>% summarize_kmer(k = k, ...)
 
     dist_kmer_replacement_inference(x, kmer_summary, k)
 
@@ -104,7 +110,7 @@ dist_kmer_replacement_inference <- function(x, kmer_summary, k = 2){
   for (start in seq_len(sequence_length - k + 1)){  # for each k-mer segment
 
 		if (start == 1 || start %% 10 == 0){
-			flog.info(sprintf('posterior probability | position=%5.d/%5.d', start, sequence_length))
+			sprintf('posterior probability | position=%5.d/%5.d', start, sequence_length) %>% message()
 		}
 
     log_prob <- matrix(log_p_D, nrow(p), kmer_summary@max_distance, byrow = TRUE)

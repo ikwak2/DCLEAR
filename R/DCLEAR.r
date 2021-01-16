@@ -3,10 +3,10 @@
 #' Distance based methods for inferring lineage treess from single cell data
 #' 
 #' @import tidyverse
-#' @import dplyr 
+#' @import methods
 #' @import Matrix
+#' @import dplyr
 #' @importFrom matrixStats rowLogSumExps
-#' @import futile.logger
 #' @importFrom igraph distances graph.adjacency degree permute.vertices vcount V contract simplify set_vertex_attr
 #' @importFrom purrr map
 #' @importFrom stringr str_pad
