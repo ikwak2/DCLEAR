@@ -26,7 +26,7 @@ We can assign weights as below equation.
 And we can approximate unknown weights using training data.
 
 ### Constructing tree from the distance matrix
-With the previously proposed distance matric, we can construct distance matrix among cells. We can apply diverse types of tree construction algorithms such as Neighbor-Joining(NJ), FastME.
+With the previously proposed distance matric, we can construct distance matrix among cells. We can apply tree construction algorithms such as Neighbor-Joining(NJ), FastME.
 
 
 ## Usage
