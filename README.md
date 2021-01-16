@@ -19,7 +19,7 @@ Figure 1. Overview of DCLEAR modeling architecture. Our model is divided into tw
 #### Estimating distance between cells
 
 Naive approach would be the hamming distance that simply calculate the edit distance.
-![](https://ikwak2.github.io/tmpimages/hamming.png)
+![](https://ikwak2.github.io/tmpimages/hamming.PNG)
 
 However, the previous approach assume every base difference have same weights. For example, two sequences, '00AB0' and '0-CB0', are different at second and third positions. The second position, we have '0' and '-', and the third position, we have 'A' and 'C'.
 
@@ -27,7 +27,7 @@ For '0' and '-', '-' is point missing and it is possibly '0'. Thus it should hav
 For 'A' and 'C', During the cell propagation, '0' differentiated to 'A' and '0' differentiated to 'C'. Thus it should have larger weight.
 We can assign weights as below equation.
 
-![](https://ikwak2.github.io/tmpimages/whamming.png)
+![](https://ikwak2.github.io/tmpimages/whamming.PNG)
 
 And we can approximate unknown weights using training data.
 
