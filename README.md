@@ -11,6 +11,33 @@ With 'devtools':
 devtools::install_github("ikwak2/DCLEAR")
 ```
 
+Figure 1. Overview of DCLEAR modeling architecture. Our model is divided into two parts, 1) estimating distance between cells and 2) constructing tree using distance matrix.
+![](https://ikwak2.github.io/tmpimages/modeling_overview.png =250x)
+
+#### Estimating distance between cells
+
+Naive approach would be the hamming distance that simply calculate the edit distance.
+![](https://ikwak2.github.io/tmpimages/hamming.png =50x)
+
+However, the previous approach assume every base difference have same weights. For example, two sequences, '00AB0' and '0-CB0', are different at second and third positions. The second position, we have '0' and '-', and the third position, we have 'A' and 'C'.
+
+For '0' and '-', '-' is point missing and it is possibly '0'. Thus it should have lower weight.
+For 'A' and 'C', During the cell propagation, '0' differentiated to 'A' and '0' differentiated to 'C'. Thus it should have larger weight.
+We can assign weights as below equation.
+
+![](https://ikwak2.github.io/tmpimages/whamming.png =50x)
+
+And we can approximate unknown weights using training data.
+
+#### Constructing tree from the distance matrix
+With the previously proposed distance matric, we can construct distance matrix among cells. We can apply diverse types of tree construction algorithms such as Neighbor-Joining(NJ), FastME.
+
+
+### Usage
+
+Following link describe the use of DCLEAR : Link will be provided later
+
+
 ### DCLEAR Overview 
 
 ![](https://ikwak2.github.io/tmpimages/modeling_overview.png)
