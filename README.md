@@ -31,11 +31,10 @@ With the previously proposed distance matric, we can construct distance matrix a
 
 ## Usage
 
-   - How to use weighted hamming : [Link](vignette/WHhowto.html)
-   - How to use kmer_replacement : [Link](vignette/kmer_replacement_howto.html)
-   - Preparation for subchallenge 2 submission : [link](vignette/PrepC2.html)
-   - Preparation for subchallenge 3 submission : [link](vignette/PrepC3.html)
-   - Another example using subchallenge 2 data : [link](vignette/Example_subchallenge2.html)
+   - How to use weighted hamming : [Link](https://ikwak2.github.io/tmphtml/Example_subchallenge2)
+   - How to use kmer_replacement : [Link](xxx.html)
+   - Preparation for subchallenge 2 submission : [link](https://ikwak2.github.io/tmphtml/PrepC2)
+   - Preparation for subchallenge 3 submission : [link](https://ikwak2.github.io/tmphtml/PrepC3)
 
 
 ## installation
