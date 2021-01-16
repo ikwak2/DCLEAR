@@ -46,7 +46,7 @@ scaled_dot_product_attention <- function(q, k, v, mask = NULL){
 		scaled_attention_logits <- scaled_attention_logits + (mask * -1e9)  
 	}
 			
-	attention_weights <- tf$nn$softmax(scaled_attention_logits, axis = -1)  # (..., seq_len_q, seq_len_k)
+	attention_weights <- tf$nn$softmax(scaled_attention_logits, axis = -1L)  # (..., seq_len_q, seq_len_k)
 
 	output <- tf$matmul(attention_weights, v)  # (..., seq_len_q, depth_v)
 
@@ -71,9 +71,9 @@ MultiHeadAttention <- function(
 		stopifnot(self$d_model %% self$num_heads == 0)
 
 		self$depth <- as.integer(self$d_model / self$num_heads)
-		self$wv <- tf$keras$layers$Dense(self$d_model)
 		self$wq <- tf$keras$layers$Dense(self$d_model)
 		self$wk <- tf$keras$layers$Dense(self$d_model)
+		self$wv <- tf$keras$layers$Dense(self$d_model)
 		self$dense <- tf$keras$layers$Dense(self$d_model)
 
 		self$split_heads <- function(x, batch_size){
@@ -158,7 +158,7 @@ SimDistModel <- function(
 		self$filters <- filters
 		self$n_targets <- n_targets
 
-		self$embedding <- tf$keras$layers$Embedding(alphabets, filters)
+		self$embedding <- tf$keras$layers$Embedding(alphabets, as.integer(self$filters / 2))
 		self$dropout_1 <- tf$keras$layers$Dropout(rate)
 		self$pos_encoding <- tf$cast(positional_encoding(self$n_targets, self$filters), tf$float32)
 
@@ -173,7 +173,9 @@ SimDistModel <- function(
 			x1 <- x1 %>% self$embedding()
 			x2 <- x2 %>% self$embedding()
 
-			x <- (x1 - x2)^2
+			x <- list(x1, x2) %>% 
+				tf$concat(axis = 2L)
+				
 			x <- x * tf$math$sqrt(tf$cast(self$filters, tf$float32))
 			x <- x + self$pos_encoding
 			x <- x %>%
@@ -210,12 +212,13 @@ setMethod(
 		epochs = 10000L,
 		steps_per_epoch = 10L,
 		n_samples = 100L,
+		n_sims = 20L,
 		compile = FALSE
 	){
 
 		learning_rate <- tf$keras$optimizers$schedules$PolynomialDecay(
 			initial_learning_rate = 1e-4,
-			decay_steps = steps_per_epoch * epochs,
+			decay_steps = steps_per_epoch * epochs * n_sims,
 			end_learning_rate = 0
 		)
 		optimizer <- tf$keras$optimizers$Adam(learning_rate, beta_1 = 0.9, beta_2 = 0.98, epsilon = 1e-9)
@@ -240,37 +243,49 @@ setMethod(
 		}
 
 		config <- process_sequence(x)
+
+		sims <- lapply(1:n_sims, function(i) simulate(config, n_samples = n_samples))
 		
 		for (epoch in 1:epochs){
 
-			sim <- simulate(config, n_samples = n_samples)
-			xb <- as_matrix(sim@x)
+			loss <- rep(0, length(sims))
 
-			for (s in seq_len(steps_per_epoch)){
+			for (j in 1:length(sims)){
 
-				i1 <- sample(rownames(xb), batch_size, replace = TRUE)	# sampling some nodes
-				i2 <- sample(rownames(xb), batch_size, replace = TRUE)	# sampling some nodes
+				xb <- as_matrix(sims[[j]]@x)
+				db <- distances(sims[[j]]@graph)
 
-				yb <- distances(sim@graph)[cbind(i1, i2)] %>%
-					tf$cast(tf$float32) %>%
-					tf$expand_dims(1L)
+				for (s in seq_len(steps_per_epoch)){
 
-				x1 <- xb[i1, ] %>% 
-					tf$cast(tf$int64) 
+					i1 <- sample(rownames(xb), batch_size, replace = TRUE)	# sampling some nodes
+					i2 <- sample(rownames(xb), batch_size, replace = TRUE)	# sampling some nodes
 
-				x2 <- xb[i2, ] %>% 
-					tf$cast(tf$int64) 
+					yb <- db[cbind(i1, i2)] %>%
+						tf$cast(tf$float32) %>%
+						tf$expand_dims(1L)
 
-				res <- train_step(x1, x2, yb)
+					x1 <- xb[i1, ] %>% 
+						tf$cast(tf$int64) 
 
-				sprintf('epoch=%6.d/%6.d | step=%3.d/%3.d | loss=%15.7f', epoch, epochs, s, steps_per_epoch, res$loss) %>%
-					message()
+					x2 <- xb[i2, ] %>% 
+						tf$cast(tf$int64) 
+
+					res <- train_step(x1, x2, yb)
+					loss[j] <- loss[j] + as.numeric(res$loss)
+
+				}
 			}
 
-			if (epoch %% 10 == 0){
-				d <- dist_sim(x, model)
-				d %>% NJ() %>% RF.dist(y, normalize = TRUE) %>% message()
+			for (j in 1:2){
+				is_leaf <- degree(sims[[j]]@graph, mode = 'out') == 0
+				rf <- dist_sim(sims[[j]]@x[is_leaf], model) %>%
+					NJ() %>% 
+					RF.dist(sims[[j]]@graph %>% as_phylo(), normalize = TRUE) 
+				sprintf('epoch=%6.d/%6.d | sim=%3.d/%3.d | loss=%15.7f | RF=%15.7f', epoch, epochs, j, n_sims, loss[j], rf) %>% message()
 			}
+
+			d <- dist_sim(x, model)
+			d %>% NJ() %>% RF.dist(y, normalize = TRUE) %>% message()
 		}
 		model
 	}
