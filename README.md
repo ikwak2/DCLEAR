@@ -20,7 +20,7 @@ Figure 1. Overview of DCLEAR modeling architecture. Our model is divided into tw
 
 Naive approach would be the hamming distance that simply calculate the edit distance.
 
-<img src="https://ikwak2.github.io/tmpimages/hamming.PNG" alt="drawing" width="500"/>
+<img src="https://ikwak2.github.io/tmpimages/hamming.PNG" alt="drawing" width="450"/>
 
 However, the previous approach assume every base difference have same weights. For example, two sequences, '00AB0' and '0-CB0', are different at second and third positions. The second position, we have '0' and '-', and the third position, we have 'A' and 'C'.
 
