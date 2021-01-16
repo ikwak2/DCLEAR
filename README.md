@@ -31,7 +31,11 @@ With the previously proposed distance matric, we can construct distance matrix a
 
 ## Usage
 
-Following link describe the use of DCLEAR : Link will be provided later
+   - How to use weighted hamming : [Link](vignette/WHhowto.html)
+   - How to use kmer_replacement : [Link](vignette/kmer_replacement_howto.html)
+   - Preparation for subchallenge 2 submission : [link](vignette/PrepC2.html)
+   - Preparation for subchallenge 3 submission : [link](vignette/PrepC3.html)
+   - Another example using subchallenge 2 data : [link](vignette/Example_subchallenge2.html)
 
 
 ## installation
