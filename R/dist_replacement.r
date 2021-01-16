@@ -4,6 +4,8 @@
 #'
 #' @param x input data in phyDat format
 #' @param kmer_summary a kmer_summary object
+#' @param k k-mer length
+#' @param ... other arguments passed to substr_kmer
 #' @return a dist object
 #' @export
 #' @author Wuming Gong (gongx030@umn.edu)
@@ -31,6 +33,8 @@ setMethod(
 #'
 #' @param x input data in phyDat format
 #' @param kmer_summary a kmer_summary object
+#' @param k k-mer length
+#' @param ... other arguments passed to substr_kmer
 #' @return a dist object
 #' @export
 #' @author Wuming Gong (gongx030@umn.edu)

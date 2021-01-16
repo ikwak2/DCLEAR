@@ -3,7 +3,6 @@
 #' Distance based methods for inferring lineage treess from single cell data
 #' 
 #' @import tidyverse
-#' @import reticulate
 #' @import methods
 #' @import Matrix
 #' @import dplyr

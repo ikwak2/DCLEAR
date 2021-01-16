@@ -6,6 +6,9 @@
 #' @param division number of cell division
 #' @param k k-mer (default = 2)
 #' @param reps number of simulated trees
+#' @param n_samples number of samples to simulate
+#' @param n_nodes number of nodes to sample (including both leaves and internval nodes)
+#' @param n_targets number of targets
 #' @param n_targets sequence length. If this argument is missing, the length of the input sequences will be used.
 #'
 #' @return a kmer_summary object
@@ -45,6 +48,8 @@ setMethod(
 #'
 #' @param k k-mer (default = 2)
 #' @param reps number of simulated trees
+#' @param n_samples number of samples to simulate
+#' @param n_nodes number of nodes to sample (including both leaves and internval nodes)
 #' @param config lineage tree configuration (a lineage_tree_config object)
 #'
 #' @return a kmer_summary object
