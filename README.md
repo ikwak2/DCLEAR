@@ -11,6 +11,18 @@ With 'devtools':
 devtools::install_github("ikwak2/DCLEAR")
 ```
 
+### DCLEAR Overview 
+
+![https://ikwak2.github.io/tmpimages/modeling_overview.png]
+
+Test
+$$ \sum_i^n x_i $$
+
+this is $n$ number
+
+### Usage
+
+
 ### License
 
 The R/DCLEAR package is free software; you can redistribute it and/or
