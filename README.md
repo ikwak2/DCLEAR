@@ -1,22 +1,15 @@
-## Distance based Cell LinEAge Reconstruction (DCLEAR)
+# Distance based Cell LinEAge Reconstruction (DCLEAR)
 
 Il-Youp Kwak (<ikwak2@cau.ac.kr>) and Wuming Gong (<gongx030@umn.edu>)
 
 R/DCLEAR is an R package for Distance based Cell LinEAge Reconstruction(DCLEAR). These codes are created during the participation of [Cell Lineage Reconstruction DREAM challenge](https://www.synapse.org/#!Synapse:syn20692755/wiki/595096).
 
-### installation
-
-With 'devtools':
-```S
-devtools::install_github("ikwak2/DCLEAR")
-```
-
-### DCLEAR Overview 
+## DCLEAR Overview 
 
 Figure 1. Overview of DCLEAR modeling architecture. Our model is divided into two parts, 1) estimating distance between cells and 2) constructing tree using distance matrix.
 <img src="https://ikwak2.github.io/tmpimages/modeling_overview.png" alt="drawing" width="850"/>
 
-#### Estimating distance between cells
+### Estimating distance between cells
 
 Naive approach would be the hamming distance that simply calculate the edit distance.
 
@@ -32,16 +25,23 @@ We can assign weights as below equation.
 
 And we can approximate unknown weights using training data.
 
-#### Constructing tree from the distance matrix
+### Constructing tree from the distance matrix
 With the previously proposed distance matric, we can construct distance matrix among cells. We can apply diverse types of tree construction algorithms such as Neighbor-Joining(NJ), FastME.
 
 
-### Usage
+## Usage
 
 Following link describe the use of DCLEAR : Link will be provided later
 
 
-### License
+## installation
+
+With 'devtools':
+```S
+devtools::install_github("ikwak2/DCLEAR")
+```
+
+## License
 
 The R/DCLEAR package is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License,
@@ -56,6 +56,6 @@ A copy of the GNU General Public License, version 3, is available at
 <https://www.r-project.org/Licenses/GPL-3>
 
 
-### Presentation
+## Presentation
 
 Our talk on the special DREAM session in RECOMB 2020 meeting (https://www.recomb2020.org/) can be found [here](https://www.dropbox.com/s/a93q2lnqni6xf4q/RECOMB_2020_talk_final.pdf?dl=0).  
