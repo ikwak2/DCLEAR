@@ -28,7 +28,6 @@ We are Il-Youp Kwak and Wuming Going who participated this competition as a team
 ```{r loading, include=FALSE}
 library(DCLEAR)
 library(phangorn)
-library(phylosim)
 library(tidyverse)
 library(ape)
 
