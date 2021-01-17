@@ -42,3 +42,8 @@ setGeneric('process_sequence', function(x, ...) standardGeneric('process_sequenc
 #' @param ... additional parameters
 #'
 setGeneric('as_phylo', function(x, ...) standardGeneric('as_phylo'))
+
+setGeneric('fit', function(model, x, ...) standardGeneric('fit'))
+
+setGeneric('dist_sim', function(x, model, ...) standardGeneric('dist_sim'))
+

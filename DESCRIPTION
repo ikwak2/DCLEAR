@@ -27,6 +27,9 @@ Imports:
 	purrr, 
 	stringr,
 	tidyr,
-	tidyverse
+	tidyverse,
+	tensorflow,
+	tfdatasets,
+	keras
 Suggests:
 	knitr

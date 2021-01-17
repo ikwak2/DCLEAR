@@ -4,7 +4,7 @@
 \alias{dist_replacement,phyDat,missing,integer-method}
 \title{Compute the kmer replacement distance}
 \usage{
-\S4method{dist_replacement}{phyDat,missing,integer}(x, kmer_summary, k = 2, ...)
+\S4method{dist_replacement}{phyDat,missing,integer}(x, kmer_summary, k = 2L, ...)
 }
 \arguments{
 \item{x}{input data in phyDat format}

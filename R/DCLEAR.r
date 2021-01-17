@@ -16,6 +16,7 @@
 #' @importFrom Rcpp evalCpp
 #' @importFrom ape write.tree read.tree
 #' @importFrom tidyr replace_na
+#' @importFrom keras keras_model_custom
 #' @useDynLib DCLEAR
 #' @docType package
 #' @name DCLEAR
