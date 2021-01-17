@@ -1,0 +1,37 @@
+---
+title: 'Computing the k-mer replacement matrix by simulation'
+output: rmarkdown::html_vignette
+date: '6/7/2020'
+author: 'Wuming Gong'
+vignette: >
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteIndexEntry{Computing the k-mer replacement matrix by simulation}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, message = FALSE}
+library(DCLEAR)
+library(BiocParallel)
+library(ape)
+library(phangorn)
+register(MulticoreParam(3)) # Use 3 cores
+options(width = as.integer(system('tput cols', intern = TRUE)))
+
+```
+
+## Load the Challenge 2 lineage data
+```{r}
+data(lineages)
+x <- lineages[[1]]$sequence
+y <- lineages[[1]]$tree
+```
+
+## Distance estimation by 2-mer replacment frequency from the simulated data
+```{r}
+x %>% 
+	dist_replacement() %>%
+	fastme.bal() %>% 
+	RF.dist(y, normalize = TRUE)
+
+```
+

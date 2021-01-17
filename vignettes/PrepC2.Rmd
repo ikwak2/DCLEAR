@@ -8,6 +8,7 @@ author: "Il-Youp Kwak and Wuming Gong"
 ```{r, message = FALSE}
 devtools::load_all('.')
 library(phangorn)
+library(phylosim)
 library(BiocParallel)
 register(MulticoreParam(8)) # Use 8 cores
 options(width = as.integer(system('tput cols', intern = TRUE)))

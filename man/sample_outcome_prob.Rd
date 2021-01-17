@@ -4,14 +4,14 @@
 \alias{sample_outcome_prob}
 \title{sample_outcome_prob}
 \usage{
-sample_outcome_prob(config, num_states = 20L, shape = 0.1, scale = 2)
+sample_outcome_prob(alphabets, shape = 0.1, scale = 2)
 }
 \arguments{
+\item{alphabets}{alphabets used in the tree}
+
 \item{shape}{shape parameter in gamma distribution}
 
 \item{scale}{scale parameter in gamma distribution}
-
-\item{alphabets}{alphabets used in the tree}
 }
 \value{
 a probability vector for each alphabet
