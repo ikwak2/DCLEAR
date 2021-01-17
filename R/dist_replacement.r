@@ -46,7 +46,7 @@ setMethod(
     kmer_summary = 'missing',
 		k = 'integer'
 	),
-	function(x, kmer_summary, k = 2L, ...){
+	function(x, kmer_summary, k = 2, ...){
 
 		kmer_summary <- x %>% summarize_kmer(k = k, ...)
 
