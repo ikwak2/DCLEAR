@@ -17,10 +17,6 @@ summarize_kmer_core(
 
 \item{reps}{number of simulated trees}
 
-\item{n_samples}{number of samples to simulate}
-
-\item{n_nodes}{number of nodes to sample (including both leaves and internval nodes)}
-
 \item{config}{lineage tree configuration (a lineage_tree_config object)}
 }
 \value{

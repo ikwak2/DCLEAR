@@ -37,10 +37,6 @@ Generate singe cell barcode data set with tree shaped lineage information
 }
 \examples{
 
-library(DCLEAR)
-library(phangorn)
-library(ape)
-
 set.seed(1)
 mu_d1 = c( 30, 20, 10, 5, 5, 1, 0.01, 0.001)
 mu_d1 = mu_d1/sum(mu_d1)

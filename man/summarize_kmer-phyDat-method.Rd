@@ -23,10 +23,6 @@
 
 \item{reps}{number of simulated trees}
 
-\item{n_samples}{number of samples to simulate}
-
-\item{n_nodes}{number of nodes to sample (including both leaves and internval nodes)}
-
 \item{n_targets}{sequence length. If this argument is missing, the length of the input sequences will be used.}
 }
 \value{
