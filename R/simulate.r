@@ -20,13 +20,17 @@ setMethod(
 	),
 	function(
 		config,
-		n_samples = 200 # number of samples to simulate 
+		n_samples = NA# number of samples to simulate 
 	){
 
 		tree <- random_tree(n_samples = n_samples, division = config@division)
 
+		if (length(config@root) == 0){
+			config@root <- rep(config@default_character, config@n_targets)
+		}
+
 		ancestor <- 1
-		x <- matrix(config@default_character, nrow = 1, ncol = config@n_targets, dimnames = list(ancestor %>% get_node_names(), NULL))	# the ancestor sequence
+		x <- matrix(config@root, nrow = 1, ncol = config@n_targets, dimnames = list(ancestor %>% get_node_names(), NULL))	# the ancestor sequence
 		h <- 1	# a unit time
 		while (h < config@division){
 
@@ -82,7 +86,7 @@ setMethod(
 
 	x <- x %>% phyDat(type = 'USER', levels = config@alphabets)
 
-	new('lineage_tree', 
+	new('LineageTree', 
 		x = x, 
 		graph = g, 
 		config = config
@@ -102,7 +106,7 @@ setMethod(
 #'
 #' @author Wuming Gong (gongx030@umn.edu)
 #'
-random_tree <- function(n_samples, division = 16L){
+random_tree <- function(n_samples = NA, division = 16L){
 
 	ancestor <- 1	# ancestor index
 	num_nodes <- 2^division - 1	# number of total nodes in the binary tree
@@ -111,11 +115,14 @@ random_tree <- function(n_samples, division = 16L){
 	edges <- edges[order(edges[, 'to']), ]	# so that edge `from | to` is simply edges[to - 1, ]
 
 	leaves <- 2^(division - 1):(2^division - 1)	# leaf index
-	sampled_leaves <- sample(leaves, n_samples)	# leaves to keep
+
+	if (!is.na(n_samples)){
+		leaves <- sample(leaves, n_samples)	# leaves to keep
+	}
 
 	sampled_edges <- list()
 	h <- division - 1	# leaf level
-	sampled_edges[[h]] <- edges[sampled_leaves - 1, ]
+	sampled_edges[[h]] <- edges[leaves- 1, ]
 	while (h > 1){
 		to <- unique(sampled_edges[[h]][, 'from'])
 		sampled_edges[[h - 1]] <- edges[to - 1, ]
@@ -125,6 +132,7 @@ random_tree <- function(n_samples, division = 16L){
 	height <- rep(seq_len(division  - 1), sapply(sampled_edges, nrow))
 	sampled_edges <- do.call('rbind', sampled_edges)
 	data.frame(sampled_edges, height = height)
+
 } # random_tree
 
 

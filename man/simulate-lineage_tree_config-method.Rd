@@ -4,7 +4,7 @@
 \alias{simulate,lineage_tree_config-method}
 \title{simulate}
 \usage{
-\S4method{simulate}{lineage_tree_config}(config, n_samples = 200)
+\S4method{simulate}{lineage_tree_config}(config, n_samples = NA)
 }
 \arguments{
 \item{config}{simulation configuration; a lineage_tree_config object}

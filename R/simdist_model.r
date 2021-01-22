@@ -157,41 +157,150 @@ SimDistModel <- function(
 
 		self$filters <- filters
 		self$n_targets <- n_targets
+		self$alphabets <- alphabets
 
-		self$embedding <- tf$keras$layers$Embedding(alphabets, as.integer(self$filters / 2))
+		self$distance_token <- alphabets
+		self$input_dim <- self$distance_token + 1L
+
+		self$sequence_length <- self$n_targets + 1L
+
+		self$embedding <- tf$keras$layers$Embedding(self$input_dim, as.integer(self$filters / 2L))
 		self$dropout_1 <- tf$keras$layers$Dropout(rate)
-		self$pos_encoding <- tf$cast(positional_encoding(self$n_targets, self$filters), tf$float32)
+		self$pos_encoding <- tf$cast(positional_encoding(self$n_targets + 1L, self$filters), tf$float32)
+		self$bn <- tf$keras$layers$BatchNormalization()
 
 		self$enc_layers <- lapply(seq_len(encoders), function(i) TransformerEncoderLayer(self$filters, num_heads = num_heads, dff = dff, rate = rate))
 
-		self$flatten_1 <- tf$keras$layers$Flatten()
-
+		self$dense_1 <- tf$keras$layers$Dense(self$alphabets, activation = 'softmax')
 		self$dense_2 <- tf$keras$layers$Dense(1L)
 
-		function(x1, x2, ..., training = TRUE){
 
-			x1 <- x1 %>% self$embedding()
-			x2 <- x2 %>% self$embedding()
+		function(x, training = TRUE, mask = NULL){ 
 
-			x <- list(x1, x2) %>% 
-				tf$concat(axis = 2L)
-				
-			x <- x * tf$math$sqrt(tf$cast(self$filters, tf$float32))
+			batch_size <- x[[1]]$shape[[1]]
+
+			d <- self$distance_token %>% 
+				tf$constant(dtype = tf$int64, shape = shape(1L, 1L)) %>%
+				tf$tile(shape(batch_size, 1L))
+
+			sequence_1 <- x[[1]]
+			sequence_2 <- x[[2]]
+
+			sequence_1 <- list(d, sequence_1) %>% tf$concat(1L)
+			sequence_2 <- list(d, sequence_2) %>% tf$concat(1L)
+
+			sequence_1 <- sequence_1 %>% self$embedding()
+			sequence_2 <- sequence_2 %>% self$embedding()
+
+			sequence_1 <- sequence_1 * tf$math$sqrt(tf$cast(self$filters, tf$float32))
+			sequence_2 <- sequence_2 * tf$math$sqrt(tf$cast(self$filters, tf$float32))
+
+			x <- list(sequence_1, sequence_2) %>% tf$concat(2L)
 			x <- x + self$pos_encoding
-			x <- x %>%
-				self$dropout_1()
 
-			for (i in seq_len(length(self$enc_layers))){
-				x <- self$enc_layers[[i - 1]](x)
+			x <- x %>%
+				self$dropout_1(training = training)
+
+			if (!is.null(mask)){
+
+				mask <- list(tf$zeros(shape(batch_size, 1L)), mask) %>% 
+					tf$concat(1L) %>%
+					tf$reshape(shape(batch_size, 1L, 1L, self$sequence_length))
 			}
 
-			x <- x %>% 
-				self$flatten_1() %>%
-				self$dense_2()
-			x
+			for (i in seq_len(length(self$enc_layers))){
+				x <- self$enc_layers[[i - 1]](x, training = training, mask = mask)
+			}
+
+			ancestor <- x[, 2:self$sequence_length, ] %>% 
+				self$dense_1()
+
+			distance <- x[, 1, ] %>% self$dense_2()
+
+			list(
+				ancestor = ancestor,
+				distance = distance
+			)
 		}
 	})
 }
+
+
+#' prepare_data
+#'
+#' @export
+#'
+setMethod(
+	'prepare_data',
+	signature(
+		model = 'SimDistModel',
+		x = 'lineage_tree_config' 
+	),
+	function(
+		model,
+		x,
+		n_sims = 10L,
+		divisions = 6L,
+		n_samples_per_sim = 100L
+	){
+
+		x1 <- NULL
+		x2 <- NULL
+		d <- NULL
+		a <- NULL
+
+		x@division <- divisions
+
+		for (i in seq_len(n_sims)){
+
+			root <- sample_root(x)
+			x@root <- root
+			sim <- simulate(x)
+
+			xb <- as_matrix(sim@x)
+			db <- distances(sim@graph)
+
+			df <- data.frame(
+				from = rep(rownames(db), ncol(db)),
+				to = rep(rownames(db), each = nrow(db)),
+				distance = c(db)
+			) %>%
+				filter(from != to)  %>%
+				filter(is_leaf[from] & is_leaf[to])
+
+			is_leaf <- degree(sim@graph, mode = 'out') == 0
+			leaves <- names(sim@x)[is_leaf]
+
+			i1 <- sample(leaves, n_samples_per_sim, replace = TRUE)	# sampling some nodes
+			i2 <- sample(leaves, n_samples_per_sim, replace = TRUE)	# sampling some nodes
+			
+			v <- unique(c(i1, i2))
+			p <- ego(sim@graph, order = length(V(sim@graph)), nodes = v, mode = 'in')
+			p <- lapply(p, names)
+			
+			m <- sparseMatrix(
+				i = as.numeric(factor(rep(v, sapply(p, length)), V(sim@graph)$name)),
+				j = as.numeric(factor(unlist(p), V(sim@graph)$name)),
+				dims = c(length(V(sim@graph)), length(V(sim@graph))),
+				dimnames = list( V(sim@graph)$name,  V(sim@graph)$name)
+			)
+
+			ancestor <- sapply(apply(m[i1, ]& m[i2, ], 1, which), function(xx) names(xx)[length(xx)])
+
+			d <- c(d, db[cbind(i1, i2)])
+			x1 <- rbind(x1, xb[i1, ])
+			x2 <- rbind(x2, xb[i2, ])
+			a <- rbind(a, xb[ancestor, ])
+		}
+
+		list(
+			distance = d %>% tf$cast(tf$float32), 
+			sequence_1 = x1 %>% tf$cast(tf$int64),
+			sequence_2 = x2 %>% tf$cast(tf$int64),
+			ancestor = a %>% tf$cast(tf$int64)
+		)
+	}
+)
 
 #' fit
 #'
@@ -201,92 +310,127 @@ setMethod(
 	'fit',
 	signature(
 		model = 'SimDistModel',
-		x = 'phyDat' 
+		x = 'tf_dataset' 
 	),
 	function(
 		model,
 		x,
-		y = NULL,
-		division = 16L,
 		batch_size = 128L,
 		epochs = 10000L,
-		steps_per_epoch = 10L,
-		n_samples = 100L,
-		n_sims = 20L,
+		evaluation_data = NULL,
+		test_size = 0.15,
 		compile = FALSE
 	){
 
+		total_steps <- as.integer(as.numeric(x$cardinality()) * (1 - test_size) * epochs / batch_size)
+
+    x <- x %>%
+      split_dataset(batch_size = batch_size, test_size = test_size)
+
 		learning_rate <- tf$keras$optimizers$schedules$PolynomialDecay(
 			initial_learning_rate = 1e-4,
-			decay_steps = steps_per_epoch * epochs * n_sims,
+			decay_steps = total_steps,
 			end_learning_rate = 0
 		)
 		optimizer <- tf$keras$optimizers$Adam(learning_rate, beta_1 = 0.9, beta_2 = 0.98, epsilon = 1e-9)
 
 		mse <- tf$keras$losses$MeanSquaredError()
-		train_step <- function(x1, x2, y){
+		cce <- tf$keras$losses$CategoricalCrossentropy(reduction = tf$keras$losses$Reduction$SUM)
+
+		train_step <- function(sequence_1, sequence_2, ancestor, distance){
+
+			batch_size <- sequence_1$shape[[1]]
+
+#			mask <- (tf$random$uniform(shape(batch_size, model@model$n_targets)) < 0.15) %>% 
+#				tf$cast(tf$float32) 
+
+			ancestor <-  ancestor %>%
+				tf$one_hot(model@model$alphabets) 
+
 			with(tf$GradientTape(persistent = TRUE) %as% tape, {
-				y_pred <- model@model(x1, x2)
-				loss <- mse(y, y_pred)
+				res <- model@model(list(sequence_1, sequence_2), training = TRUE)
+				loss_distance <- mse(distance, res$distance)
+				loss_ancestor <- cce(ancestor , res$ancestor)
+				loss <- loss_distance + loss_ancestor
 			})
 			gradients <- tape$gradient(loss, model@model$trainable_variables)
 			list(gradients, model@model$trainable_variables) %>%
 				purrr::transpose() %>%
 				optimizer$apply_gradients()
 			list(
+				loss_distance = loss_distance,
+				loss_ancestor = loss_ancestor,
+				loss = loss
+			)
+		}
+
+		test_step <- function(sequence_1, sequence_2, ancestor, distance){
+			ancestor <-  ancestor %>%
+				tf$one_hot(model@model$alphabets) 
+			res <- model@model(list(sequence_1, sequence_2), training = FALSE)
+			loss_distance <- mse(distance, res$distance)
+			loss_ancestor <- cce(ancestor , res$ancestor)
+			loss <- loss_distance + loss_ancestor
+			list(
+				loss_distance = loss_distance,
+				loss_ancestor = loss_ancestor,
 				loss = loss
 			)
 		}
 
 		if (compile){
 			train_step <- tf_function(train_step) # convert to graph mode
+			test_step <- tf_function(test_step) # convert to graph mode
 		}
 
-		config <- process_sequence(x)
-
-		sims <- lapply(1:n_sims, function(i) simulate(config, n_samples = n_samples))
-		
 		for (epoch in 1:epochs){
 
-			loss <- rep(0, length(sims))
+			loss_train <- NULL
+			loss_distance_train <- NULL
+			loss_ancestor_train <- NULL
+			loss_test <- NULL
+			loss_distance_test <- NULL
+			loss_ancestor_test <- NULL
 
-			for (j in 1:length(sims)){
+			iter <- x$train %>%
+				dataset_shuffle(1000L) %>%
+				make_iterator_one_shot()
 
-				xb <- as_matrix(sims[[j]]@x)
-				db <- distances(sims[[j]]@graph)
+			res <- until_out_of_range({
+				batch <- iterator_get_next(iter)
+				res <- train_step(batch$sequence_1, batch$sequence_2, batch$ancestor, batch$distance)
+				loss_train <- c(loss_train, as.numeric(res$loss))
+				loss_distance_train <- c(loss_distance_train, as.numeric(res$loss_distance))
+				loss_ancestor_train <- c(loss_ancestor_train, as.numeric(res$loss_ancestor))
+			})
 
-				for (s in seq_len(steps_per_epoch)){
+			iter <- x$test %>%
+				make_iterator_one_shot()
 
-					i1 <- sample(rownames(xb), batch_size, replace = TRUE)	# sampling some nodes
-					i2 <- sample(rownames(xb), batch_size, replace = TRUE)	# sampling some nodes
+			res <- until_out_of_range({
+				batch <- iterator_get_next(iter)
+				res <- train_step(batch$sequence_1, batch$sequence_2, batch$ancestor, batch$distance)
+				loss_test <- c(loss_test, as.numeric(res$loss))
+				loss_distance_test <- c(loss_distance_test, as.numeric(res$loss_distance))
+				loss_ancestor_test <- c(loss_ancestor_test, as.numeric(res$loss_ancestor))
+			})
 
-					yb <- db[cbind(i1, i2)] %>%
-						tf$cast(tf$float32) %>%
-						tf$expand_dims(1L)
+			sprintf('epoch=%6.d/%6.d | loss_distance_train=%13.7f | loss_ancestor_train=%13.7f | loss_train=%13.7f | loss_distance_test=%13.7f | loss_ancestor_test=%13.7f | loss_test=%13.7f', 
+				epoch, epochs, 
+				mean(loss_distance_train), mean(loss_ancestor_train), mean(loss_train), 
+				mean(loss_distance_test), mean(loss_ancestor_test), mean(loss_test)
+			) %>%
+				message()
 
-					x1 <- xb[i1, ] %>% 
-						tf$cast(tf$int64) 
-
-					x2 <- xb[i2, ] %>% 
-						tf$cast(tf$int64) 
-
-					res <- train_step(x1, x2, yb)
-					loss[j] <- loss[j] + as.numeric(res$loss)
-
+			if (!is.null(evaluation_data) && epoch %% 10 == 0){
+				for (i in 1:length(evaluation_data)){
+					d <- dist_sim(evaluation_data[[i]]$sequence, model)
+					sprintf('epoch=%6.d/%6.d | RF=%13.7f', epoch, epochs, d %>% NJ() %>% RF.dist(evaluation_data[[i]]$tree, normalize = TRUE)) %>% 
+						message()
 				}
 			}
-
-			for (j in 1:2){
-				is_leaf <- degree(sims[[j]]@graph, mode = 'out') == 0
-				rf <- dist_sim(sims[[j]]@x[is_leaf], model) %>%
-					NJ() %>% 
-					RF.dist(sims[[j]]@graph %>% as_phylo(), normalize = TRUE) 
-				sprintf('epoch=%6.d/%6.d | sim=%3.d/%3.d | loss=%15.7f | RF=%15.7f', epoch, epochs, j, n_sims, loss[j], rf) %>% message()
-			}
-
-			d <- dist_sim(x, model)
-			d %>% NJ() %>% RF.dist(y, normalize = TRUE) %>% message()
 		}
+
 		model
 	}
 )
@@ -302,12 +446,8 @@ setMethod(
 
 		v <- names(x)
 
-		x <- x %>%
-		  as.character() %>%
-		  factor(levels(x)) %>%
-			as.numeric() %>%
-			matrix(nrow = length(x), ncol = ncol(as.character(x)))
-		x <- x - 1
+		x <- x %>% 
+			as_matrix()
 
 		param <- expand.grid(i = seq_len(nrow(x)), j = seq_len(nrow(x))) %>%
 			as.matrix()
@@ -328,7 +468,9 @@ setMethod(
 			x2 <- x[param[b, 2], , drop = FALSE]%>% 
 				tf$cast(tf$int64) 
 
-			d[[i]] <- model@model(x1, x2) %>% as.matrix() %>% c()
+			res <- model@model(list(x1, x2), training = FALSE)
+
+			d[[i]] <- res$distance %>% as.matrix() %>% c()
 		}
 
 		d <- unlist(d)
@@ -346,6 +488,7 @@ as_matrix <- function(x){
 		factor(levels(x)) %>%
 		as.numeric() %>%
 		matrix(nrow = length(x), ncol = ncol(as.character(x)), dimnames = list(names(x), NULL))
-	x <- x - 1
+	x <- x - 1L	# to zero-based
+	x
 }
 

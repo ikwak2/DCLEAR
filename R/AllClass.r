@@ -18,7 +18,8 @@ setClass(
 		frequency = 'numeric',
 		dropout_character = 'character',
 		default_character = 'character',
-		deletion_character = 'character'
+		deletion_character = 'character',
+		root = 'character'
 	),
 	prototype = list(
 		alphabets = c('*', '0', '-', letters, LETTERS),
@@ -30,7 +31,7 @@ setClass(
 )
 
 setClass(
-	'lineage_tree',
+	'LineageTree',
 	representation(
 		x = 'phyDat',
 		graph = 'igraph',
@@ -53,4 +54,13 @@ setClass(
 
 setClass('Model', slot = c(model = 'kerastools.model.RModel'))
 setClass('SimDistModel', contains = 'Model')
+
+#' LineageTreeList
+#'
+#' @export
+#'
+setClass(
+	'LineageTreeList',
+	contains = 'SimpleList'
+)
 
