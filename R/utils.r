@@ -32,3 +32,35 @@ sample_root <- function(config){
 	prob[config@deletion_character] <- 0
 	sample(config@alphabets, config@n_targets, replace = TRUE, prob = prob)
 }
+
+
+#'
+as_matrix <- function(x){
+  x <- x %>%
+    as.character() %>%
+		factor(levels(x)) %>%
+		as.numeric() %>%
+		matrix(nrow = length(x), ncol = ncol(as.character(x)), dimnames = list(names(x), NULL))
+	x <- x - 1L # to zero-based
+  x
+}
+
+get_replacement_distance <- function(x){
+
+	g <- x@df %>%
+		group_by(from, to) %>%
+		summarize(mean = sum(n * distance) / sum(n))
+
+	D <- sparseMatrix(
+		i = as.numeric(factor(as.character(g$from), x@kmers)),
+		j = as.numeric(factor(as.character(g$to), x@kmers)),
+		x = g$mean,
+		dims = c(length(x@kmers), length(x@kmers)),
+		dimnames = list(x@kmers, x@kmers)
+	) %>%
+		as.matrix()
+
+	D[D == 0 & row(D) != col(D)] <- x@max_distance
+	D[D == 0 & row(D) == col(D)] <- 0
+	D
+}

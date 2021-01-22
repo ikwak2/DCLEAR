@@ -53,7 +53,7 @@ setClass(
 )
 
 setClass('Model', slot = c(model = 'kerastools.model.RModel'))
-setClass('SimDistModel', contains = 'Model')
+setClass('KmerConvModel', contains = 'Model')
 
 #' LineageTreeList
 #'
