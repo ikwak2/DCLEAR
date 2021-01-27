@@ -8,6 +8,8 @@
 #' @param reps number of simulated trees
 #' @param n_samples number of samples to simulate
 #' @param n_nodes number of nodes to sample (including both leaves and internval nodes)
+#' @param n_targets number of targets
+#' @param n_targets sequence length. If this argument is missing, the length of the input sequences will be used.
 #'
 #' @return a kmer_summary object
 #'
@@ -26,42 +28,15 @@ setMethod(
     k = 2,
     reps = 20L,
 		n_samples = 200L,
-		n_nodes = 100L
+		n_nodes = 100L,
+		n_targets 
   ){
+
 		config <- process_sequence(x, division = division)
-		summarize_kmer(config, k = k, reps = reps, n_samples = n_samples, n_nodes = n_nodes)
-  }
-)
 
+		if (!missing(n_targets))
+			config@n_targets <- n_targets
 
-#' summarize_kmer
-#'
-#' Summarize kmer distributions with input sequences
-#'
-#' @param x a lineage_tree_config object
-#' @param k k-mer (default = 2)
-#' @param reps number of simulated trees
-#' @param n_samples number of samples to simulate
-#' @param n_nodes number of nodes to sample (including both leaves and internval nodes)
-#'
-#' @return a kmer_summary object
-#'
-#' @author Wuming Gong (gongx030@umn.edu)
-#' 
-#' @export
-#'
-setMethod(
-  'summarize_kmer',
-  signature(
-    x = 'lineage_tree_config'
-  ),
-  function(
-    x,
-    k = 2,
-    reps = 20L,
-		n_samples = 200L,
-		n_nodes = 100L
-  ){
     summarize_kmer_core(k, reps, n_samples, n_nodes, config)
   }
 )
@@ -103,7 +78,8 @@ summarize_kmer_core <- function(
    ) %>%
     filter(from < to)
 
-  df <- do.call('rbind', bplapply(
+#  df <- do.call('rbind', bplapply(
+  df <- do.call('rbind', lapply(
     seq_len(reps), 
     function(i){
       sim <- simulate(n_samples = 200L, config)    

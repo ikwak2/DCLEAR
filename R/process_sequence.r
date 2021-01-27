@@ -55,7 +55,6 @@ setMethod(
 		config@dropout_prob <- dropout_prob
 		config@division <- division
 		config@deletion <- deletion
-		config@root <- rep(config@default_character, n_targets)
 
 		config
 	}

@@ -4,7 +4,7 @@
 \alias{random_tree}
 \title{random_tree}
 \usage{
-random_tree(n_samples = NA, division = 16L)
+random_tree(n_samples, division = 16L)
 }
 \arguments{
 \item{n_samples}{number of samples to simulate}

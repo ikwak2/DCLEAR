@@ -10,7 +10,8 @@
   k = 2,
   reps = 20L,
   n_samples = 200L,
-  n_nodes = 100L
+  n_nodes = 100L,
+  n_targets
 )
 }
 \arguments{
@@ -25,6 +26,8 @@
 \item{n_samples}{number of samples to simulate}
 
 \item{n_nodes}{number of nodes to sample (including both leaves and internval nodes)}
+
+\item{n_targets}{sequence length. If this argument is missing, the length of the input sequences will be used.}
 }
 \value{
 a kmer_summary object

@@ -18,8 +18,7 @@ setClass(
 		frequency = 'numeric',
 		dropout_character = 'character',
 		default_character = 'character',
-		deletion_character = 'character',
-		root = 'character'
+		deletion_character = 'character'
 	),
 	prototype = list(
 		alphabets = c('*', '0', '-', letters, LETTERS),
@@ -31,7 +30,7 @@ setClass(
 )
 
 setClass(
-	'LineageTree',
+	'lineage_tree',
 	representation(
 		x = 'phyDat',
 		graph = 'igraph',
@@ -53,14 +52,5 @@ setClass(
 )
 
 setClass('Model', slot = c(model = 'kerastools.model.RModel'))
-setClass('KmerConvModel', contains = 'Model')
-
-#' LineageTreeList
-#'
-#' @export
-#'
-setClass(
-	'LineageTreeList',
-	contains = 'SimpleList'
-)
+setClass('SimDistModel', contains = 'Model')
 

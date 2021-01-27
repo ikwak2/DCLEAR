@@ -42,17 +42,3 @@ setGeneric('process_sequence', function(x, ...) standardGeneric('process_sequenc
 #' @param ... additional parameters
 #'
 setGeneric('as_phylo', function(x, ...) standardGeneric('as_phylo'))
-
-setGeneric('fit', function(model, x, ...) standardGeneric('fit'))
-
-setGeneric('dist_sim', function(x, model, ...) standardGeneric('dist_sim'))
-
-#' prepare_data
-#'
-#' The generic function of prepare_data
-#'
-#' @param model a model object
-#' @param x a data object that include the Vplot information
-#' @param ... Other arguments
-#'
-setGeneric('prepare_data', function(model, x, ...) standardGeneric('prepare_data'))
