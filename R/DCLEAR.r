@@ -3,9 +3,11 @@
 #' Distance based methods for inferring lineage treess from single cell data
 #' 
 #' @import tidyverse
+#' @import reticulate
 #' @import methods
 #' @import Matrix
 #' @import dplyr
+#' @import tfdatasets
 #' @importFrom matrixStats rowLogSumExps
 #' @importFrom igraph distances graph.adjacency degree permute.vertices vcount V contract simplify set_vertex_attr
 #' @importFrom purrr map
@@ -16,6 +18,8 @@
 #' @importFrom Rcpp evalCpp
 #' @importFrom ape write.tree read.tree
 #' @importFrom tidyr replace_na
+#' @importFrom keras keras_model_custom save_model_weights_tf load_model_weights_tf
+#' @importFrom tensorflow shape
 #' @useDynLib DCLEAR
 #' @docType package
 #' @name DCLEAR

@@ -15,10 +15,6 @@
 #' 
 #' @examples
 #'
-#' library(DCLEAR)
-#' library(phangorn)
-#' library(ape)
-#'
 #' set.seed(1)
 #' mu_d1 = c( 30, 20, 10, 5, 5, 1, 0.01, 0.001)
 #' mu_d1 = mu_d1/sum(mu_d1)
@@ -55,9 +51,10 @@ setMethod(
 	'dist_weighted_hamming',
 	signature(
             x = 'phyDat',
-            wVec = 'numeric'
+            wVec = 'numeric',
+            dropout = 'logical'
 	),
-	function(x, wVec, dropout=FALSE){
+	function(x, wVec, dropout=FALSE, ...){
 
             ## compute pairwise weighted hamming distance
 

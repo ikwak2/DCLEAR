@@ -4,7 +4,7 @@
 \alias{dist_kmer_replacement_inference}
 \title{Core function of computing kmer replacement distance}
 \usage{
-dist_kmer_replacement_inference(x, kmer_summary, k = 2)
+dist_kmer_replacement_inference(x, kmer_summary)
 }
 \arguments{
 \item{x}{input data in phyDat format}

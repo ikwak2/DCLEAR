@@ -132,8 +132,7 @@ random_tree <- function(n_samples, division = 16L){
 #' 
 #' Sampling outcome probability based on a gamma distribution
 #'
-#' @param config a lineage_tree_config object
-#' @param num_states number of states used in simulation.
+#' @param alphabets alphabets used in the tree
 #' @param shape shape parameter in gamma distribution
 #' @param scale scale parameter in gamma distribution
 #' 

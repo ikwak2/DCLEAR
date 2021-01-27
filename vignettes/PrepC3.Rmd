@@ -17,6 +17,7 @@ opts_chunk$set(fig.width = 12)
 ```{r loading, include=FALSE}
 library(DCLEAR)
 library(phangorn)
+library(phylosim)
 library(parallel)
 
 ```
