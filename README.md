@@ -5,10 +5,14 @@ Il-Youp Kwak (<ikwak2@cau.ac.kr>) and Wuming Gong (<gongx030@umn.edu>)
 R/DCLEAR is an R package for Distance based Cell LinEAge Reconstruction(DCLEAR). These codes are created during the participation of [Cell Lineage Reconstruction DREAM challenge](https://www.synapse.org/#!Synapse:syn20692755/wiki/595096).
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 ## DCLEAR Overview 
 =======
 ## DCLEAR Overview
 >>>>>>> 315391d381779bb6d7c571c537a842df8d0a0b59
+=======
+## DCLEAR Overview
+>>>>>>> stable
 
 Figure 1. Overview of DCLEAR modeling architecture. Our model is divided into two parts, 1) estimating distance between cells and 2) constructing tree using distance matrix.
 <img src="https://ikwak2.github.io/tmpimages/modeling_overview.png" alt="drawing" width="850"/>
@@ -30,18 +34,25 @@ We can assign weights as below equation.
 And we can approximate unknown weights using training data.
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> stable
 ### K-mer replacement distance
 <img src="https://gongx030.github.io/images/KRD_schematic.png" alt="drawing" width="850"/>
 DCLEAR also implements a k-mer replacement distance (KRD), which does not require  training data.  KRD method first looks at mutations in the character arrays to estimate  the parameters of the generative process associated with the tree to be reconstructed.  With these parameters, we repetitively        simulated trees with a size and mutation distribution similar to the target tree. The k-mer replacement distances were estimated from the simulated lineage trees and used to compute the distances between input sequences in the character arrays of internal nodes and tips.  Specifically, by examining the   simulated lineage trees, KRD estimated the expected 1-mer replacement distance between characters in the array (including ground state “0” and deletion state “-“) in the lineage trees and the probability for a given nodal distance of replacing a character in a cell array.  To extend the 1-mer replacement distance to the k-mer replacement distance, the posterior probability distributions of k-mer replacement distance were estimated by using a conditional model considering a dependance for the concurrence of mutations.  We found that by considering the neighboring characters, the conditional model can more accurately estimate the nodal distance than an independent model.  The cell distance can then be readily computed as the mean expected k-mer replacement distance.
 
+<<<<<<< HEAD
 >>>>>>> 315391d381779bb6d7c571c537a842df8d0a0b59
+=======
+>>>>>>> stable
 ### Constructing tree from the distance matrix
 With the previously proposed distance matric, we can construct distance matrix among cells. We can apply tree construction algorithms such as Neighbor-Joining(NJ), FastME.
 
 
 ## Usage
 
+<<<<<<< HEAD
    - How to use weighted hamming : [Link](https://ikwak2.github.io/tmphtml/Example_subchallenge2)
 <<<<<<< HEAD
    - How to use kmer_replacement : [Link](xxx.html)
@@ -50,6 +61,12 @@ With the previously proposed distance matric, we can construct distance matrix a
 >>>>>>> 315391d381779bb6d7c571c537a842df8d0a0b59
    - Preparation for subchallenge 2 submission : [link](https://ikwak2.github.io/tmphtml/PrepC2)
    - Preparation for subchallenge 3 submission : [link](https://ikwak2.github.io/tmphtml/PrepC3)
+=======
+- How to use weighted hamming : [Link](https://ikwak2.github.io/tmphtml/Example_subchallenge2)
+- How to use kmer_replacement : [Colab Link](https://colab.research.google.com/gist/gongx030/53a589baff96895bafcf8af7dc07a76f/krd.ipynb)
+- Preparation for subchallenge 2 submission : [link](https://ikwak2.github.io/tmphtml/PrepC2)
+- Preparation for subchallenge 3 submission : [link](https://ikwak2.github.io/tmphtml/PrepC3)
+>>>>>>> stable
 
 
 ## installation
@@ -75,5 +92,11 @@ A copy of the GNU General Public License, version 3, is available at
 
 
 ## Presentation
+<<<<<<< HEAD
 
 Our talk on the special DREAM session in RECOMB 2020 meeting (https://www.recomb2020.org/) can be found [here](https://www.dropbox.com/s/a93q2lnqni6xf4q/RECOMB_2020_talk_final.pdf?dl=0).
+=======
+
+Our talk on the special DREAM session in RECOMB 2020 meeting (https://www.recomb2020.org/) can be found [here](https://www.dropbox.com/s/a93q2lnqni6xf4q/RECOMB_2020_talk_final.pdf?dl=0).
+
+>>>>>>> stable

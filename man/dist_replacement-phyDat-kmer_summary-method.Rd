@@ -4,7 +4,11 @@
 \alias{dist_replacement,phyDat,kmer_summary-method}
 \title{Compute the kmer replacement distance}
 \usage{
+<<<<<<< HEAD:man/dist_replacement-phyDat-kmer_summary-method.Rd
 \S4method{dist_replacement}{phyDat,kmer_summary}(x, kmer_summary, k = 2, ...)
+=======
+\S4method{dist_replacement}{phyDat,missing,integer}(x, kmer_summary, k = 2L, ...)
+>>>>>>> stable:man/dist_replacement-phyDat-missing-integer-method.Rd
 }
 \arguments{
 \item{x}{input data in phyDat format}

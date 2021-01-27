@@ -73,7 +73,8 @@ summarize_kmer_core <- function(
    ) %>%
     filter(from < to)
 
-  df <- do.call('rbind', bplapply(
+#  df <- do.call('rbind', bplapply(
+  df <- do.call('rbind', lapply(
     seq_len(reps), 
     function(i){
       sim <- simulate(n_samples = 200L, config)    
