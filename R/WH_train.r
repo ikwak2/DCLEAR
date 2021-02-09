@@ -21,7 +21,7 @@ WH_train <- function(X){
         InfoW[4:55] = Wothers
         
         ds = NULL
-        for(i in 1:length(sims_tr)){
+        for(i in 1:length(X)){
             D_wh = dist_weighted_hamming(X[[i]][[1]], InfoW, dropout = FALSE)
             tree_wh = fastme.bal(D_wh)
             ds = c(ds, -RF.dist(tree_wh, X[[i]][[2]], normalize = TRUE) )
