@@ -15,8 +15,8 @@ WH_train <- function(X){
     WHfit <- function( Wdropout1, Wdropout2, Wothers ) {
         
         InfoW = rep(1,7)
-        InfoW[2] = Wdropout1
-        InfoW[1] = 1
+        InfoW[1] = Wdropout1
+        InfoW[2] = 1
         InfoW[3] = Wdropout2
         InfoW[4:55] = Wothers
         
@@ -45,8 +45,8 @@ WH_train <- function(X){
                                      n_iter = 20, acq = "ucb")
     
     InfoW = rep(1,7)
-    InfoW[2] = bayes_WH$Best_Par['Wdropout1']
-    InfoW[1] = 1
+    InfoW[1] = bayes_WH$Best_Par['Wdropout1']
+    InfoW[2] = 1
     InfoW[3] = bayes_WH$Best_Par['Wdropout2']
     InfoW[4:55] = bayes_WH$Best_Par['Wothers']
     
