@@ -13,6 +13,7 @@ LinkingTo: Rcpp, RcppArmadillo
 RoxygenNote: 7.1.1
 Depends: 
 	R (>= 3.6.0)
+Encoding: UTF-8
 biocViews:
 Imports: 
 	BiocParallel,
@@ -27,6 +28,7 @@ Imports:
 	purrr, 
 	stringr,
 	tidyr,
-	tidyverse
+	tidyverse,
+	rBayesianOptimization
 Suggests:
 	knitr
