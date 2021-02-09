@@ -27,7 +27,6 @@ Imports:
 	purrr, 
 	stringr,
 	tidyr,
-	tidyverse,
-	rBayesianOptimization
+	tidyverse
 Suggests:
 	knitr
