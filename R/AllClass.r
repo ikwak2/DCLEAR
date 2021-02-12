@@ -1,9 +1,6 @@
 setOldClass('phyDat')
 setOldClass('phylo')
 setOldClass('igraph')
-setOldClass('kerastools.model.RModel')
-setOldClass('tf_dataset')
-setOldClass('tensorflow.tensor')
 
 setClass(
 	'lineage_tree_config',
@@ -50,7 +47,4 @@ setClass(
 		config = 'lineage_tree_config'
 	)
 )
-
-setClass('Model', slot = c(model = 'kerastools.model.RModel'))
-setClass('SimDistModel', contains = 'Model')
 
