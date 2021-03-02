@@ -38,7 +38,7 @@
 #' @export
 
 WH <- function(x, InfoW, dropout = FALSE) {
-    states <- c('0', '-', LETTERS)
+    states <- attributes(x)$allLevels
     states2num = 1:length(states)
     names(states2num) = states
     x2 = do.call('rbind', x %>% map(~states2num[.]) )
