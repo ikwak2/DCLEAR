@@ -4,6 +4,7 @@
 #' @param division cell divisions (default: 16L)
 #' @return a `lineage_tree_config` object
 #' @author Wuming Gong (gongx030@umn.edu)
+#' @export
 #'
 setMethod(
 	'process_sequence',
