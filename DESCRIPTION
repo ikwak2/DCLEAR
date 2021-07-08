@@ -31,4 +31,4 @@ Imports:
 	tidyverse,
 	rBayesianOptimization
 Suggests:
-	knitr
+	knitr, rmarkdown, markdown

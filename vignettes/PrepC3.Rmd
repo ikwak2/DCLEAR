@@ -17,7 +17,7 @@ opts_chunk$set(fig.width = 12)
 ```{r loading, include=FALSE}
 library(DCLEAR)
 library(phangorn)
-library(parallel)
+#library(parallel)
 
 ```
 
@@ -31,26 +31,26 @@ Change the like with the one you would like to predict.
 
 ```
 csv_file <- 'Data/subC3/SubC3_10K_0001_mutation_table.csv'
-x <- read.table(csv_file, header = T, sep = ',', colClasses = "character")
+\dontrun{x <- read.table(csv_file, header = T, sep = ',', colClasses = "character")}
 ```
 
 Initical state is '0', interval dropout is '-', point dropout is '*' (point dropout was '' from the file, but we will replace it with '*'), and mutational outcome states are 'A' to 'Z'. 
 
 ```
-states <- c('0', '-', '*', LETTERS)
+\dontrun{states <- c('0', '-', '*', LETTERS)}
 ```
 
 Read file and save it as 'phyDat' object.
 ```
-tip_names <- x[, 1]
-x <- x[,-1]
-rownames(x) <- tip_names
-x[ x == '' ] = '*'  ## specified * as point dropout (point missing) 
-x = as.matrix(x)
-x <- x %>% phyDat(type = 'USER', levels = states)
+\dontrun{tip_names <- x[, 1]}
+\dontrun{x <- x[,-1]}
+\dontrun{rownames(x) <- tip_names}
+\dontrun{x[ x == '' ] = '*'  ## specified * as point dropout (point missing)} 
+\dontrun{x = as.matrix(x)}
+\dontrun{x <- x %>% phyDat(type = 'USER', levels = states)}
 
-states2num = 1:length(states)
-names(states2num) = states
+\dontrun{states2num = 1:length(states)}
+\dontrun{names(states2num) = states}
 ```
 
 ## Weight parameters for the prediction
@@ -68,8 +68,8 @@ InfoW[4:26] = 3
 ## Generating final submission file for subchallenge 3
 
 ```
-aTree2 <- x %>% dist_weighted_hamming(InfoW, FALSE) %>% fastme.ols()
-write.tree(aTree2, "Kwak_Gongsub3_submission.nw")
+\dontrun{aTree2 <- x %>% dist_weighted_hamming(InfoW, FALSE) %>% fastme.ols()}
+\dontrun{write.tree(aTree2, "Kwak_Gongsub3_submission.nw")}
 
 ```
 

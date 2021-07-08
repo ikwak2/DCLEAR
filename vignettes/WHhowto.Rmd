@@ -194,6 +194,8 @@ InfoW = -log(mu_d1)  ## entropy as their weights
 InfoW[1:2] = 1   ## weight for initial state is 1 , weight for '-' is set to 1. 
 InfoW[3:7] = 4.5 ## Constant weight for outcome states
 dist_wh1 = WH(sD$seqs, InfoW)
+#dist_wh1 = dist_weighted_hamming(sD$seqs, InfoW, dropout = FALSE)
+
 ```
 
 We can construct tree using NJ or fastme.
