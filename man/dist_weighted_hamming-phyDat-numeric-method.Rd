@@ -28,9 +28,10 @@ library(ape)
 set.seed(1)
 mu_d1 = c( 30, 20, 10, 5, 5, 1, 0.01, 0.001)
 mu_d1 = mu_d1/sum(mu_d1)
-simn = 100 # number of cell samples
-m = 200  ## number of targets
-sD = sim_seqdata(sim_n = simn, m = m, mu_d = 0.03, d = 12, n_s = length(mu_d1), outcome_prob = mu_d1, p_d = 0.005 )
+simn = 2 # number of cell samples
+m = 10  ## number of targets
+sD = sim_seqdata(sim_n = simn, m = m, mu_d = 0.03,
+     d = 12, n_s = length(mu_d1), outcome_prob = mu_d1, p_d = 0.005 )
 ## RF score with hamming distance
 D_hm = dist.hamming(sD$seqs)
 tree_hm = NJ(D_hm)

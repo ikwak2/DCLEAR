@@ -137,7 +137,7 @@ One easy way to construct a tree is to calculate distance among cells and constr
 distH = dist.hamming(sD$seqs)
 ```
 
-With Neighbor Joining or fastme by [Desper, R. and Gascuel, O. (2002)](https://www.ncbi.nlm.nih.gov/pubmed/12487758), we can construct tree from the distance matrix.
+With Neighbor Joining or fastme by [Desper, R. and Gascuel, O. (2002)](https://pubmed.ncbi.nlm.nih.gov/12487758/), we can construct tree from the distance matrix.
 
 ```{r treeconst}
 TreeNJ = NJ(distH)
