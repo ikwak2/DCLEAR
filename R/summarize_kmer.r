@@ -76,7 +76,7 @@ summarize_kmer_core <- function(
     to = 1:n_nodes,
     start = 1:(config@n_targets - k + 1)
    ) %>%
-    filter(from < to)
+    filter(.data$from < .data$to)
 
   df <- do.call('rbind', bplapply(
     seq_len(reps), 
@@ -98,11 +98,11 @@ summarize_kmer_core <- function(
         to = str_to,
         distance = d
       ) %>%
-        group_by(from, to, distance) %>%
+        group_by(.data$from, .data$to, .data$distance) %>%
         tally()
     }
   )) %>%
-    group_by(from, to, distance) %>%
+    group_by(.data$from, .data$to, .data$distance) %>%
     summarize(n = sum(n))
 
   new(

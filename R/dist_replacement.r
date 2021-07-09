@@ -67,6 +67,7 @@ setMethod(
 #' @param k k-mers (default k=2)
 #' @return a dist object
 #' @author Wuming Gong (gongx030@umn.edu)
+#' @importFrom rlang .data
 #'
 dist_kmer_replacement_inference <- function(x, kmer_summary, k = 2){
 
@@ -97,7 +98,7 @@ dist_kmer_replacement_inference <- function(x, kmer_summary, k = 2){
 		from = 1:length(x),
 		to = 1:length(x)
 	) %>% 
-		filter(from < to)
+		filter(.data$from < .data$to)
 
   # input sequence 
 	y <- do.call('rbind', strsplit(as.character(x), '')) %>%
@@ -171,15 +172,16 @@ dist_kmer_replacement_inference <- function(x, kmer_summary, k = 2){
 #' @return a probabilistic vector of the distribution of nodal distances
 #'
 #' @author Wuming Gong (gongx030@umn.edu)
+#' @importFrom rlang .data
 #'
 get_distance_prior <- function(x){
 
   d <- x@df %>%
     ungroup() %>%
-    group_by(distance) %>%
+    group_by(.data$distance) %>%
     summarize(n = sum(n)) %>%
     mutate(prob = n / sum(n)) %>%
-    select(distance, prob)
+    select(.data$distance, .data$prob)
 
   prior <- rep(0, x@max_distance)
   prior[d$distance] <- d$prob
@@ -205,11 +207,11 @@ get_transition_probability <- function(x){
   d <- x@df %>%
     ungroup() %>%
     mutate(
-      from2 = paste0(substr(from, 1, 1), substr(to, 1, 1)),
-      to2 = paste0(substr(from, 2, 2), substr(to, 2, 2))
+      from2 = paste0(substr(.data$from, 1, 1), substr(.data$to, 1, 1)),
+      to2 = paste0(substr(.data$from, 2, 2), substr(.data$to, 2, 2))
     ) %>%
-    mutate(from = from2, to = to2) %>%
-    select(from, to, distance, n) %>%
+    mutate(from = .data$from2, to = .data$to2) %>%
+    select(.data$from, .data$to, .data$distance, .data$n) %>%
     right_join(
       expand.grid(
         from = x@kmers, 
@@ -220,15 +222,15 @@ get_transition_probability <- function(x){
       by = c('from', 'to', 'distance')
     ) %>%
     replace_na(list(n = 0))  %>%
-    mutate(n = ifelse(from == to, n + 1, n)) %>%
-    group_by(distance, from) %>%
+    mutate(n = ifelse(.data$from == .data$to, n + 1, n)) %>%
+    group_by(.data$distance, .data$from) %>%
     mutate(prob = n / sum(n)) %>%
-    select(from, to, distance, prob) %>%
+    select(.data$from, .data$to, .data$distance, .data$prob) %>%
 		mutate(
-			from = factor(from, x@kmers),
-			to = factor(to, x@kmers)
+			from = factor(.data$from, x@kmers),
+			to = factor(.data$to, x@kmers)
 		) %>%
-		arrange(distance, to, from)
+		arrange(.data$distance, .data$to, .data$from)
 
   array(
     d$prob, 
@@ -250,6 +252,7 @@ get_transition_probability <- function(x){
 #' @export
 #'
 #' @author Wuming Gong (gongx030@umn.edu)
+#' @importFrom rlang .data
 #'
 get_replacement_probability <- function(x){
 
@@ -264,15 +267,15 @@ get_replacement_probability <- function(x){
       by = c('from', 'to', 'distance')
     ) %>%
     replace_na(list(n = 0))  %>%
-    mutate(n = ifelse(from == to, n + 1, n)) %>%
-    group_by(distance) %>%
+    mutate(n = ifelse(.data$from == .data$to, n + 1, n)) %>%
+    group_by(.data$distance) %>%
     mutate(prob = n / sum(n)) %>%
-    select(from, to, distance, prob) %>%
+    select(.data$from, .data$to, .data$distance, .data$prob) %>%
 		mutate(
-			from = factor(from, x@kmers),
-			to = factor(to, x@kmers)
+			from = factor(.data$from, x@kmers),
+			to = factor(.data$to, x@kmers)
 		) %>%
-		arrange(distance, to, from)
+		arrange(.data$distance, .data$to, .data$from)
 
   array(
     d$prob, 

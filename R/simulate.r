@@ -30,7 +30,7 @@ setMethod(
 		h <- 1	# a unit time
 		while (h < config@division){
 
-			pairs <- tree %>% filter(height == h) 	# parent-child pairs at level h
+			pairs <- tree %>% filter(.data$height == h) 	# parent-child pairs at level h
 			parents <- pairs[, 1] %>% get_node_names()
 			children <- pairs[, 2] %>% get_node_names()
 			xc <- x[parents, , drop = FALSE]	# the states of the children cells

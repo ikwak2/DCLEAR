@@ -27,11 +27,11 @@ setMethod(
         x@df %>%
           ungroup() %>%
           mutate(
-            from = substr(from, start, start + k - 1),
-            to = substr(to, start, start + k - 1)
+            from = substr(.data$from, start, start + k - 1),
+            to = substr(.data$to, start, start + k - 1)
           )
       })) %>%
-        group_by(from, to, distance) %>%
+        group_by(.data$from, .data$to, .data$distance) %>%
         summarize(n = sum(n))
 
       x@kmers <-   do.call('paste0', do.call('expand.grid', lapply(1:k, function(j) x@alphabets)))
