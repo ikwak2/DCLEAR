@@ -5,7 +5,7 @@ Title: Distance Based Cell Lineage Reconstruction (DCLEAR)
 Description: R codes for distance based cell lineage reconstruction. 
 Author: Il-Youp Kwak and Wuming Gong
 Maintainer: 
-  Il-Youp Kwak <ilyoup.kwak@gmail.com>
+  Il-Youp Kwak <ikwak2@cau.ac.kr>
 License: GPL-3
 VignetteBuilder: knitr
 LinkingTo: Rcpp, RcppArmadillo
