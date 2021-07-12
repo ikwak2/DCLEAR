@@ -149,9 +149,8 @@ sim_seqdata <- function(sim_n = 200, # number of samples to simulate
     attr(tree_ex,'class') = 'phylo'
 
     fixtree <- function(tree) {
-        tmpfn = "tmp_junktree.tree"
-        write.tree(tree, tmpfn)
-        newtree2 = read.tree(tmpfn)
+        tmp_tree_nw = write.tree(tree, "")
+        newtree2 = read.tree(text = tmp_tree_nw)
         return(newtree2)
     }
 
