@@ -2,10 +2,17 @@ Package: DCLEAR
 Version: 1.0.0
 Date: 2021-07-13
 Title: Distance Based Cell Lineage Reconstruction
-Description: R codes for distance based cell lineage reconstruction. Our methods won both sub-challenges 2 and 3 of the Allen Institute Cell Lineage Reconstruction DREAM Challenge in 2020. 
-Author: Il-Youp Kwak and Wuming Gong
-Maintainer: 
-  Il-Youp Kwak <ikwak2@cau.ac.kr>
+Description: R codes for distance based cell lineage reconstruction. Our methods won both sub-challenges 2 and 3 of the Allen Institute Cell Lineage Reconstruction DREAM Challenge in 2020. The challenge paper is Wuming et al. (2021) <doi:10.1016/j.cels.2021.05.008>.
+Authors@R: 
+  c(person(given = "Il-Youp",
+           family = "Kwak",
+           role = c("aut", "cre"),
+           email = "ikwak@cau.ac.kr",
+           comment = c(ORCID = "0000-0002-7117-7669")),
+    person(given = "Wuming",
+           family = "Gong",
+           role = "aut",
+           comment = c(ORCID = "0000-0002-3147-4028"))
 License: GPL-3
 VignetteBuilder: knitr
 LinkingTo: Rcpp, RcppArmadillo
