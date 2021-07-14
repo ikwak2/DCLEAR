@@ -35,13 +35,13 @@ sD = sim_seqdata(sim_n = simn, m = m, mu_d = 0.03,
 InfoW = -log(mu_d1)
 InfoW[1:2] = 1
 InfoW[3:7] = 4.5
-#sD$seqs \%>\% WH(InfoW) \%>\% NJ() \%>\% RF.dist(sD$tree, normalize = TRUE)
+sD$seqs \%>\% WH(InfoW) \%>\% NJ() \%>\% RF.dist(sD$tree, normalize = TRUE)
 ## RF score with weighted hamming, cosidering dropout situation
 nfoW = -log(mu_d1)
 InfoW[1] = 1
 InfoW[2] = 12
 InfoW[3:7] = 3
-#sD$seqs \%>\% WH(InfoW, dropout=TRUE) \%>\% NJ() \%>\% RF.dist(sD$tree, normalize = TRUE)
+sD$seqs \%>\% WH(InfoW, dropout=TRUE) \%>\% NJ() \%>\% RF.dist(sD$tree, normalize = TRUE)
 
 }
 \author{
