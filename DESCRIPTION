@@ -6,7 +6,7 @@ Authors@R: c(person("Il-Youp", "Kwak", role = c("aut", "cre"),
                      email = "ikwak2@cau.ac.kr"),
               person("Wuming", "Gong", role = "aut", email = "gongx030@umn.edu"))
 Author: Il-Youp Kwak [aut, cre],
-  Wuming Gong [aut],
+  Wuming Gong [aut]
 Maintainer: Il-Youp Kwak <ikwak2@cau.ac.kr>
 License: GPL-3
 VignetteBuilder: knitr

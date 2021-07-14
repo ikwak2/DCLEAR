@@ -22,6 +22,7 @@ implementation of weighted hamming algorithm
 \examples{
 
 set.seed(1)
+library(phangorn)
 mu_d1 = c( 30, 20, 10, 5, 5, 1, 0.01, 0.001)
 mu_d1 = mu_d1/sum(mu_d1)
 simn = 10 # number of cell samples
@@ -30,18 +31,29 @@ sD = sim_seqdata(sim_n = simn, m = m, mu_d = 0.03,
         d = 12, n_s = length(mu_d1), outcome_prob = mu_d1, p_d = 0.005 )
 
 ## RF score with hamming distance
-RF.dist(NJ(dist.hamming(sD$seqs)), sD$tree, normalize = TRUE)
+D_h = dist.hamming(sD$seqs)
+tree_h= NJ(D_h)
+RF.dist(tree_h, sD$tree, normalize = TRUE)
+
 ## RF score with weighted hamming
 InfoW = -log(mu_d1)
 InfoW[1:2] = 1
 InfoW[3:7] = 4.5
-RF.dist(NJ(WH(sD$seqs, InfoW)), sD$tree, normalize = TRUE)
+
+D_wh = WH(sD$seqs, InfoW)
+tree_wh= NJ(D_wh)
+RF.dist(tree_wh, sD$tree, normalize = TRUE)
+
 ## RF score with weighted hamming, cosidering dropout situation
 nfoW = -log(mu_d1)
 InfoW[1] = 1
 InfoW[2] = 12
 InfoW[3:7] = 3
-RF.dist(NJ(WH(sD$seqs, InfoW, dropout=TRUE)), sD$tree, normalize = TRUE)
+
+D_wh2 = WH(sD$seqs, InfoW, dropout=TRUE)
+tree_wh2= NJ(D_wh2)
+RF.dist(tree_wh2, sD$tree, normalize = TRUE)
+
 }
 \author{
 Il-Youp Kwak
