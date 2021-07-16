@@ -78,10 +78,11 @@ summarize_kmer_core <- function(
    ) %>%
     filter(.data$from < .data$to)
 
-  df <- do.call('rbind', bplapply(
+#  df <- do.call('rbind', bplapply(
+  df <- do.call('rbind', lapply(
     seq_len(reps), 
     function(i){
-      sim <- simulate(n_samples = 200L, config)    
+      sim <- simulate(n_samples = n_samples, config)    
       s <- sample(length(sim@x), n_nodes)
       X <- sim@x[s] %>% as.character()
       D <- sim@graph %>% distances(
