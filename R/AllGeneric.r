@@ -43,3 +43,9 @@ setGeneric('process_sequence', function(x, ...) standardGeneric('process_sequenc
 #' @param ... additional parameters
 #'
 setGeneric('as_phylo', function(x, ...) standardGeneric('as_phylo'))
+
+#' Generic function for as_igraph
+#' @param x a phylo object
+#' @param ... additional parameters
+#'
+setGeneric('as_igraph', function(x, ...) standardGeneric('as_igraph'))
