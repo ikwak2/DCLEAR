@@ -3,8 +3,10 @@
 #' Simulate a cell lineage tree
 #' Adoped from https://github.com/elifesciences-publications/CRISPR_recorders_sims/blob/master/MATLAB_sims/GESTALT_30hr_1x_simulation.m
 #'
-#' @param n_samples number of samples to simulate
 #' @param config simulation configuration; a lineage_tree_config object
+#' @param x a sequence object
+#' @param n_samples number of samples to simulate
+#' @param ... additional parameters
 #'
 #' @return a lineage_tree object
 #'
@@ -12,54 +14,124 @@
 #'
 #' @export
 #'
-
 setMethod(
 	'simulate',
 	signature(
-		config = 'lineage_tree_config'
+		config = 'lineage_tree_config',
+		x = 'missing'
 	),
 	function(
 		config,
-		n_samples = 200 # number of samples to simulate 
+		x,
+		n_samples = 200, # number of samples to simulate 
+		...
 	){
 
-		tree <- random_tree(n_samples = n_samples, division = config@division)
+		simulate_core(config, mp = NULL, n_samples = n_samples, ...)
 
-		ancestor <- 1
-		x <- matrix(config@default_character, nrow = 1, ncol = config@n_targets, dimnames = list(ancestor %>% get_node_names(), NULL))	# the ancestor sequence
-		h <- 1	# a unit time
-		while (h < config@division){
+	}
+) # simulate
 
-			pairs <- tree %>% filter(.data$height == h) 	# parent-child pairs at level h
-			parents <- pairs[, 1] %>% get_node_names()
-			children <- pairs[, 2] %>% get_node_names()
-			xc <- x[parents, , drop = FALSE]	# the states of the children cells
-			rownames(xc) <- children
 
-			for (i in 1:nrow(pairs)){ # for each child
+#' simulate
+#'
+#' Simulate a cell lineage tree
+#' Adoped from https://github.com/elifesciences-publications/CRISPR_recorders_sims/blob/master/MATLAB_sims/GESTALT_30hr_1x_simulation.m
+#'
+#' @param config simulation configuration; a lineage_tree_config object
+#' @param x a sequence object
+#' @param n_samples number of samples to simulate
+#' @param ... additional parameters
+#'
+#' @return a lineage_tree object
+#'
+#' @author Wuming Gong (gongx030@umn.edu)
+#'
+#' @export
+#'
+setMethod(
+	'simulate',
+	signature(
+		config = 'lineage_tree_config',
+		x = 'phyDat'
+	),
+	function(
+		config,
+		x,
+		n_samples = 200L,
+		...
+	){
 
-				mutation_site <- runif(config@n_targets) < config@mutation_prob & xc[i, ] == config@default_character 	# sampling mutation site
-				n_mut <- sum(mutation_site)
+		# compute site specific outcome probability
+		mp <- x %>% as.character() %>% apply(2, function(y) table(factor(y, config@alphabets)))
+		mp[config@outcome_prob == 0, ] <- 0
+		w <- 1 / colSums(mp)
+		w[is.infinite(w)] <- 0
+		mp <- mp %*% diag(w)
+		mp[config@default_character, w == 0] <- 1
+		simulate_core(config, mp = mp, n_samples = n_samples, ...)
+	}
+)
 
-				if (n_mut > 0){
-					xc[i, mutation_site] <- sample(config@alphabets, n_mut, replace = TRUE, prob = config@outcome_prob)
-					if (n_mut > 1 && config@deletion){
-						# find all pairs of mutation sites within 20 bp
-						p <- expand.grid(from = which(mutation_site), to = which(mutation_site)) %>%
+
+#' simulate_core
+#'
+#' Simulate a cell lineage tree
+#' Adoped from https://github.com/elifesciences-publications/CRISPR_recorders_sims/blob/master/MATLAB_sims/GESTALT_30hr_1x_simulation.m
+#'
+#' @param config simulation configuration; a lineage_tree_config object
+#' @param mp site specific mutation probability
+#' @param n_samples number of samples to simulate
+#' @param ... additional parameters
+#'
+simulate_core <- function(config, mp = NULL, n_samples = 200L, ...){
+
+	tree <- random_tree(n_samples = n_samples, division = config@division)
+
+	if (is.null(mp)){
+		mp <- matrix(
+			config@outcome_prob, 
+			nrow = length(config@outcome_prob), 
+			ncol = config@n_targets, 
+			dimnames = list(config@alphabets, NULL)
+		)
+	}
+
+	ancestor <- 1
+	x <- matrix(config@default_character, nrow = 1, ncol = config@n_targets, dimnames = list(ancestor %>% get_node_names(), NULL))	# the ancestor sequence
+	h <- 1	# a unit time
+	while (h < config@division){
+
+		pairs <- tree %>% filter(.data$height == h) 	# parent-child pairs at level h
+		parents <- pairs[, 1] %>% get_node_names()
+		children <- pairs[, 2] %>% get_node_names()
+		xc <- x[parents, , drop = FALSE]	# the states of the children cells
+		rownames(xc) <- children
+
+		for (i in 1:nrow(pairs)){ # for each child
+
+			mutation_site <- runif(config@n_targets) < config@mutation_prob & xc[i, ] == config@default_character 	# sampling mutation site
+			n_mut <- sum(mutation_site)
+
+			if (n_mut > 0){
+				xc[i, mutation_site] <- sapply(which(mutation_site), function(j) sample(config@alphabets, 1L, prob = mp[, j]))
+				if (n_mut > 1 && config@deletion){
+					# find all pairs of mutation sites within 20 bp
+					p <- expand.grid(from = which(mutation_site), to = which(mutation_site)) %>%
 						filter(to - from <= 20 & to - from >= 2)
-						if (nrow(p) > 0){
-							j <- sample(1:nrow(p), 1)
-							from <- p[j, 'from'] + 1
-							to <- p[j, 'to'] - 1
-							xc[i, from:to] <- config@deletion_character
-						}
+					if (nrow(p) > 0){
+						j <- sample(1:nrow(p), 1)
+						from <- p[j, 'from'] + 1
+						to <- p[j, 'to'] - 1
+						xc[i, from:to] <- config@deletion_character
 					}
 				}
 			}
-
-			x <- rbind(x, xc)
-			h <- h + 1
 		}
+
+		x <- rbind(x, xc)
+		h <- h + 1
+	}
 
 	if (config@dropout_prob > 0){
 		# randomly add dropout events
@@ -87,9 +159,7 @@ setMethod(
 		graph = g, 
 		config = config
 	)
-	}
-) # simulate
-
+}
 
 #' random_tree
 #'

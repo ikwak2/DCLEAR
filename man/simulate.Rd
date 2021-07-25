@@ -4,15 +4,14 @@
 \alias{simulate}
 \title{Generic function for simulate}
 \usage{
-simulate(config, ...)
+simulate(config, x, ...)
 }
 \arguments{
 \item{config}{a lineage_tree_config object}
 
+\item{x}{a sequence object}
+
 \item{...}{additional parameters}
-}
-\value{
-a lineage_tree object
 }
 \description{
 Generic function for simulate

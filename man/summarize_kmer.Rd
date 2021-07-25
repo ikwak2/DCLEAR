@@ -11,9 +11,6 @@ summarize_kmer(x, ...)
 
 \item{...}{additional parameters}
 }
-\value{
-a kmer_summary object
-}
 \description{
 Generic function for summarize_kmer
 }

@@ -13,9 +13,6 @@ dist_weighted_hamming(x, wVec, ...)
 
 \item{...}{additional parameters}
 }
-\value{
-Calculated distance matrix of input sequences. The result is a 'dist' class object.
-}
 \description{
 Generic function for dist_weighted_hamming
 }

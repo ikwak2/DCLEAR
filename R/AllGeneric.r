@@ -27,9 +27,10 @@ setGeneric('summarize_kmer', function(x, ...) standardGeneric('summarize_kmer'))
 
 #' Generic function for simulate
 #' @param config a lineage_tree_config object
+#' @param x a sequence object
 #' @param ... additional parameters
 #'
-setGeneric('simulate', function(config, ...) standardGeneric('simulate'))
+setGeneric('simulate', function(config, x, ...) standardGeneric('simulate'))
 
 #' Generic function for process_sequence
 #' @param x a sequence object

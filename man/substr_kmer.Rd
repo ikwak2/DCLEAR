@@ -11,9 +11,6 @@ substr_kmer(x, ...)
 
 \item{...}{additional parameters}
 }
-\value{
-a new kmer_summary object
-}
 \description{
 Generic function for substr_kmer
 }

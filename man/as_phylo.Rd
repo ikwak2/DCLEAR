@@ -11,9 +11,6 @@ as_phylo(x, ...)
 
 \item{...}{additional parameters}
 }
-\value{
-a phylo object
-}
 \description{
 Generic function for as_phylo
 }

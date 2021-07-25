@@ -15,9 +15,6 @@ dist_replacement(x, kmer_summary, k, ...)
 
 \item{...}{additional parameters}
 }
-\value{
-a dist object
-}
 \description{
 Generic function for dist_replacement
 }

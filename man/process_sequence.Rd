@@ -11,9 +11,6 @@ process_sequence(x, ...)
 
 \item{...}{additional parameters}
 }
-\value{
-a `lineage_tree_config` object
-}
 \description{
 Generic function for process_sequence
 }
