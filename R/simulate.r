@@ -186,9 +186,11 @@ random_tree <- function(n_samples, division = 16L){
 	sampled_edges <- list()
 	h <- division - 1	# leaf level
 	sampled_edges[[h]] <- edges[sampled_leaves - 1, ]
+
+
 	while (h > 1){
 		to <- unique(sampled_edges[[h]][, 'from'])
-		sampled_edges[[h - 1]] <- edges[to - 1, ]
+		sampled_edges[[h - 1]] <- edges[to - 1, , drop = FALSE]
 		h <- h - 1
 	}
 
