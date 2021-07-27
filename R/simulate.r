@@ -244,6 +244,8 @@ get_node_names <- function(x) sprintf('node_%s', sprintf('%d', x) %>% str_pad(15
 #'
 #' @return a positional mutation probability matrix
 #'
+#' @export
+#'
 positional_mutation_prob <- function(x, config){
 	mp <- x %>% 
 		as.character() %>% 
@@ -255,4 +257,3 @@ positional_mutation_prob <- function(x, config){
 	mp[config@default_character, w == 0] <- 1
 	mp
 }
-
