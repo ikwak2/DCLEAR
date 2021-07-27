@@ -63,12 +63,7 @@ setMethod(
 	){
 
 		# compute site specific outcome probability
-		mp <- x %>% as.character() %>% apply(2, function(y) table(factor(y, config@alphabets)))
-		mp[config@outcome_prob == 0, ] <- 0
-		w <- 1 / colSums(mp)
-		w[is.infinite(w)] <- 0
-		mp <- mp %*% diag(w)
-		mp[config@default_character, w == 0] <- 1
+		mp <- positional_mutation_prob(x, config)
 		simulate_core(config, mp = mp, n_samples = n_samples, ...)
 	}
 )
@@ -239,4 +234,25 @@ sample_outcome_prob <- function(config, num_states = 20L, shape = 0.1, scale = 2
 #'
 get_node_names <- function(x) sprintf('node_%s', sprintf('%d', x) %>% str_pad(15, pad = '0'))
 
+
+#' positional_mutation_prob
+#'
+#' Convenient function for get node names
+#'
+#' @param x a phyDat object
+#' @param config a lineage_tree_config object
+#'
+#' @return a positional mutation probability matrix
+#'
+positional_mutation_prob <- function(x, config){
+	mp <- x %>% 
+		as.character() %>% 
+		apply(2, function(y) table(factor(y, config@alphabets)))
+  mp[config@outcome_prob == 0, ] <- 0
+	w <- 1 / colSums(mp)
+	w[is.infinite(w)] <- 0
+	mp <- mp %*% diag(w)
+	mp[config@default_character, w == 0] <- 1
+	mp
+}
 
