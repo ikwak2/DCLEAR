@@ -18,6 +18,7 @@
 #' @importFrom tidyr replace_na
 #' @importFrom rlang .data
 #' @importFrom rBayesianOptimization BayesianOptimization
+#' @importFrom BiocGenerics rbind
 #' @useDynLib DCLEAR
 #' @docType package
 #' @name DCLEAR

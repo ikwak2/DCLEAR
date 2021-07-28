@@ -74,3 +74,4 @@ setGeneric('subtract', function(x, y, ...) standardGeneric('subtract'))
 #' @param ... additional parameters
 #'
 setGeneric('get_leaves', function(x, ...) standardGeneric('get_leaves'))
+

@@ -31,7 +31,8 @@ Imports:
 	tidyr,
 	tidyverse,
 	rBayesianOptimization,
-	rlang
+	rlang,
+	BiocGenerics
 Suggests:
 	knitr, rmarkdown, markdown
 Description: R codes for distance based cell lineage reconstruction. Our methods won both sub-challenges 2 and 3 of the Allen Institute Cell Lineage Reconstruction DREAM Challenge in 2020. The challenge paper is Gong et al. (2021) <doi:10.1016/j.cels.2021.05.008>.
