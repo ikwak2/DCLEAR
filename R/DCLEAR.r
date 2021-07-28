@@ -7,7 +7,7 @@
 #' @import Matrix
 #' @import dplyr
 #' @importFrom matrixStats rowLogSumExps
-#' @importFrom igraph distances graph.adjacency degree permute.vertices vcount V contract simplify set_vertex_attr graph_from_edgelist
+#' @importFrom igraph distances graph.adjacency degree permute.vertices vcount V contract simplify set_vertex_attr graph_from_edgelist induced_subgraph
 #' @importFrom purrr map
 #' @importFrom stringr str_pad
 #' @importFrom BiocParallel bplapply

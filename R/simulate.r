@@ -257,3 +257,116 @@ positional_mutation_prob <- function(x, config){
 	mp[config@default_character, w == 0] <- 1
 	mp
 }
+
+
+#' downsample
+#'
+#' Sample a lineage tree
+#'
+#' @param x a lineage_tree object
+#' @param n number of leaves (tips) in the down-sampled tree
+#' @param ... additional parameters
+#'
+#' @return a lineage_tree object
+#'
+#' @export
+#'
+setMethod(
+	'downsample',
+	signature(
+		x = 'lineage_tree'
+	),
+	function(
+		x,
+		n = 10L,
+		...
+	){
+
+		is_leaf <- degree(x@graph, mode = 'out') == 0
+		if (n < sum(is_leaf)){
+	  	leaves <- sample(names(x@x)[is_leaf], n)
+			x <- subtree(x, leaves)
+		}
+		x
+	}
+) # downsample
+
+
+#' subtree
+#'
+#' Extract a subtree with specific leaves
+#'
+#' @param x a lineage_tree object
+#' @param n leaves of the extracted tree
+#' @param ... additional parameters
+#'
+#' @return a lineage_tree object
+#'
+#' @export
+#'
+setMethod(
+	'subtree',
+	signature(
+		x = 'lineage_tree'
+	),
+	function(
+		x,
+		leaves = NULL,
+		...
+	){
+
+		stopifnot(!is.null(leaves))
+
+		is_leaf <- degree(x@graph, mode = 'out') == 0
+		stopifnot(all(leaves %in% names(x@x)[is_leaf]))
+	
+		d <- distances(x@graph, leaves, mode = 'in')
+	  v <- names(x@x)[(!is.infinite(d)) %>% colSums() > 0]  # subgraphs that connect to the leaves
+		g <- induced_subgraph(x@graph, v)
+		x@x <- x@x[v]
+		x@graph <- g
+		x
+	}
+) # subtree
+
+
+#' subtract
+#'
+#' Subtract a subtree from a large tree
+#'
+#' @param x a lineage_tree object
+#' @param y a lineage_tree object
+#' @param ... additional parameters
+#'
+#' @return a lineage_tree object
+#'
+#' @export
+#'
+setMethod(
+	'subtract',
+	signature(
+		x = 'lineage_tree',
+		y = 'lineage_tree'
+	),
+	function(
+		x,
+		y,
+		...
+	){
+
+		# need to verify if y is a subtree of x
+
+		is_leaf <- degree(x@graph, mode = 'out') == 0
+		leaves_x <- names(x@x[is_leaf])
+
+		is_leaf <- degree(y@graph, mode = 'out') == 0
+		leaves_y <- names(y@x[is_leaf])
+
+		stopifnot(all(leaves_y %in% leaves_x))
+
+		leaves <- leaves_x[!leaves_x %in% leaves_y]
+
+		stopifnot(length(leaves) > 0)
+		subtree(x, leaves)
+	}
+) # subtree

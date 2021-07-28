@@ -49,3 +49,22 @@ setGeneric('as_phylo', function(x, ...) standardGeneric('as_phylo'))
 #' @param ... additional parameters
 #'
 setGeneric('as_igraph', function(x, ...) standardGeneric('as_igraph'))
+
+#' Generic function for downsample 
+#' @param x a data object
+#' @param ... additional parameters
+#'
+setGeneric('downsample', function(x, ...) standardGeneric('downsample'))
+
+#' Generic function for subtree
+#' @param x a lineage_tree object
+#' @param ... additional parameters
+#'
+setGeneric('subtree', function(x, ...) standardGeneric('subtree'))
+
+#' Generic function for subtract
+#' @param x a lineage_tree object
+#' @param y a lineage_tree object
+#' @param ... additional parameters
+#'
+setGeneric('subtract', function(x, y, ...) standardGeneric('subtract'))
