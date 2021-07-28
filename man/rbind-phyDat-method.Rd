@@ -7,13 +7,11 @@
 \S4method{rbind}{phyDat}(..., deparse.level = 1)
 }
 \arguments{
-\item{...}{additional parameters}
-
-\item{x}{a lineage_tree object}
+\item{...}{a list of phyDat objects}
 }
 \value{
-a phyData object
+a phyDat object
 }
 \description{
-Get the leaf sequences
+Concatenate multiple phyDat objects
 }

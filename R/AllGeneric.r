@@ -75,3 +75,9 @@ setGeneric('subtract', function(x, y, ...) standardGeneric('subtract'))
 #'
 setGeneric('get_leaves', function(x, ...) standardGeneric('get_leaves'))
 
+#' Generic function for prune
+#' @param x a lineage_tree object
+#' @param ... additional parameters
+#'
+setGeneric('prune', function(x, ...) standardGeneric('prune'))
+

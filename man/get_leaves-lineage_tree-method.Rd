@@ -12,7 +12,7 @@
 \item{...}{additional parameters}
 }
 \value{
-a phyData object
+a phyDat object
 }
 \description{
 Get the leaf sequences
