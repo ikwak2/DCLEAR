@@ -68,3 +68,9 @@ setGeneric('subtree', function(x, ...) standardGeneric('subtree'))
 #' @param ... additional parameters
 #'
 setGeneric('subtract', function(x, y, ...) standardGeneric('subtract'))
+
+#' Generic function for get_leaves
+#' @param x a lineage_tree object
+#' @param ... additional parameters
+#'
+setGeneric('get_leaves', function(x, ...) standardGeneric('get_leaves'))
