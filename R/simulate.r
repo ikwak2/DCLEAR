@@ -292,6 +292,43 @@ setMethod(
 ) # downsample
 
 
+#' downsample
+#'
+#' Sample a lineage tree
+#'
+#' @param x a phylo object
+#' @param n number of leaves (tips) in the down-sampled tree
+#' @param ... additional parameters
+#'
+#' @return a phylo object
+#'
+#' @export
+#'
+setMethod(
+	'downsample',
+	signature(
+		x = 'phylo'
+	),
+	function(
+		x,
+		n = 10L,
+		...
+	){
+
+		g <- x %>% as_igraph() 
+		is_leaf <- degree(g, mode = 'out') == 0
+		if (n < sum(is_leaf)){
+	  	leaves <- sample(V(g)$name[is_leaf], n)
+			d <- distances(g, leaves, mode = 'in')
+		  v <- V(g)$name[(!is.infinite(d)) %>% colSums() > 0]  # subgraphs that connect to the leaves
+			g <- induced_subgraph(g, v)
+			g %>% as_phylo()
+		}
+
+		browser()
+	}
+)
+
 #' subtree
 #'
 #' Extract a subtree with specific leaves
@@ -328,6 +365,38 @@ setMethod(
 		x
 	}
 ) # subtree
+
+
+#' subtree
+#'
+#' Extract a subtree with specific leaves
+#'
+#' @param x a lineage_tree object
+#' @param n leaves of the extracted tree
+#' @param ... additional parameters
+#'
+#' @return a lineage_tree object
+#'
+#' @export
+#'
+setMethod(
+	'subtree',
+	signature(
+		x = 'phylo'
+	),
+	function(
+		x,
+		leaves = NULL,
+		...
+	){
+		stopifnot(!is.null(leaves))
+		browser()
+	}
+) # subtree
+
+
+#' subtract
+#'
 
 
 #' subtract

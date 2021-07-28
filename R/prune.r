@@ -5,7 +5,7 @@
 #' @param x a lineage_tree object
 #' @param ... additional parameters
 #'
-#' @return a lineage_tree object
+#' @return a list of phyDat and phylo objects
 #'
 #' @export
 #'
@@ -19,8 +19,9 @@ setMethod(
 		...
 	){
 
-		x@x <- get_leaves(x)
-		x@graph %>% as_phylo() %>% as_igraph
-		x
+		tree <- x@graph %>% as_phylo()
+		sequence <- get_leaves(x)
+		sequence <- sequence[tree$tip.label]
+		list(sequence = sequence, tree = tree)
 	}
 )

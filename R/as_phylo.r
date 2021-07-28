@@ -13,8 +13,6 @@ setMethod(
 	),
 	function(x){
 
-		y <- list()	# a phylo object
-
 		# reverse the vertic order so that the leaves have the smallest index
 		x <- permute.vertices(x, vcount(x):1)	
 
@@ -25,7 +23,7 @@ setMethod(
 
 		d_lb <- distances(x, v = V(x)[is_leaf | is_branch], to = V(x)[is_leaf | is_branch])
 
-		n_nodes <- sum(is_leaf | is_branch)
+		n_nodes <- sum(is_leaf | is_branch)	# number of nodes in phylo
 		new2old <- which(is_leaf | is_branch)	# map from new vertex index to old vertex index
 		name2id <- 1:n_nodes
 		names(name2id) <- names(new2old)
@@ -37,17 +35,17 @@ setMethod(
 		old2new[is_link] <- name2id[names(new2old[apply(d, 1, which.min)])]
 		x <- contract(x, old2new)
 		x <- simplify(x)
-			is_leaf <- degree(x, mode = 'out') == 0
 		x <- x %>% set_vertex_attr('name', index = 1:vcount(x), value = names(name2id))
+		x <- permute.vertices(x, vcount(x):1)
+		is_leaf <- degree(x, mode = 'out') == 0
+		y <- list()
 		y$edge <- (x[] %>% summary())[, 1:2] %>% as.matrix()
-		y$tip.label <- names(name2id)[is_leaf]
-		y$Nnode <- vcount(x)
 		y$edge.length <- d_lb[y$edge]
-
-		attr(y, 'class') = 'phylo'
-		tmpfn <- tempfile(fileext = '.nw')
-		write.tree(y, tmpfn)
-		read.tree(tmpfn)
+		y$Nnode <- sum(is_branch)
+		y$tip.label <- V(x)$name[is_leaf]
+		attr(y, 'class') <- 'phylo'
+		attr(y, "order") <- 'cladewise'
+		y
 	}
 
 ) # as_phylo
