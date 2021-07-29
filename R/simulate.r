@@ -296,7 +296,7 @@ setMethod(
 #'
 #' Sample a lineage tree
 #'
-#' @param x a phylo object
+#' @param x a igraph object
 #' @param n number of leaves (tips) in the down-sampled tree
 #' @param ... additional parameters
 #'
@@ -307,7 +307,7 @@ setMethod(
 setMethod(
 	'downsample',
 	signature(
-		x = 'phylo'
+		x = 'igraph'
 	),
 	function(
 		x,
@@ -315,17 +315,15 @@ setMethod(
 		...
 	){
 
-		g <- x %>% as_igraph() 
-		is_leaf <- degree(g, mode = 'out') == 0
-		if (n < sum(is_leaf)){
-	  	leaves <- sample(V(g)$name[is_leaf], n)
-			d <- distances(g, leaves, mode = 'in')
-		  v <- V(g)$name[(!is.infinite(d)) %>% colSums() > 0]  # subgraphs that connect to the leaves
-			g <- induced_subgraph(g, v)
-			g %>% as_phylo()
+		is_leaf <- degree(x, mode = 'out') == 0
+		if (n <= sum(is_leaf)){
+	  	leaves <- sample(unlist(V(x)$name[is_leaf]), n)
+			d <- distances(x, leaves, mode = 'in')
+		  v <- V(x)$name[(!is.infinite(d)) %>% colSums() > 0]  # subgraphs that connect to the leaves
+			v <- unlist(v)
+			x <- induced_subgraph(x, v)
 		}
-
-		browser()
+		x
 	}
 )
 
@@ -490,4 +488,4 @@ setMethod(
 		do.call('rbind', lapply(x, as.character)) %>% phyDat(type = 'USER', levels = lv)
 
 	}
-) # get_leaves
+) # rbind

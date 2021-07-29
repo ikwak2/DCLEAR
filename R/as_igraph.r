@@ -16,6 +16,7 @@ setMethod(
 		g <- graph_from_edgelist(x$edge)
 		V(g)$name <- c(x$tip.label, sprintf('Node%d', 1:x$Nnode))
 		E(g)$weight <- x$edge.length
+		g <- permute.vertices(g, vcount(g):1)	# reverse the node order so that the tips have the largest order
 		g
 	}
 )
