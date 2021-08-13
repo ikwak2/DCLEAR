@@ -9,10 +9,10 @@
 \arguments{
 \item{x}{a lineage_tree object}
 
-\item{...}{additional parameters}
+\item{...}{additional parameters passed to as_phylo()}
 }
 \value{
-a list of phyDat and phylo objects
+a lineage_tree object
 }
 \description{
 Trim a full lineage tree into phylogenetic tree

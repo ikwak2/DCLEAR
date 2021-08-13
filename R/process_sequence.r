@@ -27,6 +27,11 @@ setMethod(
 			factor(config@alphabets) %>%
 			table() 
 
+		used <- freq > 0 | names(freq) %in% c(config@dropout_character, config@default_character, config@deletion_character)
+		config@alphabets <- config@alphabets[used]
+		config@outcome_prob <- config@outcome_prob[used]
+		freq <- freq[used]
+
 		freq <- as.numeric(freq)
 		names(freq) <- config@alphabets
 

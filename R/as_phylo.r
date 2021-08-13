@@ -18,10 +18,12 @@ setMethod(
 
 		is_leaf <- degree(x, mode = 'out') == 0
 		n_leaves <- sum(is_leaf)
-		permutation <- 1:vcount(x)
-		permutation[is_leaf] <- which(is_leaf) - n_leaves + 1
-		permutation[!is_leaf] <- which(!is_leaf) + n_leaves 
-		x <- permute.vertices(x, permutation)
+		v <- topo_sort(x, mode = 'in')$name %>% 
+			rev() %>%
+			unlist() 
+		v <- c(v[(vcount(x) - n_leaves + 1):vcount(x)], v[1:(vcount(x) - n_leaves)])
+		v0 <- V(x)$name %>% as.character()
+		x <- permute.vertices(x, factor(v0, v) %>% as.numeric())
 		is_leaf <- degree(x, mode = 'out') == 0
 		d <- distances(x)
 		y <- list()
@@ -32,7 +34,6 @@ setMethod(
 		y$tip.label <- V(x)$name[is_leaf] %>% as.character()
 		attr(y, 'class') <- 'phylo'
 		attr(y, "order") <- 'cladewise'
-		RF.dist(y, y)
 		y
 	}
 

@@ -169,29 +169,19 @@ simulate_core <- function(config, mp = NULL, n_samples = 200L, ...){
 #'
 random_tree <- function(n_samples, division = 16L){
 
-	ancestor <- 1	# ancestor index
-	num_nodes <- 2^division - 1	# number of total nodes in the binary tree
-	k <- 2:num_nodes
-	edges <- cbind(from = k %/% 2, to = k)	# a binary tree
-	edges <- edges[order(edges[, 'to']), ]	# so that edge `from | to` is simply edges[to - 1, ]
-
-	leaves <- 2^(division - 1):(2^division - 1)	# leaf index
-	sampled_leaves <- sample(leaves, n_samples)	# leaves to keep
-
-	sampled_edges <- list()
+	leaf_min <- 2^(division - 1)
+	leaf_max <- (2^division - 1)
+	to <- (sample.int(leaf_max - leaf_min + 1L, n_samples) + leaf_min - 1L) %>% 
+		sort()
 	h <- division - 1	# leaf level
-	sampled_edges[[h]] <- edges[sampled_leaves - 1, ]
-
-
-	while (h > 1){
-		to <- unique(sampled_edges[[h]][, 'from'])
-		sampled_edges[[h - 1]] <- edges[to - 1, , drop = FALSE]
+	edges <- NULL
+	while (h > 0){
+		from <- floor(to / 2)
+		edges <- rbind(cbind(from = from, to = to, height = h), edges)
+		to <- sort(unique(from))
 		h <- h - 1
 	}
-
-	height <- rep(seq_len(division  - 1), sapply(sampled_edges, nrow))
-	sampled_edges <- do.call('rbind', sampled_edges)
-	data.frame(sampled_edges, height = height)
+	edges
 } # random_tree
 
 
@@ -232,7 +222,7 @@ sample_outcome_prob <- function(config, num_states = 20L, shape = 0.1, scale = 2
 #' @return node names
 #' @author Wuming Gong (gongx030@umn.edu)
 #'
-get_node_names <- function(x) sprintf('node_%s', sprintf('%d', x) %>% str_pad(15, pad = '0'))
+get_node_names <- function(x) sprintf('node_%s', sprintf('%.0f', x) %>% str_pad(20, pad = '0'))
 
 
 #' positional_mutation_prob
@@ -258,234 +248,3 @@ positional_mutation_prob <- function(x, config){
 	mp
 }
 
-
-#' downsample
-#'
-#' Sample a lineage tree
-#'
-#' @param x a lineage_tree object
-#' @param n number of leaves (tips) in the down-sampled tree
-#' @param ... additional parameters
-#'
-#' @return a lineage_tree object
-#'
-#' @export
-#'
-setMethod(
-	'downsample',
-	signature(
-		x = 'lineage_tree'
-	),
-	function(
-		x,
-		n = 10L,
-		...
-	){
-
-		is_leaf <- degree(x@graph, mode = 'out') == 0
-		if (n < sum(is_leaf)){
-	  	leaves <- sample(names(x@x)[is_leaf], n)
-			x <- subtree(x, leaves)
-		}
-		x
-	}
-) # downsample
-
-
-#' downsample
-#'
-#' Sample a lineage tree
-#'
-#' @param x a igraph object
-#' @param n number of leaves (tips) in the down-sampled tree
-#' @param ... additional parameters
-#'
-#' @return a phylo object
-#'
-#' @export
-#'
-setMethod(
-	'downsample',
-	signature(
-		x = 'igraph'
-	),
-	function(
-		x,
-		n = 10L,
-		...
-	){
-
-		is_leaf <- degree(x, mode = 'out') == 0
-		if (n <= sum(is_leaf)){
-	  	leaves <- sample(unlist(V(x)$name[is_leaf]), n)
-			d <- distances(x, leaves, mode = 'in')
-		  v <- V(x)$name[(!is.infinite(d)) %>% colSums() > 0]  # subgraphs that connect to the leaves
-			v <- unlist(v)
-			x <- induced_subgraph(x, v)
-		}
-		x
-	}
-)
-
-#' subtree
-#'
-#' Extract a subtree with specific leaves
-#'
-#' @param x a lineage_tree object
-#' @param n leaves of the extracted tree
-#' @param ... additional parameters
-#'
-#' @return a lineage_tree object
-#'
-#' @export
-#'
-setMethod(
-	'subtree',
-	signature(
-		x = 'lineage_tree'
-	),
-	function(
-		x,
-		leaves = NULL,
-		...
-	){
-
-		stopifnot(!is.null(leaves))
-
-		is_leaf <- degree(x@graph, mode = 'out') == 0
-		stopifnot(all(leaves %in% names(x@x)[is_leaf]))
-	
-		d <- distances(x@graph, leaves, mode = 'in')
-	  v <- names(x@x)[(!is.infinite(d)) %>% colSums() > 0]  # subgraphs that connect to the leaves
-		g <- induced_subgraph(x@graph, v)
-		x@x <- x@x[v]
-		x@graph <- g
-		x
-	}
-) # subtree
-
-
-#' subtree
-#'
-#' Extract a subtree with specific leaves
-#'
-#' @param x a lineage_tree object
-#' @param n leaves of the extracted tree
-#' @param ... additional parameters
-#'
-#' @return a lineage_tree object
-#'
-#' @export
-#'
-setMethod(
-	'subtree',
-	signature(
-		x = 'phylo'
-	),
-	function(
-		x,
-		leaves = NULL,
-		...
-	){
-		stopifnot(!is.null(leaves))
-		browser()
-	}
-) # subtree
-
-
-#' subtract
-#'
-
-
-#' subtract
-#'
-#' Subtract a subtree from a large tree
-#'
-#' @param x a lineage_tree object
-#' @param y a lineage_tree object
-#' @param ... additional parameters
-#'
-#' @return a lineage_tree object
-#'
-#' @export
-#'
-setMethod(
-	'subtract',
-	signature(
-		x = 'lineage_tree',
-		y = 'lineage_tree'
-	),
-	function(
-		x,
-		y,
-		...
-	){
-
-		# need to verify if y is a subtree of x
-
-		is_leaf <- degree(x@graph, mode = 'out') == 0
-		leaves_x <- names(x@x[is_leaf])
-
-		is_leaf <- degree(y@graph, mode = 'out') == 0
-		leaves_y <- names(y@x[is_leaf])
-
-		stopifnot(all(leaves_y %in% leaves_x))
-
-		leaves <- leaves_x[!leaves_x %in% leaves_y]
-
-		stopifnot(length(leaves) > 0)
-		subtree(x, leaves)
-	}
-) # subtree
-
-#' get_leaves
-#'
-#' Get the leaf sequences
-#'
-#' @param x a lineage_tree object
-#' @param ... additional parameters
-#'
-#' @return a phyDat object
-#'
-#' @export
-#'
-setMethod(
-	'get_leaves',
-	signature(
-		x = 'lineage_tree'
-	),
-	function(
-		x,
-		...
-	){
-		is_leaf <- degree(x@graph, mode = 'out') == 0
-		x@x[is_leaf]
-	}
-) # get_leaves
-
-#' rbind
-#'
-#' Concatenate multiple phyDat objects
-#'
-#' @param ... a list of phyDat objects
-#'
-#' @return a phyDat object
-#'
-#' @export
-#'
-setMethod(
-	'rbind',
-	signature(
-		... = 'phyDat'
-	),
-	function(
-		...
-	){
-
-		# need to make sure that the levels of each phyDat are the same
-		x <- list(...)
-		lv <- levels(x[[1]])
-		do.call('rbind', lapply(x, as.character)) %>% phyDat(type = 'USER', levels = lv)
-
-	}
-) # rbind

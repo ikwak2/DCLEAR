@@ -81,3 +81,11 @@ setGeneric('get_leaves', function(x, ...) standardGeneric('get_leaves'))
 #'
 setGeneric('prune', function(x, ...) standardGeneric('prune'))
 
+#' Generic function for as_lineage_tree
+#' @param x a phyDat object
+#' @param y a phylo object
+#' @param config a lineage_tree_config object
+#' @param ... additional parameters
+#'
+setGeneric('as_lineage_tree', function(x, y, config, ...) standardGeneric('as_lineage_tree'))
+
