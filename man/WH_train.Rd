@@ -4,10 +4,16 @@
 \alias{WH_train}
 \title{Train weights for WH}
 \usage{
-WH_train(X)
+WH_train(X, loc0 = 2, locDropout = 1, locMissing = FALSE)
 }
 \arguments{
 \item{X}{a list of k number of input data, X[[1]] ... X[[k]]. The ith data have sequence information as phyDat format in X[[i]][[1]], and tree information in X[[i]][[2]] as phylo format.}
+
+\item{loc0}{weight location of initial state}
+
+\item{locDropout}{weight location of dropout state}
+
+\item{locMissing}{weight location of missing state, FALSE if there is no missing values}
 }
 \value{
 a weight vector
