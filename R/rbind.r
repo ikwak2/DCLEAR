@@ -3,6 +3,7 @@
 #' Concatenate multiple phyDat objects
 #'
 #' @param ... a list of phyDat objects
+#' @param deparse.level see definition in generic rbind
 #'
 #' @return a phyDat object
 #'
@@ -14,7 +15,8 @@ setMethod(
 		... = 'phyDat'
 	),
 	function(
-		...
+		...,
+		deparse.level = 1
 	){
 
 		# need to make sure that the levels of each phyDat are the same

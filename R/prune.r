@@ -31,6 +31,7 @@ setMethod(
 #' Trim a full lineage tree into phylogenetic tree
 #'
 #' @param x an igraph object 
+#' @param weighted whether or not keep the edge weight (default: TRUE)
 #' @param ... additional parameters 
 #'
 #' @return an igraph object 

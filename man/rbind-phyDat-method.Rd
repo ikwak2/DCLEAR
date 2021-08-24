@@ -8,6 +8,8 @@
 }
 \arguments{
 \item{...}{a list of phyDat objects}
+
+\item{deparse.level}{see definition in generic rbind}
 }
 \value{
 a phyDat object

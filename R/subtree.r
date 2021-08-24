@@ -3,7 +3,7 @@
 #' Extract a subtree with specific leaves
 #'
 #' @param x a lineage_tree object
-#' @param n leaves of the extracted tree
+#' @param leaves leaves of the extracted tree
 #' @param ... additional parameters
 #'
 #' @return a lineage_tree object
@@ -41,7 +41,7 @@ setMethod(
 #' Extract a subtree with specific leaves
 #'
 #' @param x a phylo object
-#' @param n leaves of the extracted tree
+#' @param leaves leaves of the extracted tree
 #' @param ... additional parameters
 #'
 #' @return a pylo object

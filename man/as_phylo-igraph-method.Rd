@@ -8,8 +8,6 @@
 }
 \arguments{
 \item{x}{an igraph object}
-
-\item{weighted}{whether include the branch length}
 }
 \value{
 a phylo object or a igraph object

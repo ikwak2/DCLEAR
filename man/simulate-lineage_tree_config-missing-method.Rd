@@ -9,7 +9,7 @@
 \arguments{
 \item{config}{simulation configuration; a lineage_tree_config object}
 
-\item{x}{a sequence object}
+\item{x}{missing}
 
 \item{n_samples}{number of samples to simulate}
 

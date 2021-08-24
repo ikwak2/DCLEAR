@@ -4,7 +4,7 @@
 #' Adoped from https://github.com/elifesciences-publications/CRISPR_recorders_sims/blob/master/MATLAB_sims/GESTALT_30hr_1x_simulation.m
 #'
 #' @param config simulation configuration; a lineage_tree_config object
-#' @param x a sequence object
+#' @param x missing 
 #' @param n_samples number of samples to simulate
 #' @param ... additional parameters
 #'
@@ -35,8 +35,7 @@ setMethod(
 
 #' simulate
 #'
-#' Simulate a cell lineage tree
-#' Adoped from https://github.com/elifesciences-publications/CRISPR_recorders_sims/blob/master/MATLAB_sims/GESTALT_30hr_1x_simulation.m
+#' Simulate a cell lineage tree based on a set of sequences
 #'
 #' @param config simulation configuration; a lineage_tree_config object
 #' @param x a sequence object
@@ -81,7 +80,8 @@ setMethod(
 #'
 simulate_core <- function(config, mp = NULL, n_samples = 200L, ...){
 
-	tree <- random_tree(n_samples = n_samples, division = config@division)
+	tree <- random_tree(n_samples = n_samples, division = config@division) %>%
+		as.data.frame()
 
 	if (is.null(mp)){
 		mp <- matrix(

@@ -2,7 +2,6 @@
 #' 
 #' Convert an igraph object to a phylo object
 #' @param x an igraph object
-#' @param weighted whether include the branch length
 #' @return a phylo object or a igraph object
 #' 
 #' @export

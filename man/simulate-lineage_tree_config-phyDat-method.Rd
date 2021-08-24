@@ -19,8 +19,7 @@
 a lineage_tree object
 }
 \description{
-Simulate a cell lineage tree
-Adoped from https://github.com/elifesciences-publications/CRISPR_recorders_sims/blob/master/MATLAB_sims/GESTALT_30hr_1x_simulation.m
+Simulate a cell lineage tree based on a set of sequences
 }
 \author{
 Wuming Gong (gongx030@umn.edu)
