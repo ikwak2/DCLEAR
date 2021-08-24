@@ -98,7 +98,7 @@ dist_kmer_replacement_inference <- function(x, kmer_summary, k = 2){
 		from = 1:length(x),
 		to = 1:length(x)
 	) %>% 
-		dplyr::filter(.data$from < .data$to)
+		filter(.data$from < .data$to)
 
   # input sequence 
 	y <- do.call('rbind', strsplit(as.character(x), '')) %>%
