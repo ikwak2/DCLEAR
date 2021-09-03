@@ -59,7 +59,7 @@ WH_train <- function(X, loc0 = 2, locDropout = 1, locMissing = FALSE){
         InfoW[locMissing] = bayes_WH$Best_Par['Wdropout2']
         InfoW[4:55] = bayes_WH$Best_Par['Wothers']
     } else {
-        WHfit <- function( Wdropout1, Wothers ) {
+        WHfit2 <- function( Wdropout1, Wothers ) {
             
             InfoW = rep(1,7)
             InfoW[locDropout] = Wdropout1
@@ -84,7 +84,7 @@ WH_train <- function(X, loc0 = 2, locDropout = 1, locMissing = FALSE){
         search_grid <- data.frame(Wdropout1 = runif(10, 0.1, 2.5),
                                   Wothers = runif(10, 1, 10))
         
-        bayes_WH <- BayesianOptimization(FUN = WHfit, bounds = search_bound,
+        bayes_WH <- BayesianOptimization(FUN = WHfit2, bounds = search_bound,
                                          init_points = 0, init_grid_dt = search_grid,
                                          n_iter = 20, acq = "ucb")
         
