@@ -18,6 +18,7 @@ setMethod(
 		config = 'lineage_tree_config'
 	),
 	function(x, y, config, ...){
+
 		s <- matrix(config@default_character, y$Nnode, config@n_targets, dimnames = list(sprintf('Node%d', 1:y$Nnode)))
 		s <- phyDat(s, type = 'USER', levels = config@alphabets)
 		x <- rbind(s, x)

@@ -4,7 +4,7 @@
 \alias{simulate,lineage_tree_config,phyDat-method}
 \title{simulate}
 \usage{
-\S4method{simulate}{lineage_tree_config,phyDat}(config, x, n_samples = 200L, ...)
+\S4method{simulate}{lineage_tree_config,phyDat}(config, x, n_samples = 200L, k = 50, greedy = TRUE, ...)
 }
 \arguments{
 \item{config}{simulation configuration; a lineage_tree_config object}
@@ -12,6 +12,10 @@
 \item{x}{a sequence object}
 
 \item{n_samples}{number of samples to simulate}
+
+\item{k}{Number of trials}
+
+\item{greedy}{Whether ot not use a greedy search}
 
 \item{...}{additional parameters}
 }

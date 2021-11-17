@@ -4,16 +4,19 @@
 \alias{simulate_core}
 \title{simulate_core}
 \usage{
-simulate_core(config, mp = NULL, n_samples = 200L, ...)
+simulate_core(config, tree, mutation_site, outcome)
 }
 \arguments{
 \item{config}{simulation configuration; a lineage_tree_config object}
 
-\item{mp}{site specific mutation probability}
+\item{tree}{a matrix representing the lineage tree}
 
-\item{n_samples}{number of samples to simulate}
+\item{mutation_site}{a binary matrix indicating the mutation sites}
 
-\item{...}{additional parameters}
+\item{outcome}{a character matrix}
+}
+\value{
+a `lineage_tree` object
 }
 \description{
 Simulate a cell lineage tree

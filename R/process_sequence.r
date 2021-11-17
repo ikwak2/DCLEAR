@@ -1,7 +1,10 @@
 #' Process sequences
 #' 
 #' @param x input data in phyDat format
-#' @param division cell divisions (default: 16L)
+#' @param division cell division
+#' @param dropout_character Dropout character (default: '*')
+#' @param default_character Default character (default: '0')
+#' @param deletion_character Deletion character (default: '-')
 #' @return a `lineage_tree_config` object
 #' @author Wuming Gong (gongx030@umn.edu)
 #' @export
@@ -13,55 +16,61 @@ setMethod(
 	),
 	function(
 		x, 
-		division = 16L
+		division = 16L,
+		dropout_character = '*',
+		default_character = '0',
+		deletion_character = '-'
 	){
 
-		config <- new('lineage_tree_config')
+		lv <-  c(dropout_character, default_character, deletion_character, levels(x)) %>% unique()
+		levels(x) <- lv
 
-		if (!all(levels(x) %in% config@alphabets)){
-			stop('unknown characters in the input sequences')
-		}
+		alphabets <- levels(x)
 
 		freq <- x %>%
 			as.character() %>%
-			factor(config@alphabets) %>%
+			factor(alphabets) %>%
 			table() 
 
-		used <- freq > 0 | names(freq) %in% c(config@dropout_character, config@default_character, config@deletion_character)
-		config@alphabets <- config@alphabets[used]
-		config@outcome_prob <- config@outcome_prob[used]
+		used <- freq > 0 | names(freq) %in% c(dropout_character, default_character, deletion_character)
+		alphabets <- alphabets[used]
+
 		freq <- freq[used]
 
 		freq <- as.numeric(freq)
-		names(freq) <- config@alphabets
+		names(freq) <- alphabets
 
-		dropout_prob <- freq[config@dropout_character] / sum(freq) # dropout probability
+		dropout_prob <- freq[dropout_character] / sum(freq) # dropout probability
 
-		if (freq[config@deletion_character] > 0){
+		if (freq[deletion_character] > 0){
 			deletion <- TRUE
 		}else
 			deletion <- FALSE
 
-		mutation_prob <- 1 - (freq[config@default_character] / sum(freq))^(1 / division)
 
+		mutation_prob <- 1 - (freq[default_character] / sum(freq))^(1 / division)
 		outcome_prob <- freq
-		outcome_prob[config@deletion_character] <- 0
-		outcome_prob[config@dropout_character] <- 0
-		outcome_prob[config@default_character] <- 0
+		outcome_prob[deletion_character] <- 0
+		outcome_prob[dropout_character] <- 0
+		outcome_prob[default_character] <- 0
 		outcome_prob <- outcome_prob / sum(outcome_prob)
 
 		n_targets <- x %>%
 			as.character() %>%
 			ncol()
 
-		config@frequency <- freq
-		config@mutation_prob <- mutation_prob
-		config@outcome_prob <- outcome_prob
-		config@n_targets <- n_targets
-		config@dropout_prob <- dropout_prob
-		config@division <- division
-		config@deletion <- deletion
+		config <- new('lineage_tree_config', 
+			alphabets = alphabets,
+			frequency = freq,
+			mutation_prob = mutation_prob,
+			outcome_prob = outcome_prob,
+			n_targets = n_targets,
+			dropout_prob = dropout_prob,
+			division = division,
+			deletion = deletion
+		)
 
 		config
 	}
 ) # process_sequence
+

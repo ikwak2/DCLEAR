@@ -21,6 +21,7 @@ setMethod(
 
 		x@graph <- x@graph %>% prune(...)
 		x@x <- x@x[V(x@graph)$name %>% unlist()]
+		x@raw <- x@raw[V(x@graph)$name %>% unlist()]
 		x
 
 	}

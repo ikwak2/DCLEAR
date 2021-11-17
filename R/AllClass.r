@@ -1,6 +1,8 @@
-setOldClass('phyDat')
+#setOldClass('phyDat')
+setClass('phyDat')
 setOldClass('phylo')
 setOldClass('igraph')
+setClassUnion('phyDatOrNULL', members = c('phyDat', 'NULL'))
 
 setClass(
 	'lineage_tree_config',
@@ -30,6 +32,7 @@ setClass(
 	'lineage_tree',
 	representation(
 		x = 'phyDat',
+		raw = 'phyDatOrNULL',
 		graph = 'igraph',
 		config = 'lineage_tree_config'
 	)
