@@ -101,7 +101,8 @@ dist_kmer_replacement_inference <- function(x, kmer_summary, k = 2){
 		filter(.data$from < .data$to)
 
   # input sequence 
-	y <- do.call('rbind', strsplit(as.character(x), '')) %>%
+	y <- x %>% 
+		as.character() %>% 
 		factor(kmer_summary@alphabets) %>% 
 		as.integer() %>%
 		matrix(length(x), sequence_length)
