@@ -1,6 +1,6 @@
 Package: DCLEAR
-Version: 1.0.9
-Date: 2021-11-17
+Version: 1.0.10
+Date: 2021-11-22
 Title: Distance Based Cell Lineage Reconstruction
 Authors@R: c(person("Il-Youp", "Kwak", role = c("aut", "cre"),
                      email = "ikwak2@cau.ac.kr"),
