@@ -32,6 +32,9 @@ setMethod(
 		n_targets 
   ){
 
+		if (k > 2)
+			stop(sprintf('k should be 1 or 2'))
+
 		config <- process_sequence(x, division = division)
 
 		if (!missing(n_targets))

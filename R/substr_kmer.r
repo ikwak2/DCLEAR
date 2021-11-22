@@ -23,20 +23,24 @@ setMethod(
       return(x)
     }else{
 
-      x@df <- do.call('rbind', lapply(seq_len(x@k - k + 1), function(start){
-        x@df %>%
-          ungroup() %>%
-          mutate(
-            from = substr(.data$from, start, start + k - 1),
-            to = substr(.data$to, start, start + k - 1)
-          )
-      })) %>%
-        group_by(.data$from, .data$to, .data$distance) %>%
-        summarize(n = sum(n))
+			from <- do.call('rbind', strsplit(x@df$from, ' '))
+			to <- do.call('rbind', strsplit(x@df$to, ' '))
 
-      x@kmers <-   do.call('paste0', do.call('expand.grid', lapply(1:k, function(j) x@alphabets)))
-      x@k <- k
-      x
+			x@df <- do.call('rbind', lapply(seq_len(x@k - k + 1), function(start){
+				data.frame(
+					from = do.call('paste', as.data.frame(from[, start:(start + k - 1), drop = FALSE])),
+					to = do.call('paste', as.data.frame(to[, start:(start + k - 1), drop = FALSE])),
+					distance = x@df$distance,
+					n = x@df$n
+				)
+			})) %>%
+				group_by(.data$from, .data$to, .data$distance) %>%
+				summarize(n = sum(n))
+
+			x@kmers <-   do.call('paste', do.call('expand.grid', lapply(1:k, function(j) x@alphabets)))
+			x@k <- k
+			x
+
     }
   }
 )

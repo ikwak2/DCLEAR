@@ -13,7 +13,8 @@ VignetteBuilder: knitr
 LinkingTo: Rcpp, RcppArmadillo
 RoxygenNote: 7.1.2
 Depends: 
-	R (>= 4.1.0)
+	R (>= 4.1.0),
+	tensorflow(>= 2.2.0)
 biocViews:
 Encoding: UTF-8
 Imports: 

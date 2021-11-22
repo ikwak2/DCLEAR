@@ -19,6 +19,7 @@
 #' @importFrom rlang .data
 #' @importFrom rBayesianOptimization BayesianOptimization
 #' @importFrom BiocGenerics rbind
+#' @importFrom tensorflow shape tf_function
 #' @useDynLib DCLEAR
 #' @docType package
 #' @name DCLEAR
