@@ -208,8 +208,8 @@ get_transition_probability <- function(x){
   d <- x@df %>%
     ungroup() %>%
     mutate(
-      from2 = paste0(substr(.data$from, 1, 1), substr(.data$to, 1, 1)),
-      to2 = paste0(substr(.data$from, 2, 2), substr(.data$to, 2, 2))
+      from2 = paste(substr(.data$from, 1, 1), substr(.data$to, 1, 1)),
+      to2 = paste(substr(.data$from, 2, 2), substr(.data$to, 2, 2))
     ) %>%
     mutate(from = .data$from2, to = .data$to2) %>%
     select(.data$from, .data$to, .data$distance, .data$n) %>%

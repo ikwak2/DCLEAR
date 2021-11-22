@@ -66,7 +66,7 @@ summarize_kmer_core <- function(
 
 	alphabets <- config@alphabets[config@frequency > 0]
 	max_distance <- (config@division - 1) * 2
-	kmers <- do.call('paste0', do.call('expand.grid', lapply(1:k, function(j) alphabets)))
+	kmers <- do.call('paste', do.call('expand.grid', lapply(1:k, function(j) alphabets)))
 
   sprintf('simulating | k=%d | alphabets=%d | mutation=%.3f | division=%d | sample=%d | n_targets=%d | dropout_prob=%.3f', k, length(alphabets), config@mutation_prob, config@division, reps, config@n_targets, config@dropout_prob) %>%
 		message()
@@ -91,8 +91,8 @@ summarize_kmer_core <- function(
       )
       d <- D[cbind(p[, 'from'], p[, 'to'])]
 
-      str_from <- do.call('paste0', lapply(1:k, function(j) X[cbind(p[, 'from'], p[, 'start'] + j - 1)]))
-      str_to <- do.call('paste0', lapply(1:k, function(j) X[cbind(p[, 'to'], p[, 'start'] + j - 1)]))
+      str_from <- do.call('paste', lapply(1:k, function(j) X[cbind(p[, 'from'], p[, 'start'] + j - 1)]))
+      str_to <- do.call('paste', lapply(1:k, function(j) X[cbind(p[, 'to'], p[, 'start'] + j - 1)]))
 
       data.frame(
         from = str_from,
