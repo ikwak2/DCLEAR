@@ -257,7 +257,28 @@ get_transition_probability <- function(x){
 #'
 get_replacement_probability <- function(x){
 
-  d <- x@df %>% 
+	browser()
+	d <- tf$sparse$SparseTensor(
+	  cbind(
+	    factor(x@df$from, x@kmers) %>% as.numeric() - 1L,
+	    factor(x@df$to, x@kmers) %>% as.numeric() - 1L,
+	    x@df$distance - 1L
+	  ),
+	  tf$cast(x@df$n, tf$float32),
+	  shape(length(x@kmers), length(x@kmers), x@max_distance)
+	) %>%
+	  tf$sparse$reorder() %>%
+	  tf$sparse$to_dense()
+	
+	dg <- tf$linalg$diag(rep(1, length(x@kmers))) %>%
+	  tf$expand_dims(2L)
+	d <- d + dg
+	d <- d / d %>% tf$reduce_sum(shape(0L, 1L), keepdims = TRUE)
+	d <- as.array(d)
+	dimnames(d) <- list(x@kmers, x@kmers, NULL)
+	d
+
+  d2 <- x@df %>% 
     right_join(
       expand.grid(
         from = x@kmers,
@@ -278,11 +299,13 @@ get_replacement_probability <- function(x){
 		) %>%
 		arrange(.data$distance, .data$to, .data$from)
 
-  array(
-    d$prob, 
+  d2 <- array(
+    d2$prob, 
     dim = c(length(x@kmers), length(x@kmers), x@max_distance),
     dimnames = list(x@kmers, x@kmers, NULL)
   )
+
+	browser()
 
 } # get_replacement_probability
 
