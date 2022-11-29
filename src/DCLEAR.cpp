@@ -51,28 +51,28 @@ arma::mat dist_w_ham2(const arma::mat X, const arma::vec InfoW) {
       int n_nonmissing = 0;
       for(int k = 0; k < n_loc ; k++) {
 
-	if((flag_i == 0) & (X(i,k) == 2) & (X(j,k) != 2) ) {
+	if((flag_i == 0) && (X(i,k) == 2) && (X(j,k) != 2) ) {
 	  flag_i = 1;
 	  D(i,j) += InfoW[1];
 	}
-	if((flag_j == 0) & (X(j,k) == 2) & (X(i,k) != 2) ) {
+	if((flag_j == 0) && (X(j,k) == 2) && (X(i,k) != 2) ) {
 	  flag_j = 1;
 	  D(i,j) += InfoW[1];
 	}
-	if((flag_i == 1) & (X(i,k) != 2)) {
+	if((flag_i == 1) && (X(i,k) != 2)) {
 	  flag_i = 0;
 	  m_i += 1;
 	}
-	if((flag_j == 1) & (X(j,k) != 2)) {
+	if((flag_j == 1) && (X(j,k) != 2)) {
 	  flag_j = 0;
 	  m_j += 1;
 	}
 
-	if((X(i,k) != 2) & (X(j,k) != 2)) {
+	if((X(i,k) != 2) && (X(j,k) != 2)) {
 	  n_nonmissing += 1;
 	}
 	
-	if( (X(i,k) != X(j,k)) & (X(i,k) != 2) & (X(j,k) !=2) ) {
+	if( (X(i,k) != X(j,k)) && (X(i,k) != 2) && (X(j,k) !=2) ) {
 	  D(i,j) += InfoW[ X(i,k)-1 ] * InfoW[ X(j,k)-1 ];
 	}
 
