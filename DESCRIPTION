@@ -1,6 +1,6 @@
 Package: DCLEAR
 Version: 1.0.11
-Date: 2022-11-29
+Date: 2022-11-30
 Title: Distance Based Cell Lineage Reconstruction
 Authors@R: c(person("Il-Youp", "Kwak", role = c("aut", "cre"),
                      email = "ikwak2@cau.ac.kr"),
@@ -36,5 +36,6 @@ Imports:
 	BiocGenerics
 Suggests:
 	knitr, rmarkdown, markdown
-Description: R codes for distance based cell lineage reconstruction. Our methods won both sub-challenges 2 and 3 of the Allen Institute Cell Lineage Reconstruction DREAM Challenge in 2020. The challenge paper is Gong et al. (2021) <doi:10.1016/j.cels.2021.05.008>. 
+Description: R codes for distance based cell lineage reconstruction. Our methods won both sub-challenges 2 and 3 of the Allen Institute Cell Lineage Reconstruction DREAM Challenge in 2020. 
+        References: Gong et al. (2021) <doi:10.1016/j.cels.2021.05.008>, Gong et al. (2022) <doi:10.1186/s12859-022-04633-x>. 
 URL: https://github.com/ikwak2/DCLEAR
