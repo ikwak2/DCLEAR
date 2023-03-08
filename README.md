@@ -37,7 +37,7 @@ With the previously proposed distance matric, we can construct distance matrix a
 
 - How to use weighted hamming : [Link](https://ikwak2.github.io/tmphtml/Example_subchallenge2)
 - How to use kmer_replacement : [Colab Link](https://colab.research.google.com/gist/gongx030/653a76bffc4ee6ff41499e0026b6d39a/krd.ipynb)
-- Preparation for subchallenge 2 submission : [link](https://ikwak2.github.io/tmphtml/PrepC2)
+- Preparation for subchallenge 2 submission : [Colab Link](https://colab.research.google.com/gist/gongx030/653a76bffc4ee6ff41499e0026b6d39a/krd.ipynb)
 - Preparation for subchallenge 3 submission : [link](https://ikwak2.github.io/tmphtml/PrepC3)
 
 
