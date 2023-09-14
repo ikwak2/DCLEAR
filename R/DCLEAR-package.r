@@ -1,3 +1,5 @@
+"_PACKAGE"
+
 #' DCLEAR: A package for DCLEAR: Distance based Cell LinEAge Reconstruction
 #'
 #' Distance based methods for inferring lineage treess from single cell data

@@ -11,7 +11,7 @@ Maintainer: Il-Youp Kwak <ikwak2@cau.ac.kr>
 License: GPL-3
 VignetteBuilder: knitr
 LinkingTo: Rcpp, RcppArmadillo
-RoxygenNote: 7.1.2
+RoxygenNote: 7.2.3
 Depends: 
 	R (>= 4.1.0),
 	tensorflow(>= 2.2.0)

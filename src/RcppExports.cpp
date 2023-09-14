@@ -6,6 +6,11 @@
 
 using namespace Rcpp;
 
+#ifdef RCPP_USE_GLOBAL_ROSTREAM
+Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
+Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
+#endif
+
 // dist_w_ham
 arma::mat dist_w_ham(const arma::mat X, const arma::vec InfoW);
 RcppExport SEXP _DCLEAR_dist_w_ham(SEXP XSEXP, SEXP InfoWSEXP) {
